@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <meta name="apple-mobile-web-app-title" content="Bob's Tracker"/>
 <meta name="theme-color" content="#070b12"/>
-<title>Bob's Corner v1.7.2 Recomp Edition</title>
+<title>Bob's Corner v1.8.0 Recomp Edition</title>
 <style>
 :root{
   --bg:#070b12;--panel:#111827;--panel2:#0b1220;--soft:#1f2937;--line:#2f3a4c;
@@ -61,7 +61,7 @@ canvas{width:100%;height:210px;background:#050914;border:1px solid var(--line);b
 <body>
 <header>
   <h1>Bob's Corner &#x1F9EA;</h1>
-  <div class="phase">Goal: Build Muscle &bull; Recomp & Maintain Leanness &bull; v1.7.2 Recomp Edition</div>
+  <div class="phase">Goal: Build Muscle &bull; Recomp & Maintain Leanness &bull; v1.8.0 5-Day Split</div>
   <div class="tabs">
     <button class="tab active" onclick="showTab('dash',this)">&#x1F3E0; Dashboard</button>
     <button class="tab" onclick="showTab('progress',this)">&#x1F4C8; Progress</button>
@@ -161,15 +161,15 @@ canvas{width:100%;height:210px;background:#050914;border:1px solid var(--line);b
     <div class="daybar">
       <div class="day active blue" onclick="setDay('Push',this)">Mon<small>Push</small></div>
       <div class="day green" onclick="setDay('Pull',this)">Tue<small>Pull</small></div>
-      <div class="day purple" onclick="setDay('Legs A',this)">Wed<small>Legs A</small></div>
+      <div class="day purple" onclick="setDay('Legs',this)">Wed<small>Legs</small></div>
       <div class="day red" onclick="setDay('Upper',this)">Thu<small>Upper</small></div>
-      <div class="day orange" onclick="setDay('Arms + Core',this)">Fri<small>Arms + Core</small></div>
+      <div class="day orange" onclick="setDay('Lower',this)">Fri<small>Lower</small></div>
     </div>
     <div class="row">
       <div><label>Date</label><input id="workDate" type="date"></div>
       <div><label>Workout</label><select id="workType" onchange="renderWorkout()"></select></div>
     </div>
-    <div id="workoutBox"></div><div class="notice goodnotice">Training Note: 5-day split. Use a controlled 3-second lowering phase and explosive lift. Rest 90 seconds on compound lifts and 60 seconds on isolation work. Most sets should finish around 1&ndash;2 RIR; the final isolation set can go to failure. Weekends are fully off.</div>
+    <div id="workoutBox"></div><div class="notice goodnotice">Training Note: 5-day split (4 high-yield exercises per day). Strict 3-second lowering (&darr;3s) on every rep. Push each set to 1 RIR (0 RIR on final isolations). Dynamic Double Progression: log your true output on every set. Weekends are fully off for systemic recovery.</div>
     <label>Notes</label><textarea id="workNotes" placeholder="Energy, pump, soreness, performance..."></textarea>
     <button onclick="saveWorkout()">Finish & Save Workout</button>
   </div>
@@ -244,8 +244,8 @@ canvas{width:100%;height:210px;background:#050914;border:1px solid var(--line);b
     <table id="histTable"><thead><tr><th>Date</th><th>Workout</th><th>Weight</th><th>Waist</th><th>Body Fat</th><th>Nutrition</th><th>Steps</th><th>Notes</th></tr></thead><tbody></tbody></table>
   </div>
   <div class="card">
-    <h2>Version 1.7.2 Recomp Edition Changelog <span class="versionchip">Bob's Corner</span></h2>
-    <div class="tiny">&bull; Swapped Friday's final triceps movement to Triceps Extension[cite: 1]<br>&bull; Streamlined tracking to Waist, Neck, and Navy Body Fat (removed caliper inputs and skinfold stats)[cite: 1]<br>&bull; Preserved 5-day split structure, 2,500 kcal maintenance recomposition profile, and Google Drive auto-sync[cite: 1]</div>
+    <h2>Version 1.8.0 Recomp Edition Changelog <span class="versionchip">Bob's Corner</span></h2>
+    <div class="tiny">&bull; Updated split to Push / Pull / Legs / Upper / Lower (strictly 4 high-yield exercises per day)<br>&bull; Day 1 (Push): Flat DB Bench Press, Seated DB Shoulder Press, DB Lateral Raise, Cable Triceps Pushdown<br>&bull; Day 2 (Pull): Wide-Grip Lat Pulldown, Seated Cable Row (bilateral low-pulley setup), Incline DB Curl, Loaded Decline Crunch<br>&bull; Day 3 (Legs): DB Goblet Squat, DB Romanian Deadlift, DB Hip Thrust / Glute Bridge, Standing DB Calf Raise<br>&bull; Day 4 (Upper): Incline DB Bench Press, Underhand Lat Pulldown, Chest Supported DB Row, Incline DB Skull Crusher<br>&bull; Day 5 (Lower): DB Romanian Deadlift, DB Goblet Squat, DB Farmers Carry, Loaded Decline Crunch<br>&bull; Preserved Google Drive cloud synchronization, Navy BF calculation, and responsive tracking metrics</div>
   </div>
 </section>
 </main>
@@ -298,37 +298,34 @@ function restoreFromGoogleDrive() {
 const targets={calories:2500, protein:180, fat:65, carbs:300};
 const workouts={
 "Push":[
- {name:"Loaded Decline Crunch \u21933s",target:"3 sets \u2022 10-12 reps \u2022 anchor hips, roll ribs to belt",rest:60},
- {name:"Machine Chest Press \u21933s \u2022 Forward Path",target:"3 sets \u2022 8-12 reps",rest:90},
- {name:"DB Shoulder Press \u21933s \u2022 Bench Position 6",target:"3 sets \u2022 8-12 reps",rest:90},
- {name:"Cable Triceps Pushdown \u21933s",target:"3 sets \u2022 10-15 reps",rest:60},
- {name:"DB Lateral Raise \u21933s",target:"3 sets \u2022 10-15 reps",rest:60}
+ {name:"Flat DB Bench Press \u21933s",target:"3 sets \u2022 8-10 reps \u2022 deep stretch, controlled drive",rest:90},
+ {name:"Seated DB Shoulder Press \u21933s \u2022 Bench Position 6",target:"3 sets \u2022 8-10 reps",rest:90},
+ {name:"DB Lateral Raise \u21933s",target:"3 sets \u2022 12-15 reps \u2022 lead with elbows, 0-1 RIR",rest:60},
+ {name:"Cable Triceps Pushdown \u21933s",target:"3 sets \u2022 10-12 reps \u2022 locked elbows",rest:60}
 ],
 "Pull":[
- {name:"Wide-Grip Lat Pulldown \u21933s",target:"3 sets \u2022 8-12 reps",rest:90},
- {name:"One-Arm DB Row \u21933s \u2022 Bench Position 1",target:"3 sets \u2022 8-12 reps",rest:90},
- {name:"Incline DB Curl \u21933s \u2022 Bench Position 3",target:"3 sets \u2022 10-15 reps",rest:60},
- {name:"DB Shrugs \u21932s",target:"3 sets \u2022 10-15 reps \u2022 1s up, brief squeeze, 2s down",rest:60}
+ {name:"Wide-Grip Lat Pulldown \u21933s",target:"3 sets \u2022 10-12 reps \u2022 full scapular stretch",rest:90},
+ {name:"Seated Cable Row \u21933s",target:"3 sets \u2022 8-10 reps \u2022 neutral/close grip, pull to navel",rest:90},
+ {name:"Incline DB Curl \u21933s \u2022 Bench Position 3",target:"3 sets \u2022 10-12 reps \u2022 zero shoulder swing",rest:60},
+ {name:"Loaded Decline Crunch \u21933s",target:"3 sets \u2022 12 reps \u2022 roll ribs down, 1 RIR",rest:60}
 ],
-"Legs A":[
- {name:"Loaded Decline Crunch \u21933s",target:"3 sets \u2022 10-12 reps \u2022 anchor hips, roll ribs to belt",rest:60},
- {name:"Goblet Squat \u21933s",target:"3 sets \u2022 8-12 reps",rest:90},
- {name:"Romanian Deadlift \u21933s",target:"3 sets \u2022 8-12 reps",rest:90},
- {name:"DB Glute Bridge \u21933s",target:"3 sets \u2022 8-12 reps \u2022 squeeze glutes at top",rest:90},
- {name:"Standing DB Calf Raise \u21933s",target:"2 sets \u2022 20 reps \u2022 both calves each set \u2022 Set 1 DB right hand, Set 2 DB left hand",rest:60,sets:2,setLabels:["Right hand","Left hand"]}
+"Legs":[
+ {name:"Goblet Squat \u21933s",target:"3 sets \u2022 10-12 reps \u2022 upright torso, deep knee flexion",rest:90},
+ {name:"Romanian Deadlift \u21933s",target:"3 sets \u2022 10-12 reps \u2022 push hips back, neutral spine",rest:90},
+ {name:"DB Glute Bridge \u21933s \u2022 Bench Position 1",target:"3 sets \u2022 12 reps \u2022 squeeze glutes hard at top",rest:90},
+ {name:"Standing DB Calf Raise \u21933s",target:"3 sets \u2022 15-20 reps \u2022 full pause at stretch & peak",rest:60}
 ],
 "Upper":[
- {name:"Incline DB Bench Press \u21933s \u2022 Bench Position 3",target:"3 sets \u2022 8-12 reps",rest:90},
- {name:"Underhand Lat Pulldown \u21933s",target:"3 sets \u2022 8-12 reps",rest:90},
- {name:"Chest Supported DB Row \u21933s \u2022 Bench Position 3",target:"3 sets \u2022 8-12 reps",rest:90},
- {name:"DB Lateral Raise \u21933s",target:"3 sets \u2022 10-15 reps",rest:60}
+ {name:"Incline DB Bench Press \u21933s \u2022 Bench Position 3",target:"3 sets \u2022 8-10 reps \u2022 upper pec bias",rest:90},
+ {name:"Underhand Lat Pulldown \u21933s",target:"3 sets \u2022 10-12 reps \u2022 lower lat & bicep drive",rest:90},
+ {name:"Chest Supported DB Row \u21933s \u2022 Bench Position 3",target:"3 sets \u2022 8-10 reps \u2022 bilateral pull",rest:90},
+ {name:"Incline DB Skull Crusher \u21933s \u2022 Bench Position 3",target:"3 sets \u2022 10-12 reps \u2022 long-head stretch",rest:60}
 ],
-"Arms + Core":[
- {name:"Loaded Decline Crunch \u21933s",target:"3 sets \u2022 10-12 reps \u2022 anchor hips, roll ribs to belt",rest:60},
- {name:"DB Farmers Carry",target:"3 sets \u2022 40-45 steps \u2022 target 35s in each hand",rest:60},
- {name:"Hanging Knee Raise",target:"3 sets \u2022 10-12 reps \u2022 strict tuck, no swing",rest:60},
- {name:"Incline DB Curl \u21933s \u2022 Bench Position 3",target:"3 sets \u2022 10-15 reps",rest:60},
- {name:"Tricep Extension \u21933s",target:"3 sets \u2022 10-15 reps \u2022 full elbow flexion and controlled lock",rest:60}
+"Lower":[
+ {name:"Romanian Deadlift \u21933s",target:"3 sets \u2022 8-10 reps \u2022 heavy posterior load",rest:90},
+ {name:"Goblet Squat \u21933s",target:"3 sets \u2022 10-12 reps \u2022 bilateral quad overload",rest:90},
+ {name:"DB Farmers Carry",target:"3 sets \u2022 40-50 paces \u2022 heavy dumbbells, tall posture",rest:60},
+ {name:"Loaded Decline Crunch \u21933s",target:"3 sets \u2022 12 reps \u2022 anchor hips, roll ribs to belt",rest:60}
 ]
 };
 function today(){return new Date().toISOString().slice(0,10)}
@@ -373,6 +370,7 @@ function setDisplay(set){
 function renderWorkout(){
  const box=document.getElementById("workoutBox"); box.innerHTML="";
  const type=workType.value;
+ if(!workouts[type]) return;
  workouts[type].forEach((ex,i)=>{
   const prevSets=previousExerciseSets(type,ex.name,i);
   const h=exerciseHistory(ex.name,data().workouts);
