@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <meta name="apple-mobile-web-app-title" content="Bob's Tracker"/>
 <meta name="theme-color" content="#070b12"/>
-<title>Bob's Corner v1.8.1 Recomp Edition</title>
+<title>Bob's Corner v1.8.2 Recomp Edition</title>
 <style>
 :root{
   --bg:#070b12;--panel:#111827;--panel2:#0b1220;--soft:#1f2937;--line:#2f3a4c;
@@ -70,7 +70,7 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
   <div class="header-top">
     <div>
       <h1>Bob's Corner &#x1F9EA;</h1>
-      <div class="phase">Goal: Build Muscle &bull; Recomp & Maintain Leanness &bull; v1.8.1</div>
+      <div class="phase">Goal: Build Muscle &bull; Recomp & Maintain Leanness &bull; v1.8.2</div>
     </div>
     <button class="theme-btn" onclick="toggleTheme()" id="themeToggleBtn">&#x1F313; Theme</button>
   </div>
@@ -256,8 +256,8 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
     <table id="histTable"><thead><tr><th>Date</th><th>Workout</th><th>Weight</th><th>Waist</th><th>Body Fat</th><th>Nutrition</th><th>Steps</th><th>Notes</th></tr></thead><tbody></tbody></table>
   </div>
   <div class="card">
-    <h2>Version 1.8.1 Recomp Edition Changelog <span class="versionchip">Bob's Corner</span></h2>
-    <div class="tiny">&bull; Added dedicated Eccentric Tempo (s) input field with auto-population from previous sessions for progressive TUT overload<br>&bull; Added Theme Toggle (Dark Mode / Light Mode) with persistent browser memory<br>&bull; Replaced glute bridge with full DB Hip Thrust on Bench Position 1 (chin tucked, full horizontal hip drive)<br>&bull; Rebalanced Friday Lower day: Romanian Deadlift, Goblet Squat, Standing Calf Raise, and Loaded Decline Crunch</div>
+    <h2>Version 1.8.2 Recomp Edition Changelog <span class="versionchip">Bob's Corner</span></h2>
+    <div class="tiny">&bull; Updated Friday Lower routine: swapped calf raises for Hanging Hollow Hold (decompression + deep pelvic tilt/anti-extension)[cite: 3]<br>&bull; Preserved dedicated Eccentric Tempo (s) input with auto-population from prior sessions[cite: 3]<br>&bull; Preserved Light/Dark theme toggle, Navy BF calculations, and Google Drive cloud synchronization[cite: 3]</div>
   </div>
 </section>
 </main>
@@ -355,7 +355,7 @@ const workouts={
 "Lower":[
  {name:"Romanian Deadlift",target:"3 sets \u2022 8-10 reps \u2022 heavy posterior load",rest:90,defaultTempo:3},
  {name:"Goblet Squat",target:"3 sets \u2022 10-12 reps \u2022 bilateral quad overload",rest:90,defaultTempo:3},
- {name:"Standing DB Calf Raise",target:"3 sets \u2022 15-20 reps \u2022 deep stretch at bottom",rest:60,defaultTempo:3},
+ {name:"Hanging Hollow Hold",target:"3 sets \u2022 20-30 sec \u2022 depress scapulae, ribs to belt, hollow core",rest:60,defaultTempo:0},
  {name:"Loaded Decline Crunch",target:"3 sets \u2022 12 reps \u2022 anchor hips, roll ribs to belt",rest:60,defaultTempo:3}
 ]
 };
@@ -395,7 +395,7 @@ function setDisplay(set){
  const rir=set.rir?` [${set.rir}]`:"";
  if(w!==""&&r!=="") return `${w}\u00D7${r}${t}${rir}`;
  if(w!=="") return `${w}`;
- if(r!=="") return `${r}`;
+ if(r!=="") return `${r}${t}${rir}`;
  return "";
 }
 
@@ -411,19 +411,19 @@ function renderWorkout(){
   const div=document.createElement("div");div.className="exercise";
   div.innerHTML=`<div class="exhead"><div><div class="exname">${ex.name} <span id="pr_badge_${i}"></span></div><div class="hint">${ex.target}</div><div class="exstats">${lastSetText?`${sourceLabel}:${lastSetText}`:"No previous sets for this exercise"}${h.best?` \u2022 Best set: ${h.best.weight} \u00D7${h.best.reps}`:""}</div></div><button class="secondary" style="width:80px" onclick="startRest(${ex.rest})">${ex.rest}s</button></div>
   <div class="sets">
-  <div class="setrow"><span>Set</span><span>Weight</span><span>Reps</span><span>Tempo</span><span>RIR</span><span>Done</span></div>
+  <div class="setrow"><span>Set</span><span>Weight</span><span>Reps/Sec</span><span>Tempo</span><span>RIR</span><span>Done</span></div>
   ${Array.from({length:ex.sets||3},(_,idx)=>{
     const n=idx+1;
     const p=prevSets[idx]||{};
     const pw=p.weight??p.w??"";
     const pr=p.reps??p.r??"";
-    const pt=p.tempo??ex.defaultTempo??3;
+    const pt=p.tempo??ex.defaultTempo??(ex.defaultTempo===0?0:3);
     const prir=p.rir||"";
     const setLabel=(ex.setLabels&&ex.setLabels[idx])?ex.setLabels[idx]:n;
     return `<div class="setrow">
       <input value="${setLabel}" disabled style="text-align:center;padding:10px 2px">
-      <input id="w_${i}_${n}" type="number" step="0.5" value="${pw}" placeholder="lb" oninput="checkPR(${i},'${ex.name}')">
-      <input id="r_${i}_${n}" type="number" value="${pr}" placeholder="reps" oninput="checkPR(${i},'${ex.name}')">
+      <input id="w_${i}_${n}" type="number" step="0.5" value="${pw}" placeholder="lb/BW" oninput="checkPR(${i},'${ex.name}')">
+      <input id="r_${i}_${n}" type="number" value="${pr}" placeholder="reps/s" oninput="checkPR(${i},'${ex.name}')">
       <input id="t_${i}_${n}" type="number" step="1" value="${pt}" placeholder="sec" style="text-align:center">
       <select id="rir_${i}_${n}">
         <option value="" ${prir===""?"selected":""}>- RIR -</option>
@@ -864,7 +864,7 @@ function workoutDetails(workoutsForDate){
        const rir=s.rir?` [${s.rir}]`:"";
        if(wt && rp) return `${wt}\u00D7${rp}${tm}${rir}`;
        if(wt) return `${wt}`;
-       if(rp) return `${rp}`;
+       if(rp) return `${rp}${tm}${rir}`;
        return "";
      }).filter(Boolean).join(", ");
      return `${ex.name}: ${sets}`;
