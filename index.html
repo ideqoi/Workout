@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <meta name="apple-mobile-web-app-title" content="Bob's Tracker"/>
 <meta name="theme-color" content="#070b12"/>
-<title>Bob's Corner v1.8.3 Aesthetic Edition</title>
+<title>Bob's Corner v1.8.4 Aesthetic Edition</title>
 <style>
 :root{
   --bg:#070b12;--panel:#111827;--panel2:#0b1220;--soft:#1f2937;--line:#2f3a4c;
@@ -47,9 +47,8 @@ button.secondary{background:var(--soft);color:var(--text);border:1px solid var(-
 .exhead{display:flex;justify-content:space-between;gap:8px;align-items:center;padding:12px;border-bottom:1px solid var(--line)}
 .exname{font-weight:950}.hint{font-size:12px;color:var(--muted)}
 .sets{padding:10px}
-.setrow{display:grid;grid-template-columns:0.45fr 1fr 0.9fr 0.8fr 1.05fr 0.55fr;gap:6px;align-items:end;margin-bottom:7px}
+.setrow{display:grid;grid-template-columns:1fr 1fr 0.9fr 0.75fr 0.75fr 0.55fr;gap:6px;align-items:end;margin-bottom:7px}
 .setrow span{font-size:11px;color:var(--muted);padding-bottom:8px;text-align:center}
-.setrow select{padding:10px 2px;font-size:12px}
 .done{background:#064e3b!important;color:#bbf7d0!important;border:1px solid #15803d!important}
 table{width:100%;border-collapse:collapse;font-size:13px}th,td{border-bottom:1px solid var(--line);padding:8px;text-align:left;vertical-align:top}th{color:var(--blue)}
 .hidden{display:none}.tiny{font-size:12px;color:var(--muted);line-height:1.35}
@@ -70,7 +69,7 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
   <div class="header-top">
     <div>
       <h1>Bob's Corner &#x1F9EA;</h1>
-      <div class="phase">Goal: Fast Aesthetic Hypertrophy &bull; V-Taper Edition &bull; v1.8.3</div>
+      <div class="phase">Goal: Fast Aesthetic Hypertrophy &bull; V-Taper Edition &bull; v1.8.4</div>
     </div>
     <button class="theme-btn" onclick="toggleTheme()" id="themeToggleBtn">&#x1F313; Theme</button>
   </div>
@@ -181,7 +180,7 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
       <div><label>Date</label><input id="workDate" type="date"></div>
       <div><label>Workout</label><select id="workType" onchange="renderWorkout()"></select></div>
     </div>
-    <div id="workoutBox"></div><div class="notice goodnotice">Training Note: High-Yield Aesthetic Split. Prioritize the upper-chest shelf and wide delts. Strict 3-second lowering (&darr;3s) on all working reps. Log Tempo to force TUT progression. Weekends fully off for muscular growth.</div>
+    <div id="workoutBox"></div><div class="notice goodnotice">Training Note: Aesthetic V-Taper Split. Log Tempo down (&darr;s) and Hold at peak (s) to systematically overload TUT. Push compounds hard and take the final set of isolations to failure. Weekends are dedicated to full recovery.</div>
     <label>Notes</label><textarea id="workNotes" placeholder="Energy, pump, soreness, performance..."></textarea>
     <button onclick="saveWorkout()">Finish & Save Workout</button>
   </div>
@@ -256,8 +255,8 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
     <table id="histTable"><thead><tr><th>Date</th><th>Workout</th><th>Weight</th><th>Waist</th><th>Body Fat</th><th>Nutrition</th><th>Steps</th><th>Notes</th></tr></thead><tbody></tbody></table>
   </div>
   <div class="card">
-    <h2>Version 1.8.3 Aesthetic Edition Changelog <span class="versionchip">Bob's Corner</span></h2>
-    <div class="tiny">&bull; Re-ordered Push Day to open with Incline DB Bench Press to build the upper clavicular chest armor<br>&bull; Bumped DB Lateral Raises to 4 working sets to accelerate shoulder width and exaggerate the V-taper<br>&bull; Shifted Seated DB Shoulder Press to lead Day 4 (Upper) on fresh deltoids<br>&bull; Preserved Hanging Hollow Hold on Friday, dedicated Tempo tracking, Light/Dark theme, and Google Drive auto-sync</div>
+    <h2>Version 1.8.4 Aesthetic Edition Changelog <span class="versionchip">Bob's Corner</span></h2>
+    <div class="tiny">&bull; Replaced RIR column with editable Hold (s) input (defaults to 1s, auto-populates from prior sessions)<br>&bull; Calf raises on Wednesday increased to 4 sets in alternating pairs (Right, Left, Right, Left)<br>&bull; Preserved dedicated Tempo (s) input, Light/Dark theme toggle, and Google Drive auto-sync</div>
   </div>
 </section>
 </main>
@@ -329,34 +328,34 @@ function restoreFromGoogleDrive() {
 const targets={calories:2500, protein:180, fat:65, carbs:300};
 const workouts={
 "Push":[
- {name:"Incline DB Bench Press \u2022 Bench Position 3",target:"3 sets \u2022 8-10 reps \u2022 upper chest armor, deep bottom stretch",rest:90,defaultTempo:3},
- {name:"Flat DB Bench Press",target:"3 sets \u2022 8-10 reps \u2022 dense mid/lower chest mass",rest:90,defaultTempo:3},
- {name:"DB Lateral Raise",target:"4 sets \u2022 12-15 reps \u2022 lead with elbows, 0-1 RIR \u2022 builds the V-taper shelf",rest:60,defaultTempo:3,sets:4},
- {name:"Cable Triceps Pushdown",target:"3 sets \u2022 10-12 reps \u2022 lateral head horseshoe sweep",rest:60,defaultTempo:3}
+ {name:"Incline DB Bench Press \u2022 Bench Position 3",target:"3 sets \u2022 8-10 reps \u2022 upper chest armor, deep stretch",rest:90,defaultTempo:3,defaultHold:1},
+ {name:"Flat DB Bench Press",target:"3 sets \u2022 8-10 reps \u2022 dense mid/lower chest mass",rest:90,defaultTempo:3,defaultHold:1},
+ {name:"DB Lateral Raise",target:"4 sets \u2022 12-15 reps \u2022 lead with elbows \u2022 builds the V-taper shelf",rest:60,defaultTempo:3,defaultHold:1,sets:4},
+ {name:"Cable Triceps Pushdown",target:"3 sets \u2022 10-12 reps \u2022 lateral head horseshoe sweep",rest:60,defaultTempo:3,defaultHold:1}
 ],
 "Pull":[
- {name:"Wide-Grip Lat Pulldown",target:"3 sets \u2022 10-12 reps \u2022 builds outer lat wings",rest:90,defaultTempo:3},
- {name:"Seated Cable Row",target:"3 sets \u2022 8-10 reps \u2022 neutral/close grip, pull to navel",rest:90,defaultTempo:3},
- {name:"Incline DB Curl \u2022 Bench Position 3",target:"3 sets \u2022 10-12 reps \u2022 bicep peak builder",rest:60,defaultTempo:3},
- {name:"Loaded Decline Crunch",target:"3 sets \u2022 12 reps \u2022 etched six-pack bricks",rest:60,defaultTempo:3}
+ {name:"Wide-Grip Lat Pulldown",target:"3 sets \u2022 10-12 reps \u2022 builds outer lat wings",rest:90,defaultTempo:3,defaultHold:1},
+ {name:"Seated Cable Row",target:"3 sets \u2022 8-10 reps \u2022 neutral/close grip, pull to navel",rest:90,defaultTempo:3,defaultHold:1},
+ {name:"Incline DB Curl \u2022 Bench Position 3",target:"3 sets \u2022 10-12 reps \u2022 bicep peak builder",rest:60,defaultTempo:3,defaultHold:1},
+ {name:"Loaded Decline Crunch",target:"3 sets \u2022 12 reps \u2022 etched six-pack bricks",rest:60,defaultTempo:3,defaultHold:1}
 ],
 "Legs":[
- {name:"Goblet Squat",target:"3 sets \u2022 10-12 reps \u2022 upright torso, quad teardrop bias",rest:90,defaultTempo:3},
- {name:"Romanian Deadlift",target:"3 sets \u2022 10-12 reps \u2022 hamstring-glute tie in",rest:90,defaultTempo:3},
- {name:"DB Hip Thrust \u2022 Bench Position 1",target:"3 sets \u2022 12 reps \u2022 posture & glute density",rest:90,defaultTempo:3},
- {name:"Standing DB Calf Raise",target:"3 sets \u2022 15-20 reps \u2022 athletic lower leg shape",rest:60,defaultTempo:3}
+ {name:"Goblet Squat",target:"3 sets \u2022 10-12 reps \u2022 upright torso, quad teardrop bias",rest:90,defaultTempo:3,defaultHold:1},
+ {name:"Romanian Deadlift",target:"3 sets \u2022 10-12 reps \u2022 hamstring-glute tie in",rest:90,defaultTempo:3,defaultHold:1},
+ {name:"DB Hip Thrust \u2022 Bench Position 1",target:"3 sets \u2022 12 reps \u2022 posture & glute density",rest:90,defaultTempo:3,defaultHold:1},
+ {name:"Standing DB Calf Raise",target:"4 sets \u2022 15-20 reps \u2022 DB Right, Left, Right, Left \u2022 pause at peak and stretch",rest:60,defaultTempo:3,defaultHold:2,sets:4,setLabels:["Set 1 (Right)","Set 2 (Left)","Set 3 (Right)","Set 4 (Left)"]}
 ],
 "Upper":[
- {name:"Seated DB Shoulder Press \u2022 Bench Position 6",target:"3 sets \u2022 8-10 reps \u2022 round, 3D shoulder caps",rest:90,defaultTempo:3},
- {name:"Underhand Lat Pulldown",target:"3 sets \u2022 10-12 reps \u2022 lower lat sweep & bicep power",rest:90,defaultTempo:3},
- {name:"Chest Supported DB Row \u2022 Bench Position 3",target:"3 sets \u2022 8-10 reps \u2022 dense upper back detail",rest:90,defaultTempo:3},
- {name:"Incline DB Skull Crusher \u2022 Bench Position 3",target:"3 sets \u2022 10-12 reps \u2022 tricep long-head mass",rest:60,defaultTempo:3}
+ {name:"Seated DB Shoulder Press \u2022 Bench Position 6",target:"3 sets \u2022 8-10 reps \u2022 round, 3D shoulder caps",rest:90,defaultTempo:3,defaultHold:1},
+ {name:"Underhand Lat Pulldown",target:"3 sets \u2022 10-12 reps \u2022 lower lat sweep & bicep power",rest:90,defaultTempo:3,defaultHold:1},
+ {name:"Chest Supported DB Row \u2022 Bench Position 3",target:"3 sets \u2022 8-10 reps \u2022 dense upper back detail",rest:90,defaultTempo:3,defaultHold:1},
+ {name:"Incline DB Skull Crusher \u2022 Bench Position 3",target:"3 sets \u2022 10-12 reps \u2022 tricep long-head mass",rest:60,defaultTempo:3,defaultHold:1}
 ],
 "Lower":[
- {name:"Romanian Deadlift",target:"3 sets \u2022 8-10 reps \u2022 heavy posterior chain loading",rest:90,defaultTempo:3},
- {name:"Goblet Squat",target:"3 sets \u2022 10-12 reps \u2022 bilateral quad overload",rest:90,defaultTempo:3},
- {name:"Hanging Hollow Hold",target:"3 sets \u2022 20-30 sec \u2022 deep transverse corset & spinal decompression",rest:60,defaultTempo:0},
- {name:"Loaded Decline Crunch",target:"3 sets \u2022 12 reps \u2022 ab brick hypertrophy",rest:60,defaultTempo:3}
+ {name:"Romanian Deadlift",target:"3 sets \u2022 8-10 reps \u2022 heavy posterior chain loading",rest:90,defaultTempo:3,defaultHold:1},
+ {name:"Goblet Squat",target:"3 sets \u2022 10-12 reps \u2022 bilateral quad overload",rest:90,defaultTempo:3,defaultHold:1},
+ {name:"Hanging Hollow Hold",target:"3 sets \u2022 20-30 sec \u2022 deep transverse corset & spinal decompression",rest:60,defaultTempo:0,defaultHold:0},
+ {name:"Loaded Decline Crunch",target:"3 sets \u2022 12 reps \u2022 ab brick hypertrophy",rest:60,defaultTempo:3,defaultHold:1}
 ]
 };
 function today(){return new Date().toISOString().slice(0,10)}
@@ -391,11 +390,11 @@ function setDisplay(set){
  if(!set) return "";
  const w=set.weight??set.w??"";
  const r=set.reps??set.r??"";
- const t=set.tempo?` (${set.tempo}s)`:"";
- const rir=set.rir?` [${set.rir}]`:"";
- if(w!==""&&r!=="") return `${w}\u00D7${r}${t}${rir}`;
+ const t=set.tempo!==undefined&&set.tempo!==""?` (${set.tempo}s)`:"";
+ const h=set.hold!==undefined&&set.hold!==""?` [H:${set.hold}s]`:"";
+ if(w!==""&&r!=="") return `${w}\u00D7${r}${t}${h}`;
  if(w!=="") return `${w}`;
- if(r!=="") return `${r}${t}${rir}`;
+ if(r!=="") return `${r}${t}${h}`;
  return "";
 }
 
@@ -411,27 +410,21 @@ function renderWorkout(){
   const div=document.createElement("div");div.className="exercise";
   div.innerHTML=`<div class="exhead"><div><div class="exname">${ex.name} <span id="pr_badge_${i}"></span></div><div class="hint">${ex.target}</div><div class="exstats">${lastSetText?`${sourceLabel}:${lastSetText}`:"No previous sets for this exercise"}${h.best?` \u2022 Best set: ${h.best.weight} \u00D7${h.best.reps}`:""}</div></div><button class="secondary" style="width:80px" onclick="startRest(${ex.rest})">${ex.rest}s</button></div>
   <div class="sets">
-  <div class="setrow"><span>Set</span><span>Weight</span><span>Reps/Sec</span><span>Tempo</span><span>RIR</span><span>Done</span></div>
+  <div class="setrow"><span>Set</span><span>Weight</span><span>Reps/Sec</span><span>Tempo</span><span>Hold</span><span>Done</span></div>
   ${Array.from({length:ex.sets||3},(_,idx)=>{
     const n=idx+1;
     const p=prevSets[idx]||{};
     const pw=p.weight??p.w??"";
     const pr=p.reps??p.r??"";
-    const pt=p.tempo??ex.defaultTempo??(ex.defaultTempo===0?0:3);
-    const prir=p.rir||"";
-    const setLabel=(ex.setLabels&&ex.setLabels[idx])?ex.setLabels[idx]:n;
+    const pt=p.tempo!==undefined&&p.tempo!==""?p.tempo:(ex.defaultTempo!==undefined?ex.defaultTempo:3);
+    const ph=p.hold!==undefined&&p.hold!==""?p.hold:(ex.defaultHold!==undefined?ex.defaultHold:1);
+    const setLabel=(ex.setLabels&&ex.setLabels[idx])?ex.setLabels[idx]:`Set ${n}`;
     return `<div class="setrow">
-      <input value="${setLabel}" disabled style="text-align:center;padding:10px 2px">
+      <input value="${setLabel}" disabled style="text-align:center;padding:10px 2px;font-size:11px">
       <input id="w_${i}_${n}" type="number" step="0.5" value="${pw}" placeholder="lb/BW" oninput="checkPR(${i},'${ex.name}')">
       <input id="r_${i}_${n}" type="number" value="${pr}" placeholder="reps/s" oninput="checkPR(${i},'${ex.name}')">
-      <input id="t_${i}_${n}" type="number" step="1" value="${pt}" placeholder="sec" style="text-align:center">
-      <select id="rir_${i}_${n}">
-        <option value="" ${prir===""?"selected":""}>- RIR -</option>
-        <option value="2 RIR" ${prir==="2 RIR"?"selected":""}>2 RIR</option>
-        <option value="1 RIR" ${prir==="1 RIR"?"selected":""}>1 RIR</option>
-        <option value="0 RIR" ${prir==="0 RIR"?"selected":""}>0 RIR (Failure)</option>
-        <option value="3+ RIR" ${prir==="3+ RIR"?"selected":""}>3+ RIR</option>
-      </select>
+      <input id="t_${i}_${n}" type="number" step="1" value="${pt}" placeholder="down" style="text-align:center">
+      <input id="h_${i}_${n}" type="number" step="1" value="${ph}" placeholder="hold" style="text-align:center">
       <button class="secondary" onclick="handleSetDone(this, ${ex.rest}, ${i}, '${ex.name}')">&#x2713;</button>
     </div>`;
   }).join("")}
@@ -581,11 +574,11 @@ function saveWorkout(){
    name:e.name,
    sets:Array.from({length:e.sets||3},(_,idx)=>{
      const n=idx+1;
-     const w = val(`w_${i}_${n}`), r = val(`r_${i}_${n}`), t = val(`t_${i}_${n}`), rir = val(`rir_${i}_${n}`);
+     const w = val(`w_${i}_${n}`), r = val(`r_${i}_${n}`), t = val(`t_${i}_${n}`), h = val(`h_${i}_${n}`);
      if (numeric(w) && numeric(r)) {
        totalTonnage += (numeric(w) * numeric(r));
      }
-     return {weight:w, reps:r, tempo:t, rir:rir};
+     return {weight:w, reps:r, tempo:t, hold:h};
    }).filter(s=>s.weight||s.reps)
  }));
  d.workouts.push({date:val("workDate"),type,ex,notes:val("workNotes")});
@@ -638,7 +631,7 @@ function splitWeekAverages(arr,key){const sorted=[...arr].sort((a,b)=>a.date.loc
 function trendText(current,previous,unit){if(current===null||previous===null)return "Need another week";const diff=current-previous,eps=unit==='"'?0.05:0.15;if(Math.abs(diff)<eps)return "\u27A1\uFE0F stable";return `${diff>0?"\u2B06\uFE0F":"\u2B07\uFE0F"} ${Math.abs(diff).toFixed(unit==='"'?2:1)}${unit} vs prior 7 logs`}
 function daysSince(dateStr){if(!dateStr)return null;return Math.max(0,Math.floor((new Date(today()+"T12:00:00")-new Date(dateStr+"T12:00:00"))/86400000))}
 function workoutStreak(workouts){const dates=[...new Set(workouts.map(w=>w.date))].sort().reverse();if(!dates.length)return 0;let streak=1;for(let i=1;i<dates.length;i++){const gap=(new Date(dates[i-1]+"T12:00:00")-new Date(dates[i]+"T12:00:00"))/86400000;if(gap<=3)streak++;else break}return streak}
-function saveCutSettings(){const d=data();d.settings={cutStartDate:val("cutStartDate")||"2026-08-13",goalWeight:numeric(val("goalWeight"))||163,plannedRate:numeric(val("plannedRate"))||0.0,height:numeric(val("userHeight"))||68};save(d);alert("Phase settings saved")}
+function saveCutSettings(){const d=data();d.settings={cutStartDate:val("cutStartDate")||"2026-08-13",goalWeight:163,plannedRate:numeric(val("plannedRate"))||0.0,height:numeric(val("userHeight"))||68};save(d);alert("Phase settings saved")}
 function loadCutSettings(){const s=data().settings||{};document.getElementById("cutStartDate").value=s.cutStartDate||"2026-08-13";document.getElementById("goalWeight").value=s.goalWeight||163;document.getElementById("plannedRate").value=s.plannedRate||0.0;document.getElementById("userHeight").value=s.height||68}
 function dateDiffDays(a,b){return Math.floor((new Date(a+"T12:00:00")-new Date(b+"T12:00:00"))/86400000)}
 function cutMetrics(d){
@@ -860,11 +853,11 @@ function workoutDetails(workoutsForDate){
      const sets=(ex.sets||[]).map(s=>{
        const wt=s.weight||s.w||"";
        const rp=s.reps||s.r||"";
-       const tm=s.tempo?` (${s.tempo}s)`:"";
-       const rir=s.rir?` [${s.rir}]`:"";
-       if(wt && rp) return `${wt}\u00D7${rp}${tm}${rir}`;
+       const tm=s.tempo!==undefined&&s.tempo!==""?` (${s.tempo}s)`:"";
+       const hd=s.hold!==undefined&&s.hold!==""?` [H:${s.hold}s]`:"";
+       if(wt && rp) return `${wt}\u00D7${rp}${tm}${hd}`;
        if(wt) return `${wt}`;
-       if(rp) return `${rp}${tm}${rir}`;
+       if(rp) return `${rp}${tm}${hd}`;
        return "";
      }).filter(Boolean).join(", ");
      return `${ex.name}: ${sets}`;
@@ -964,4 +957,3 @@ renderAll();
 </script>
 </body>
 </html>
-
