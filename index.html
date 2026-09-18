@@ -1,3 +1,10 @@
+To look visibly muscular and chiseled as fast as humanly possible, the strategy comes down to optical framing. You cannot add 10 pounds of raw muscle across your entire body in 8 weeks, but by driving maximum hypertrophy into four key areas—side delts, upper chest, upper back width (lats), and triceps—you create the dramatic illusion of an etched, wide V-taper frame immediately.
+Here is the exact code update for your index.html file that shifts your split into this high-impact visual framework.
+What This Adjusts:
+ * Day 1 (Push): Opens with Incline DB Bench Press to aggressively build the upper-chest shelf right under the collarbone, moves into Flat DB Bench Press, and bumps DB Lateral Raises up to 4 sets (side delts recover fast and directly widen your shoulder silhouette).
+ * Day 4 (Upper): Leads with Seated DB Shoulder Press on fresh shoulders to build 3D front-and-side delt thickness, followed by width-focused lat pulldowns, upper-back rowing, and deep-stretch skull crushers.
+ * Days 2, 3, and 5: Retain your exact bilateral pulling, lower-body athletic foundation, and the combo of Loaded Decline Crunches and Hanging Hollow Holds to keep the waist tightly cinched.
+Complete Updated index.html (v1.8.3 Chiseled Edition)
 <!doctype html>
 <html lang="en">
 <head>
@@ -7,7 +14,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <meta name="apple-mobile-web-app-title" content="Bob's Tracker"/>
 <meta name="theme-color" content="#070b12"/>
-<title>Bob's Corner v1.8.2 Recomp Edition</title>
+<title>Bob's Corner v1.8.3 Aesthetic Edition</title>
 <style>
 :root{
   --bg:#070b12;--panel:#111827;--panel2:#0b1220;--soft:#1f2937;--line:#2f3a4c;
@@ -70,7 +77,7 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
   <div class="header-top">
     <div>
       <h1>Bob's Corner &#x1F9EA;</h1>
-      <div class="phase">Goal: Build Muscle &bull; Recomp & Maintain Leanness &bull; v1.8.2</div>
+      <div class="phase">Goal: Fast Aesthetic Hypertrophy &bull; V-Taper Edition &bull; v1.8.3</div>
     </div>
     <button class="theme-btn" onclick="toggleTheme()" id="themeToggleBtn">&#x1F313; Theme</button>
   </div>
@@ -181,7 +188,7 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
       <div><label>Date</label><input id="workDate" type="date"></div>
       <div><label>Workout</label><select id="workType" onchange="renderWorkout()"></select></div>
     </div>
-    <div id="workoutBox"></div><div class="notice goodnotice">Training Note: 5-day split (4 high-yield exercises per day). Log your eccentric tempo down (s) to track time under tension. Push each set to 1 RIR (0 RIR on final isolations). Dynamic Double Progression: log your true output on every set. Weekends off for recovery.</div>
+    <div id="workoutBox"></div><div class="notice goodnotice">Training Note: High-Yield Aesthetic Split. Prioritize the upper-chest shelf and wide delts. Strict 3-second lowering (&darr;3s) on all working reps. Log Tempo to force TUT progression. Weekends fully off for muscular growth.</div>
     <label>Notes</label><textarea id="workNotes" placeholder="Energy, pump, soreness, performance..."></textarea>
     <button onclick="saveWorkout()">Finish & Save Workout</button>
   </div>
@@ -256,8 +263,8 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
     <table id="histTable"><thead><tr><th>Date</th><th>Workout</th><th>Weight</th><th>Waist</th><th>Body Fat</th><th>Nutrition</th><th>Steps</th><th>Notes</th></tr></thead><tbody></tbody></table>
   </div>
   <div class="card">
-    <h2>Version 1.8.2 Recomp Edition Changelog <span class="versionchip">Bob's Corner</span></h2>
-    <div class="tiny">&bull; Updated Friday Lower routine: swapped calf raises for Hanging Hollow Hold (decompression + deep pelvic tilt/anti-extension)[cite: 3]<br>&bull; Preserved dedicated Eccentric Tempo (s) input with auto-population from prior sessions[cite: 3]<br>&bull; Preserved Light/Dark theme toggle, Navy BF calculations, and Google Drive cloud synchronization[cite: 3]</div>
+    <h2>Version 1.8.3 Aesthetic Edition Changelog <span class="versionchip">Bob's Corner</span></h2>
+    <div class="tiny">&bull; Re-ordered Push Day to open with Incline DB Bench Press to build the upper clavicular chest armor<br>&bull; Bumped DB Lateral Raises to 4 working sets to accelerate shoulder width and exaggerate the V-taper<br>&bull; Shifted Seated DB Shoulder Press to lead Day 4 (Upper) on fresh deltoids<br>&bull; Preserved Hanging Hollow Hold on Friday, dedicated Tempo tracking, Light/Dark theme, and Google Drive auto-sync</div>
   </div>
 </section>
 </main>
@@ -329,34 +336,34 @@ function restoreFromGoogleDrive() {
 const targets={calories:2500, protein:180, fat:65, carbs:300};
 const workouts={
 "Push":[
- {name:"Flat DB Bench Press",target:"3 sets \u2022 8-10 reps \u2022 deep stretch, controlled drive",rest:90,defaultTempo:3},
- {name:"Seated DB Shoulder Press \u2022 Bench Position 6",target:"3 sets \u2022 8-10 reps",rest:90,defaultTempo:3},
- {name:"DB Lateral Raise",target:"3 sets \u2022 12-15 reps \u2022 lead with elbows, 0-1 RIR",rest:60,defaultTempo:3},
- {name:"Cable Triceps Pushdown",target:"3 sets \u2022 10-12 reps \u2022 locked elbows",rest:60,defaultTempo:3}
+ {name:"Incline DB Bench Press \u2022 Bench Position 3",target:"3 sets \u2022 8-10 reps \u2022 upper chest armor, deep bottom stretch",rest:90,defaultTempo:3},
+ {name:"Flat DB Bench Press",target:"3 sets \u2022 8-10 reps \u2022 dense mid/lower chest mass",rest:90,defaultTempo:3},
+ {name:"DB Lateral Raise",target:"4 sets \u2022 12-15 reps \u2022 lead with elbows, 0-1 RIR \u2022 builds the V-taper shelf",rest:60,defaultTempo:3,sets:4},
+ {name:"Cable Triceps Pushdown",target:"3 sets \u2022 10-12 reps \u2022 lateral head horseshoe sweep",rest:60,defaultTempo:3}
 ],
 "Pull":[
- {name:"Wide-Grip Lat Pulldown",target:"3 sets \u2022 10-12 reps \u2022 full scapular stretch",rest:90,defaultTempo:3},
+ {name:"Wide-Grip Lat Pulldown",target:"3 sets \u2022 10-12 reps \u2022 builds outer lat wings",rest:90,defaultTempo:3},
  {name:"Seated Cable Row",target:"3 sets \u2022 8-10 reps \u2022 neutral/close grip, pull to navel",rest:90,defaultTempo:3},
- {name:"Incline DB Curl \u2022 Bench Position 3",target:"3 sets \u2022 10-12 reps \u2022 zero shoulder swing",rest:60,defaultTempo:3},
- {name:"Loaded Decline Crunch",target:"3 sets \u2022 12 reps \u2022 roll ribs down, 1 RIR",rest:60,defaultTempo:3}
+ {name:"Incline DB Curl \u2022 Bench Position 3",target:"3 sets \u2022 10-12 reps \u2022 bicep peak builder",rest:60,defaultTempo:3},
+ {name:"Loaded Decline Crunch",target:"3 sets \u2022 12 reps \u2022 etched six-pack bricks",rest:60,defaultTempo:3}
 ],
 "Legs":[
- {name:"Goblet Squat",target:"3 sets \u2022 10-12 reps \u2022 upright torso, deep knee flexion",rest:90,defaultTempo:3},
- {name:"Romanian Deadlift",target:"3 sets \u2022 10-12 reps \u2022 push hips back, neutral spine",rest:90,defaultTempo:3},
- {name:"DB Hip Thrust \u2022 Bench Position 1",target:"3 sets \u2022 12 reps \u2022 shoulders across bench, 1s hard glute lockout",rest:90,defaultTempo:3},
- {name:"Standing DB Calf Raise",target:"3 sets \u2022 15-20 reps \u2022 full pause at stretch & peak",rest:60,defaultTempo:3}
+ {name:"Goblet Squat",target:"3 sets \u2022 10-12 reps \u2022 upright torso, quad teardrop bias",rest:90,defaultTempo:3},
+ {name:"Romanian Deadlift",target:"3 sets \u2022 10-12 reps \u2022 hamstring-glute tie in",rest:90,defaultTempo:3},
+ {name:"DB Hip Thrust \u2022 Bench Position 1",target:"3 sets \u2022 12 reps \u2022 posture & glute density",rest:90,defaultTempo:3},
+ {name:"Standing DB Calf Raise",target:"3 sets \u2022 15-20 reps \u2022 athletic lower leg shape",rest:60,defaultTempo:3}
 ],
 "Upper":[
- {name:"Incline DB Bench Press \u2022 Bench Position 3",target:"3 sets \u2022 8-10 reps \u2022 upper pec bias",rest:90,defaultTempo:3},
- {name:"Underhand Lat Pulldown",target:"3 sets \u2022 10-12 reps \u2022 lower lat & bicep drive",rest:90,defaultTempo:3},
- {name:"Chest Supported DB Row \u2022 Bench Position 3",target:"3 sets \u2022 8-10 reps \u2022 bilateral pull",rest:90,defaultTempo:3},
- {name:"Incline DB Skull Crusher \u2022 Bench Position 3",target:"3 sets \u2022 10-12 reps \u2022 long-head stretch",rest:60,defaultTempo:3}
+ {name:"Seated DB Shoulder Press \u2022 Bench Position 6",target:"3 sets \u2022 8-10 reps \u2022 round, 3D shoulder caps",rest:90,defaultTempo:3},
+ {name:"Underhand Lat Pulldown",target:"3 sets \u2022 10-12 reps \u2022 lower lat sweep & bicep power",rest:90,defaultTempo:3},
+ {name:"Chest Supported DB Row \u2022 Bench Position 3",target:"3 sets \u2022 8-10 reps \u2022 dense upper back detail",rest:90,defaultTempo:3},
+ {name:"Incline DB Skull Crusher \u2022 Bench Position 3",target:"3 sets \u2022 10-12 reps \u2022 tricep long-head mass",rest:60,defaultTempo:3}
 ],
 "Lower":[
- {name:"Romanian Deadlift",target:"3 sets \u2022 8-10 reps \u2022 heavy posterior load",rest:90,defaultTempo:3},
+ {name:"Romanian Deadlift",target:"3 sets \u2022 8-10 reps \u2022 heavy posterior chain loading",rest:90,defaultTempo:3},
  {name:"Goblet Squat",target:"3 sets \u2022 10-12 reps \u2022 bilateral quad overload",rest:90,defaultTempo:3},
- {name:"Hanging Hollow Hold",target:"3 sets \u2022 20-30 sec \u2022 depress scapulae, ribs to belt, hollow core",rest:60,defaultTempo:0},
- {name:"Loaded Decline Crunch",target:"3 sets \u2022 12 reps \u2022 anchor hips, roll ribs to belt",rest:60,defaultTempo:3}
+ {name:"Hanging Hollow Hold",target:"3 sets \u2022 20-30 sec \u2022 deep transverse corset & spinal decompression",rest:60,defaultTempo:0},
+ {name:"Loaded Decline Crunch",target:"3 sets \u2022 12 reps \u2022 ab brick hypertrophy",rest:60,defaultTempo:3}
 ]
 };
 function today(){return new Date().toISOString().slice(0,10)}
@@ -964,3 +971,4 @@ renderAll();
 </script>
 </body>
 </html>
+
