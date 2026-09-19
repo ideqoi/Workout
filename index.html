@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <meta name="apple-mobile-web-app-title" content="Bob's Tracker"/>
 <meta name="theme-color" content="#070b12"/>
-<title>Bob's Corner v1.9.1 Auto-Sync Edition</title>
+<title>Bob's Corner v1.9.4 Quantity Edit Edition</title>
 <style>
 :root{
   --bg:#070b12;--panel:#111827;--panel2:#0b1220;--soft:#1f2937;--line:#2f3a4c;
@@ -35,7 +35,7 @@ h1{font-size:24px;margin:0;font-weight:900;letter-spacing:.2px}.phase{font-size:
 main{max-width:1050px;margin:0 auto;padding:14px 14px 70px}
 .card{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:18px;padding:15px;margin-bottom:14px;box-shadow:0 10px 30px rgba(0,0,0,0.15)}
 h2{font-size:18px;margin:0 0 12px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
-.stat{background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:12px}.stat .label{font-size:12px;color:var(--muted)}.stat .value{font-size:26px;font-weight:950;margin-top:4px}
+.stat{background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:12px}.stat .label{font-size:12px;color:var(--muted)}.stat .value{font-size:24px;font-weight:950;margin-top:4px}
 .badge{display:inline-flex;align-items:center;gap:5px;border-radius:999px;padding:5px 9px;background:rgba(59,130,246,0.15);color:var(--blue);border:1px solid var(--line);font-size:12px;font-weight:800;margin:3px}
 .green{color:var(--green)}.orange{color:var(--orange)}.red{color:var(--red)}.blue{color:var(--blue)}.purple{color:var(--purple)}.cyan{color:var(--cyan)}
 label{display:block;font-size:12px;color:var(--muted);margin:10px 0 5px}
@@ -77,6 +77,7 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
 .mealHeader{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
 .mealHeader h3{margin:0;font-size:15px}
 .foodItemRow{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.06);font-size:13px}
+.foodItemActions{display:flex;gap:5px;align-items:center}
 .pantryGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px;margin-top:8px}
 .pantryBtn{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:10px 8px;text-align:left;color:var(--text);cursor:pointer;display:flex;flex-direction:column;justify-content:space-between}
 .pantryBtn:hover{border-color:var(--blue)}
@@ -84,6 +85,8 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
 .pantryBtn small{color:var(--muted);font-size:11px;margin-top:3px}
 .delItemBtn{width:auto;padding:3px 8px;font-size:11px;border-radius:8px;background:rgba(239,68,68,0.2);color:var(--red);border:1px solid rgba(239,68,68,0.4);cursor:pointer}
 .delItemBtn:hover{background:var(--red);color:#fff}
+.editItemBtn{width:auto;padding:3px 8px;font-size:11px;border-radius:8px;background:rgba(59,130,246,0.2);color:var(--blue);border:1px solid rgba(59,130,246,0.4);cursor:pointer}
+.editItemBtn:hover{background:var(--blue);color:#fff}
 </style>
 </head>
 <body>
@@ -91,7 +94,7 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
   <div class="header-top">
     <div>
       <h1>Bob's Corner &#x1F9EA;</h1>
-      <div class="phase">Goal: Fast Aesthetic Hypertrophy &bull; Auto-Sync Edition &bull; v1.9.1</div>
+      <div class="phase">Goal: Fast Aesthetic Hypertrophy &bull; Dynamic Target Edition &bull; v1.9.4</div>
     </div>
     <div style="display:flex;align-items:center;gap:8px">
       <span id="syncStatusBadge" class="sync-indicator synced">&#x2601;&#xFE0F; Synced</span>
@@ -130,8 +133,8 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
       <div class="stat"><div class="label">7-Day Avg Calories</div><div class="value" id="dCalories">--</div></div>
       <div class="stat"><div class="label">Workout Streak</div><div class="value" id="dStreak">--</div><div class="tiny">consecutive logged sessions</div></div>
       <div class="stat"><div class="label">Phase Days</div><div class="value" id="dCutDay">--</div><div class="tiny" id="dCutDates"></div></div>
-      <div class="stat"><div class="label">Net Weight vs Baseline</div><div class="value" id="dLost">--</div><div class="tiny" id="dStartWeight"></div></div>
-      <div class="stat"><div class="label">Target Zone</div><div class="value" id="dFinish">162-165 lb</div><div class="tiny" id="dRate">Recomp / Maintenance</div></div>
+      <div class="stat"><div class="label">Target Finish Goal</div><div class="value" id="dFinish" style="font-size:19px">13.5% BF &bull; Jan 8, 2027</div><div class="tiny" id="dRate">Target Waist: 31.0" - 31.25"</div></div>
+      <div class="stat"><div class="label">Pacing Status (Waist)</div><div class="value" id="dPacing" style="font-size:20px">--</div><div class="tiny" id="dPacingSub">Comparing live average to timeline</div></div>
     </div>
     <div class="card" style="margin:14px 0 0;background:var(--panel2)">
       <h2 style="margin-bottom:8px">7-Day Nutrition Averages</h2>
@@ -144,15 +147,19 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
     </div>
   </div>
   <div class="card">
-    <h2>Phase Setup</h2>
+    <h2>Phase Setup & Target Benchmarks</h2>
     <div class="row4">
       <div><label>Phase Start Date</label><input id="cutStartDate" type="date" value="2026-08-13"></div>
-      <div><label>Target Weight (lb)</label><input id="goalWeight" type="number" step="0.1" value="163"></div>
+      <div><label>Target Finish Date</label><input id="targetEndDate" type="date" value="2027-01-08"></div>
+      <div><label>Goal Waist (in)</label><input id="goalWaist" type="number" step="0.05" value="31.25"></div>
+      <div><label>Goal Weight (lb)</label><input id="goalWeight" type="number" step="0.1" value="163"></div>
+    </div>
+    <div class="row" style="margin-top:8px">
       <div><label>Height (Inches)</label><input id="userHeight" type="number" step="0.5" value="68"></div>
       <div><label>Target Weekly Loss/Gain</label><input id="plannedRate" type="number" step="0.1" value="0.0"></div>
     </div>
-    <button class="secondary" onclick="saveCutSettings()">Save Phase Settings</button>
-    <p class="tiny">Configured for 2,650 kcal maintenance baseline at 68 inches (5 ft 8 in).</p>
+    <button class="secondary" style="margin-top:10px" onclick="saveCutSettings()">Save Phase & Target Settings</button>
+    <p class="tiny">Configured for 2,650 kcal maintenance recomp toward 13.5% body fat (~31.25" waist) by Jan 8, 2027.</p>
   </div>
   <div class="card">
     <h2>Coach Read</h2>
@@ -205,7 +212,7 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
       <div><label>Date</label><input id="workDate" type="date"></div>
       <div><label>Workout</label><select id="workType" onchange="renderWorkout()"></select></div>
     </div>
-    <div id="workoutBox"></div><div class="notice goodnotice">Training Note: Aesthetic V-Taper Split. Control eccentric (&darr;3s). Hold peak contraction. Compounds heavy, isolations to failure.[cite: 2] Every logged set auto-syncs live.</div>
+    <div id="workoutBox"></div><div class="notice goodnotice">Training Note: Aesthetic V-Taper Split. Control eccentric (&darr;3s). Hold peak contraction. Compounds heavy, isolations to failure. Every logged set auto-syncs live.</div>
     <label>Notes</label><textarea id="workNotes" placeholder="Energy, pump, soreness, performance..." oninput="autoSaveWorkoutDraft()"></textarea>
     <button onclick="saveWorkout()">Finish Session & Force Sync</button>
   </div>
@@ -238,7 +245,7 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
   <div class="card"><h2>Body Fat % Trend (Navy)</h2><canvas id="bodyFatChart" width="800" height="260"></canvas></div>
 </section>
 
-<!-- ENHANCED DAILY FOOD JOURNAL WITH LIVE AUTO-SYNC -->
+<!-- ENHANCED DAILY FOOD JOURNAL WITH EDITABLE QUANTITIES -->
 <section id="nutrition" class="screen hidden">
   <div class="card">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
@@ -291,7 +298,7 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
       </div>
     </div>
 
-    <!-- Meal Slots with Delete Buttons -->
+    <!-- Meal Slots with Edit and Delete Buttons -->
     <div id="mealSlotsContainer"></div>
 
     <div class="row" style="margin-top:12px">
@@ -379,8 +386,8 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
     <table id="histTable"><thead><tr><th>Date</th><th>Workout</th><th>Weight</th><th>Waist</th><th>Body Fat</th><th>Nutrition</th><th>Steps</th><th>Notes</th></tr></thead><tbody></tbody></table>
   </div>
   <div class="card">
-    <h2>Version 1.9.1 Auto-Sync Edition Changelog <span class="versionchip">Bob's Corner</span></h2>
-    <div class="tiny">&bull; Automated background cloud sync: Every meal item added/deleted, rep logged, and metric entered triggers debounced background sync without manual buttons[cite: 2]<br>&bull; Header sync status badge indicates live save status (Saved / Syncing / Error)<br>&bull; Full-day copy and template creation automation<br>&bull; 12 pantry staples loaded with scaleable units (fl oz and grams)</div>
+    <h2>Version 1.9.4 Dynamic Target &amp; Edit Edition Changelog <span class="versionchip">Bob's Corner</span></h2>
+    <div class="tiny">&bull; Added inline ✏️ Edit button on all logged food items to adjust grams or fl oz with instant proportional macro recalculation[cite: 2]<br>&bull; Dynamic target recalculation on every log and metric interaction without needing a refresh[cite: 2]<br>&bull; Pacing engine displays exact status (Ahead / On Track / Behind) toward 13.5% BF &amp; 31.25" waist by Jan 8, 2027<br>&bull; Full debounced background sync engine active</div>
   </div>
 </section>
 </main>
@@ -418,7 +425,7 @@ function triggerAutoSync(){
   clearTimeout(syncDebounceTimer);
   syncDebounceTimer = setTimeout(()=>{
     syncToGoogleDrive(true);
-  }, 1200); // Waits 1.2s after last interaction before uploading
+  }, 1200);
 }
 
 async function syncToGoogleDrive(silent=false) {
@@ -531,7 +538,9 @@ Object.keys(workouts).forEach(k=>{let o=document.createElement("option");o.textC
 
 function data(){
   const d=JSON.parse(localStorage.getItem("recompCoach")||'{"workouts":[],"body":[],"nutrition":[]}');
-  d.settings=d.settings||{cutStartDate:"2026-08-13",goalWeight:163,plannedRate:0.0,height:68};
+  d.settings=d.settings||{cutStartDate:"2026-08-13",targetEndDate:"2027-01-08",goalWaist:31.25,goalWeight:163,plannedRate:0.0,height:68};
+  if(!d.settings.targetEndDate) d.settings.targetEndDate="2027-01-08";
+  if(!d.settings.goalWaist) d.settings.goalWaist=31.25;
   d.foodLogs=d.foodLogs||{};
   d.dayTemplates=d.dayTemplates||{};
   return d;
@@ -690,7 +699,6 @@ function updateWaistAverage(){
   }
 }
 
-/* LIVE AUTO-SYNC FOR WORKOUT */
 function autoSaveWorkoutDraft(){
   const d=data(), type=workType.value, curDate=val("workDate")||today();
   let totalTonnage = 0;
@@ -714,7 +722,6 @@ function saveWorkout(){
   alert("\u2705 Workout saved and synced live to Google Drive!");
 }
 
-/* LIVE AUTO-SYNC FOR BODY */
 function autoSaveBodyOnChange(){
   const weightVal = val("weight");
   if(!weightVal) return;
@@ -788,7 +795,10 @@ function renderMealSlots(items){
             <strong>${item.name}</strong> <small style="color:var(--muted)">(${item.portion})</small><br>
             <span class="tiny">${item.cal} kcal &bull; P:${item.p}g &bull; C:${item.c}g &bull; Fib:${item.fib||0}g &bull; F:${item.f}g</span>
           </div>
-          <button class="delItemBtn" onclick="deleteJournalItem('${slot}', ${idx})">&#x2715; Remove</button>
+          <div class="foodItemActions">
+            <button class="editItemBtn" onclick="editJournalItemQuantity('${slot}', ${idx})">&#x270F;&#xFE0F; Edit</button>
+            <button class="delItemBtn" onclick="deleteJournalItem('${slot}', ${idx})">&#x2715;</button>
+          </div>
         </div>`;
       }).join("");
     }
@@ -852,7 +862,7 @@ function autoSyncNutritionRollup(){
   if(existingIdx !== -1) d.nutrition[existingIdx] = entry;
   else d.nutrition.push(entry);
 
-  save(d); // Saves locally and kicks off live Google Drive auto-sync
+  save(d);
 }
 
 function autoSyncNutritionFields(){
@@ -865,6 +875,45 @@ function addFoodToJournal(foodObj){
   d.foodLogs = d.foodLogs || {};
   d.foodLogs[curDate] = d.foodLogs[curDate] || {items:[]};
   d.foodLogs[curDate].items.push(foodObj);
+  localStorage.setItem("recompCoach", JSON.stringify(d));
+  loadJournalForDate();
+  autoSyncNutritionRollup();
+}
+
+function editJournalItemQuantity(slot, slotIndex){
+  const curDate = val("nutDate") || today();
+  const d = data();
+  const items = d.foodLogs[curDate]?.items || [];
+  let currentSlotCount = -1;
+  const globalIndex = items.findIndex(item => {
+    if(item.slot === slot) currentSlotCount++;
+    return item.slot === slot && currentSlotCount === slotIndex;
+  });
+  if(globalIndex === -1) return;
+
+  const item = items[globalIndex];
+  const currentPortionStr = String(item.portion || "");
+  const numMatch = currentPortionStr.match(/[\d\.]+/);
+  const unitMatch = currentPortionStr.match(/[a-zA-Z\s]+/);
+  const currentVal = numMatch ? parseFloat(numMatch[0]) : 1;
+  const unit = unitMatch ? unitMatch[0].trim() : (item.name.toLowerCase().includes("milk") || item.name.toLowerCase().includes("cream") ? "fl oz" : "g");
+
+  const inputPrompt = prompt(`Update quantity for ${item.name} (${unit}):`, currentVal);
+  if(inputPrompt === null) return;
+  const newQty = parseFloat(inputPrompt);
+  if(!newQty || isNaN(newQty) || newQty <= 0){
+    alert("Please enter a valid positive number.");
+    return;
+  }
+
+  const ratio = newQty / currentVal;
+  item.portion = `${newQty} ${unit}`;
+  item.cal = Math.round((numeric(item.cal) || 0) * ratio);
+  item.p = +((numeric(item.p) || 0) * ratio).toFixed(1);
+  item.c = +((numeric(item.c) || 0) * ratio).toFixed(1);
+  item.fib = +((numeric(item.fib) || 0) * ratio).toFixed(1);
+  item.f = +((numeric(item.f) || 0) * ratio).toFixed(1);
+
   localStorage.setItem("recompCoach", JSON.stringify(d));
   loadJournalForDate();
   autoSyncNutritionRollup();
@@ -1034,11 +1083,81 @@ function splitWeekAverages(arr,key){const sorted=[...arr].sort((a,b)=>a.date.loc
 function trendText(current,previous,unit){if(current===null||previous===null)return "Need another week";const diff=current-previous,eps=unit==='"'?0.05:0.15;if(Math.abs(diff)<eps)return "\u27A1\uFE0F stable";return `${diff>0?"\u2B06\uFE0F":"\u2B07\uFE0F"} ${Math.abs(diff).toFixed(unit==='"'?2:1)}${unit} vs prior 7 logs`}
 function daysSince(dateStr){if(!dateStr)return null;return Math.max(0,Math.floor((new Date(today()+"T12:00:00")-new Date(dateStr+"T12:00:00"))/86400000))}
 function workoutStreak(workouts){const dates=[...new Set(workouts.map(w=>w.date))].sort().reverse();if(!dates.length)return 0;let streak=1;for(let i=1;i<dates.length;i++){if((new Date(dates[i-1]+"T12:00:00")-new Date(dates[i]+"T12:00:00"))/86400000<=3)streak++;else break}return streak}
-function saveCutSettings(){const d=data();d.settings={cutStartDate:val("cutStartDate")||"2026-08-13",goalWeight:163,plannedRate:numeric(val("plannedRate"))||0.0,height:numeric(val("userHeight"))||68};save(d);alert("Phase settings saved and synced")}
-function loadCutSettings(){const s=data().settings||{};document.getElementById("cutStartDate").value=s.cutStartDate||"2026-08-13";document.getElementById("goalWeight").value=s.goalWeight||163;document.getElementById("plannedRate").value=s.plannedRate||0.0;document.getElementById("userHeight").value=s.height||68}
+
+function saveCutSettings(){
+  const d=data();
+  d.settings={
+    cutStartDate: val("cutStartDate") || "2026-08-13",
+    targetEndDate: val("targetEndDate") || "2027-01-08",
+    goalWaist: numeric(val("goalWaist")) || 31.25,
+    goalWeight: numeric(val("goalWeight")) || 163,
+    plannedRate: numeric(val("plannedRate")) || 0.0,
+    height: numeric(val("userHeight")) || 68
+  };
+  save(d);
+  alert("Phase settings and target dates saved & synced!");
+}
+
+function loadCutSettings(){
+  const s=data().settings||{};
+  document.getElementById("cutStartDate").value = s.cutStartDate || "2026-08-13";
+  document.getElementById("targetEndDate").value = s.targetEndDate || "2027-01-08";
+  document.getElementById("goalWaist").value = s.goalWaist || 31.25;
+  document.getElementById("goalWeight").value = s.goalWeight || 163;
+  document.getElementById("plannedRate").value = s.plannedRate || 0.0;
+  document.getElementById("userHeight").value = s.height || 68;
+}
+
 function dateDiffDays(a,b){return Math.floor((new Date(a+"T12:00:00")-new Date(b+"T12:00:00"))/86400000)}
+
+function calculatePacing(d){
+  const s = d.settings || {cutStartDate:"2026-08-13", targetEndDate:"2027-01-08", goalWaist:31.25};
+  const waists = [...d.body].filter(x => x.date >= s.cutStartDate && numeric(x.waist) !== null).sort((a,b) => a.date.localeCompare(b.date));
+  
+  if(!waists.length) return { status: "Awaiting Logs", sub: "Log Friday waist to calculate pacing", color: "blue" };
+
+  const startWaist = numeric(waists[0].waist);
+  const curWaist = numeric(waists.at(-1).waist);
+  const goalWaist = numeric(s.goalWaist) || 31.25;
+  const totalDays = Math.max(1, dateDiffDays(s.targetEndDate, s.cutStartDate));
+  const daysPassed = Math.max(0, dateDiffDays(today(), s.cutStartDate));
+  const daysLeft = Math.max(0, dateDiffDays(s.targetEndDate, today()));
+
+  if(curWaist <= goalWaist) {
+    return { status: "Goal Met", sub: `Waist reached ${curWaist.toFixed(2)}"`, color: "green" };
+  }
+
+  const fractionTimeline = Math.min(1, daysPassed / totalDays);
+  const expectedDropSoFar = (startWaist - goalWaist) * fractionTimeline;
+  const expectedWaistNow = startWaist - expectedDropSoFar;
+  const delta = curWaist - expectedWaistNow;
+  const remainingDropNeeded = curWaist - goalWaist;
+  const weeksLeft = Math.max(0.1, daysLeft / 7);
+  const neededRate = remainingDropNeeded > 0 ? (remainingDropNeeded / weeksLeft).toFixed(2) : "0.00";
+
+  if (delta <= -0.15) {
+    return {
+      status: `Ahead of Target (${Math.abs(delta).toFixed(2)}" lower)`,
+      sub: `Current: ${curWaist.toFixed(2)}" vs Pace: ${expectedWaistNow.toFixed(2)}" &bull; Needs ${neededRate}"/wk`,
+      color: "green"
+    };
+  } else if (Math.abs(delta) < 0.15) {
+    return {
+      status: `On Target Pace (&plusmn;${Math.abs(delta).toFixed(2)}")`,
+      sub: `Current: ${curWaist.toFixed(2)}" &bull; Goal: ${goalWaist.toFixed(2)}" by Jan 8 (${neededRate}"/wk)`,
+      color: "green"
+    };
+  } else {
+    return {
+      status: `Behind Pace (+${delta.toFixed(2)}" above)`,
+      sub: `Current: ${curWaist.toFixed(2)}" vs Pace: ${expectedWaistNow.toFixed(2)}" &bull; Needs ${neededRate}"/wk to catch up`,
+      color: "orange"
+    };
+  }
+}
+
 function cutMetrics(d){
- const s=d.settings||{cutStartDate:"2026-08-13",goalWeight:163,plannedRate:0.0,height:68};
+ const s=d.settings||{cutStartDate:"2026-08-13", targetEndDate:"2027-01-08", goalWaist:31.25, goalWeight:163, plannedRate:0.0, height:68};
  const body=[...d.body].filter(x=>x.date>=s.cutStartDate&&numeric(x.weight)!==null).sort((a,b)=>a.date.localeCompare(b.date));
  const start=body[0]||null, current=body.at(-1)||null, avgWeight=avg(body.slice(-7).map(x=>x.weight)), todayStr=today();
  const day=todayStr<s.cutStartDate?0:dateDiffDays(todayStr,s.cutStartDate)+1;
@@ -1072,36 +1191,38 @@ function renderDash(){
   dSteps.textContent=stepsAvg?Math.round(stepsAvg).toLocaleString():"--";
   dCutDay.textContent=cm.day?`Day ${cm.day}`:"Recomp Active";
   dCutDates.textContent=`Target: 2650 kcal baseline`;
-  dLost.textContent=cm.lost!==null?`${Math.abs(cm.lost).toFixed(1)} lb ${cm.lost>=0?"drop":"gain"}`:"--";
-  dStartWeight.textContent=cm.start?`Baseline ${Number(cm.start.weight).toFixed(1)} lb \u2022 Current avg ${cm.avgWeight!==null?cm.avgWeight.toFixed(1):"--"} lb`:"Tracking recomp stability";
-  dFinish.textContent="162-165 lb";
-  dRate.textContent="Recomp / Maintenance";
+  
+  dFinish.textContent = "13.5% BF \u2022 Jan 8, 2027";
+  dRate.textContent = `Target Waist: 31.0" - 31.25"`;
+
+  const pace = calculatePacing(d);
+  const pacingEl = document.getElementById("dPacing");
+  pacingEl.textContent = pace.status;
+  pacingEl.className = `value ${pace.color}`;
+  document.getElementById("dPacingSub").innerHTML = pace.sub;
+
   coachRead.textContent=makeRead();
 }
 
 function makeRead(){
   const d=data(),b=[...d.body].sort((a,b)=>a.date.localeCompare(b.date));
-  if(b.length<2)return `Phase active: Recomp & Maintenance (2650 kcal). Log body weight and waist to track lean mass and leanness.`;
-  const last=b.at(-1),av=avg(seven(b,"weight")),wt=splitWeekAverages(b,"weight"),cal=avg(seven(d.nutrition,"calories")),pro=avg(seven(d.nutrition,"protein"));
-  let verdict="Hold 2650 calories. Weight stability with progressive overload in the gym drives clean recomposition.";
-  if(wt.current!==null&&wt.previous!==null){
-    const wd=wt.current-wt.previous;
-    if(wd>1.2)verdict="Scale jumped slightly faster than expected. Check sodium and water shifts from carb refueling before adjusting.";
-    else if(wd<-1.0)verdict="Weight is still dropping steadily. Consider adding 100-150 kcal if you want to hold pure maintenance.";
-    else verdict="Perfect maintenance balance. Muscle glycogen is saturated; push for PRs on all primary lifts.";
-  }
+  const pace = calculatePacing(d);
+  if(b.length<2)return `Phase active: Recomp & Maintenance (2650 kcal) toward 13.5% BF finish on Jan 8, 2027. Log weekly Friday waist to calculate exact pacing.`;
+  const last=b.at(-1),av=avg(seven(b,"weight")),cal=avg(seven(d.nutrition,"calories")),pro=avg(seven(d.nutrition,"protein"));
+  
   return `Current phase: RECOMP / MAINTENANCE
 Daily targets: ${targets.calories} calories \u2022 ${targets.protein}g protein \u2022 ${targets.fat}g fat \u2022 ${targets.carbs}g carbs \u2022 38g+ fiber
-Goal: Build muscle & preserve lean waistline
+Target Milestone: 13.5% Body Fat (~31.25" Waist) by January 8, 2027
 
 Latest weight: ${last.weight||"--"}
 7-log average weight: ${av?av.toFixed(1):"--"}
-Latest averaged waist: ${last.waist?Number(last.waist).toFixed(2):"--"}
+Latest averaged waist: ${last.waist?Number(last.waist).toFixed(2)+'"':"--"}
 7-log calorie average: ${cal?Math.round(cal):"--"}
 7-log protein average: ${pro?Math.round(pro):"--"}g
 
-Coach read:
-${verdict}`;
+Target Tracking Status:
+${pace.status}
+${pace.sub.replace(/&bull;/g, "|")}`;
 }
 
 function drawChart(id,arr,key,label){
