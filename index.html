@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <meta name="apple-mobile-web-app-title" content="Bob's Tracker"/>
 <meta name="theme-color" content="#070b12"/>
-<title>Bob's Corner v1.8.4 Aesthetic Edition</title>
+<title>Bob's Corner v1.8.5 Aesthetic Edition</title>
 <style>
 :root{
   --bg:#070b12;--panel:#111827;--panel2:#0b1220;--soft:#1f2937;--line:#2f3a4c;
@@ -47,7 +47,7 @@ button.secondary{background:var(--soft);color:var(--text);border:1px solid var(-
 .exhead{display:flex;justify-content:space-between;gap:8px;align-items:center;padding:12px;border-bottom:1px solid var(--line)}
 .exname{font-weight:950}.hint{font-size:12px;color:var(--muted)}
 .sets{padding:10px}
-.setrow{display:grid;grid-template-columns:1fr 1fr 0.9fr 0.75fr 0.75fr 0.55fr;gap:6px;align-items:end;margin-bottom:7px}
+.setrow{display:grid;grid-template-columns:1.25fr 1fr 0.9fr 0.75fr 0.75fr 0.55fr;gap:6px;align-items:end;margin-bottom:7px}
 .setrow span{font-size:11px;color:var(--muted);padding-bottom:8px;text-align:center}
 .done{background:#064e3b!important;color:#bbf7d0!important;border:1px solid #15803d!important}
 table{width:100%;border-collapse:collapse;font-size:13px}th,td{border-bottom:1px solid var(--line);padding:8px;text-align:left;vertical-align:top}th{color:var(--blue)}
@@ -69,7 +69,7 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
   <div class="header-top">
     <div>
       <h1>Bob's Corner &#x1F9EA;</h1>
-      <div class="phase">Goal: Fast Aesthetic Hypertrophy &bull; V-Taper Edition &bull; v1.8.4</div>
+      <div class="phase">Goal: Fast Aesthetic Hypertrophy &bull; V-Taper Edition &bull; v1.8.5</div>
     </div>
     <button class="theme-btn" onclick="toggleTheme()" id="themeToggleBtn">&#x1F313; Theme</button>
   </div>
@@ -94,7 +94,7 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
       </div>
     </div>
     <div>
-      <span class="badge">Calories 2500</span><span class="badge">Protein 180g</span><span class="badge">Fat 65g</span><span class="badge">Carbs 300g</span>
+      <span class="badge">Calories 2650</span><span class="badge">Protein 180g</span><span class="badge">Fat 65g</span><span class="badge">Carbs 335g</span>
     </div>
     <div class="grid" style="margin-top:10px">
       <div class="stat"><div class="label">Latest Weight</div><div class="value" id="dWeight">--</div></div>
@@ -127,7 +127,7 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
       <div><label>Target Weekly Loss/Gain</label><input id="plannedRate" type="number" step="0.1" value="0.0"></div>
     </div>
     <button class="secondary" onclick="saveCutSettings()">Save Phase Settings</button>
-    <p class="tiny">Configured for 2,500 kcal maintenance &amp; recomp at 68 inches (5 ft 8 in).</p>
+    <p class="tiny">Configured for 2,650 kcal maintenance baseline at 68 inches (5 ft 8 in).</p>
   </div>
   <div class="card">
     <h2>Coach Read</h2>
@@ -180,7 +180,7 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
       <div><label>Date</label><input id="workDate" type="date"></div>
       <div><label>Workout</label><select id="workType" onchange="renderWorkout()"></select></div>
     </div>
-    <div id="workoutBox"></div><div class="notice goodnotice">Training Note: Aesthetic V-Taper Split. Log Tempo down (&darr;s) and Hold at peak (s) to systematically overload TUT. Push compounds hard and take the final set of isolations to failure. Weekends are dedicated to full recovery.</div>
+    <div id="workoutBox"></div><div class="notice goodnotice">Training Note: Aesthetic V-Taper Split. Control every rep with a 3-second lowering (&darr;3s). Hold the peak contraction for the logged seconds. Push compounds hard, take isolations to failure, and enjoy weekend recovery.</div>
     <label>Notes</label><textarea id="workNotes" placeholder="Energy, pump, soreness, performance..."></textarea>
     <button onclick="saveWorkout()">Finish & Save Workout</button>
   </div>
@@ -218,17 +218,17 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
     <h2>Nutrition Log</h2>
     <div class="row">
       <div><label>Date</label><input id="nutDate" type="date"></div>
-      <div><label>Calories</label><input id="calories" type="number" value="2500"></div>
+      <div><label>Calories</label><input id="calories" type="number" value="2650"></div>
     </div>
     <div class="row3">
       <div><label>Protein</label><input id="protein" type="number" value="180"></div>
       <div><label>Fat</label><input id="fat" type="number" value="65"></div>
-      <div><label>Carbs</label><input id="carbs" type="number" value="300"></div>
+      <div><label>Carbs</label><input id="carbs" type="number" value="335"></div>
     </div>
     <div><label>Steps</label><input id="steps" type="number" placeholder="10000"></div>
     <label>Nutrition Notes</label><textarea id="nutNotes" placeholder="Energy, hunger, pumps, hydration..."></textarea>
     <button onclick="saveNutrition()">Save Nutrition</button>
-    <p class="tiny">Targeting 2500 kcal maintenance: 180g protein, 65g fat, 300g carbs.</p>
+    <p class="tiny">Targeting 2650 kcal baseline (includes 150 kcal pre-bed stack snack).</p>
   </div>
 </section>
 
@@ -255,8 +255,8 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
     <table id="histTable"><thead><tr><th>Date</th><th>Workout</th><th>Weight</th><th>Waist</th><th>Body Fat</th><th>Nutrition</th><th>Steps</th><th>Notes</th></tr></thead><tbody></tbody></table>
   </div>
   <div class="card">
-    <h2>Version 1.8.4 Aesthetic Edition Changelog <span class="versionchip">Bob's Corner</span></h2>
-    <div class="tiny">&bull; Replaced RIR column with editable Hold (s) input (defaults to 1s, auto-populates from prior sessions)<br>&bull; Calf raises on Wednesday increased to 4 sets in alternating pairs (Right, Left, Right, Left)<br>&bull; Preserved dedicated Tempo (s) input, Light/Dark theme toggle, and Google Drive auto-sync</div>
+    <h2>Version 1.8.5 Aesthetic Edition Changelog <span class="versionchip">Bob's Corner</span></h2>
+    <div class="tiny">&bull; DB Shoulder Press locked to Position 5 (75&deg;&ndash;80&deg; scapular plane angle)<br>&bull; Machine Seated Cable Row configured for both Pull and Upper days (seated on floor, feet against sheet/frame)<br>&bull; Day 4 arm block programmed as 2 sets Incline DB Skull Crushers + 2 sets Standing DB Hammer Curls<br>&bull; Nutrition baseline updated to 2,650 kcal to reflect the evening stack snack</div>
   </div>
 </section>
 </main>
@@ -325,7 +325,7 @@ function restoreFromGoogleDrive() {
   document.body.appendChild(script);
 }
 
-const targets={calories:2500, protein:180, fat:65, carbs:300};
+const targets={calories:2650, protein:180, fat:65, carbs:335};
 const workouts={
 "Push":[
  {name:"Incline DB Bench Press \u2022 Bench Position 3",target:"3 sets \u2022 8-10 reps \u2022 upper chest armor, deep stretch",rest:90,defaultTempo:3,defaultHold:1},
@@ -335,7 +335,7 @@ const workouts={
 ],
 "Pull":[
  {name:"Wide-Grip Lat Pulldown",target:"3 sets \u2022 10-12 reps \u2022 builds outer lat wings",rest:90,defaultTempo:3,defaultHold:1},
- {name:"Seated Cable Row",target:"3 sets \u2022 8-10 reps \u2022 neutral/close grip, pull to navel",rest:90,defaultTempo:3,defaultHold:1},
+ {name:"Machine Seated Cable Row",target:"3 sets \u2022 8-10 reps \u2022 seated on floor \u2022 underhand/neutral grip to navel for lower lats",rest:90,defaultTempo:3,defaultHold:1},
  {name:"Incline DB Curl \u2022 Bench Position 3",target:"3 sets \u2022 10-12 reps \u2022 bicep peak builder",rest:60,defaultTempo:3,defaultHold:1},
  {name:"Loaded Decline Crunch",target:"3 sets \u2022 12 reps \u2022 etched six-pack bricks",rest:60,defaultTempo:3,defaultHold:1}
 ],
@@ -346,10 +346,10 @@ const workouts={
  {name:"Standing DB Calf Raise",target:"4 sets \u2022 15-20 reps \u2022 DB Right, Left, Right, Left \u2022 pause at peak and stretch",rest:60,defaultTempo:3,defaultHold:2,sets:4,setLabels:["Set 1 (Right)","Set 2 (Left)","Set 3 (Right)","Set 4 (Left)"]}
 ],
 "Upper":[
- {name:"Seated DB Shoulder Press \u2022 Bench Position 6",target:"3 sets \u2022 8-10 reps \u2022 round, 3D shoulder caps",rest:90,defaultTempo:3,defaultHold:1},
+ {name:"Seated DB Shoulder Press \u2022 Bench Position 5",target:"3 sets \u2022 8-10 reps \u2022 75-80\u00B0 angle \u2022 scapular plane \u2022 3D shoulder caps",rest:90,defaultTempo:3,defaultHold:1},
  {name:"Underhand Lat Pulldown",target:"3 sets \u2022 10-12 reps \u2022 lower lat sweep & bicep power",rest:90,defaultTempo:3,defaultHold:1},
- {name:"Chest Supported DB Row \u2022 Bench Position 3",target:"3 sets \u2022 8-10 reps \u2022 dense upper back detail",rest:90,defaultTempo:3,defaultHold:1},
- {name:"Incline DB Skull Crusher \u2022 Bench Position 3",target:"3 sets \u2022 10-12 reps \u2022 tricep long-head mass",rest:60,defaultTempo:3,defaultHold:1}
+ {name:"Machine Seated Cable Row",target:"3 sets \u2022 8-10 reps \u2022 seated on floor \u2022 overhand flared grip to sternum for mid-back/rear delts",rest:90,defaultTempo:3,defaultHold:1},
+ {name:"Arms: Incline Skull Crusher & DB Hammer Curl",target:"4 sets total \u2022 10-12 reps \u2022 2 sets tricep long-head, 2 sets brachialis/arm width",rest:60,defaultTempo:3,defaultHold:1,sets:4,setLabels:["Set 1 (Skull Crusher)","Set 2 (Skull Crusher)","Set 3 (Hammer Curl)","Set 4 (Hammer Curl)"]}
 ],
 "Lower":[
  {name:"Romanian Deadlift",target:"3 sets \u2022 8-10 reps \u2022 heavy posterior chain loading",rest:90,defaultTempo:3,defaultHold:1},
@@ -420,7 +420,7 @@ function renderWorkout(){
     const ph=p.hold!==undefined&&p.hold!==""?p.hold:(ex.defaultHold!==undefined?ex.defaultHold:1);
     const setLabel=(ex.setLabels&&ex.setLabels[idx])?ex.setLabels[idx]:`Set ${n}`;
     return `<div class="setrow">
-      <input value="${setLabel}" disabled style="text-align:center;padding:10px 2px;font-size:11px">
+      <input value="${setLabel}" disabled style="text-align:center;padding:10px 2px;font-size:10.5px">
       <input id="w_${i}_${n}" type="number" step="0.5" value="${pw}" placeholder="lb/BW" oninput="checkPR(${i},'${ex.name}')">
       <input id="r_${i}_${n}" type="number" value="${pr}" placeholder="reps/s" oninput="checkPR(${i},'${ex.name}')">
       <input id="t_${i}_${n}" type="number" step="1" value="${pt}" placeholder="down" style="text-align:center">
@@ -676,7 +676,7 @@ function renderDash(){
   dFat.textContent=fatAvg?Math.round(fatAvg)+"g":"--";
   dSteps.textContent=stepsAvg?Math.round(stepsAvg).toLocaleString():"--";
   dCutDay.textContent=cm.day?`Day ${cm.day}`:"Recomp Active";
-  dCutDates.textContent=`Target: 2500 kcal maintenance`;
+  dCutDates.textContent=`Target: 2650 kcal baseline`;
   dLost.textContent=cm.lost!==null?`${Math.abs(cm.lost).toFixed(1)} lb ${cm.lost>=0?"drop":"gain"}`:"--";
   dStartWeight.textContent=cm.start?`Baseline ${Number(cm.start.weight).toFixed(1)} lb \u2022 Current avg ${cm.avgWeight!==null?cm.avgWeight.toFixed(1):"--"} lb`:"Tracking recomp stability";
   dFinish.textContent="162-165 lb";
@@ -686,9 +686,9 @@ function renderDash(){
 
 function makeRead(){
   const d=data(),cm=cutMetrics(d),b=[...d.body].sort((a,b)=>a.date.localeCompare(b.date));
-  if(b.length<2)return `Phase active: Recomp & Maintenance (2500 kcal). Log body weight and waist to track lean mass and leanness.`;
+  if(b.length<2)return `Phase active: Recomp & Maintenance (2650 kcal). Log body weight and waist to track lean mass and leanness.`;
   const last=b.at(-1),av=avg(seven(b,"weight")),wt=splitWeekAverages(b,"weight"),wa=splitWeekAverages(b,"waist"),cal=avg(seven(d.nutrition,"calories")),pro=avg(seven(d.nutrition,"protein"));
-  let verdict="Hold 2500 calories. Weight stability with progressive overload in the gym drives clean recomposition.";
+  let verdict="Hold 2650 calories. Weight stability with progressive overload in the gym drives clean recomposition.";
   if(wt.current!==null&&wt.previous!==null){
     const wd=wt.current-wt.previous;
     if(wd>1.2)verdict="Scale jumped slightly faster than expected. Check sodium and water shifts from carb refueling before adjusting.";
