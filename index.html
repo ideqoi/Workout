@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <meta name="apple-mobile-web-app-title" content="Bob's Tracker"/>
 <meta name="theme-color" content="#070b12"/>
-<title>Bob's Corner v1.9.0 Food Journal Edition</title>
+<title>Bob's Corner v1.9.1 Auto-Sync Edition</title>
 <style>
 :root{
   --bg:#070b12;--panel:#111827;--panel2:#0b1220;--soft:#1f2937;--line:#2f3a4c;
@@ -25,6 +25,10 @@ header{position:sticky;top:0;z-index:10;background:var(--bg);backdrop-filter:blu
 .header-top{display:flex;justify-content:space-between;align-items:center}
 h1{font-size:24px;margin:0;font-weight:900;letter-spacing:.2px}.phase{font-size:13px;color:var(--muted);margin-top:3px}
 .theme-btn{width:auto;padding:6px 12px;font-size:14px;border-radius:12px;background:var(--soft);color:var(--text);border:1px solid var(--line);cursor:pointer}
+.sync-indicator{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:800;padding:4px 8px;border-radius:999px;border:1px solid var(--line);background:var(--panel2);color:var(--muted);transition:all .3s}
+.sync-indicator.syncing{color:var(--orange);border-color:var(--orange)}
+.sync-indicator.synced{color:var(--green);border-color:var(--green)}
+.sync-indicator.error{color:var(--red);border-color:var(--red)}
 .tabs{display:flex;gap:8px;overflow-x:auto;margin-top:12px;padding-bottom:3px}
 .tab{border:0;border-radius:12px;background:var(--soft);color:var(--text);padding:10px 12px;font-weight:800;white-space:nowrap;cursor:pointer}
 .tab.active{background:var(--blue);color:white}
@@ -87,9 +91,12 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
   <div class="header-top">
     <div>
       <h1>Bob's Corner &#x1F9EA;</h1>
-      <div class="phase">Goal: Fast Aesthetic Hypertrophy &bull; Food Journal &bull; v1.9.0</div>
+      <div class="phase">Goal: Fast Aesthetic Hypertrophy &bull; Auto-Sync Edition &bull; v1.9.1</div>
     </div>
-    <button class="theme-btn" onclick="toggleTheme()" id="themeToggleBtn">&#x1F313; Theme</button>
+    <div style="display:flex;align-items:center;gap:8px">
+      <span id="syncStatusBadge" class="sync-indicator synced">&#x2601;&#xFE0F; Synced</span>
+      <button class="theme-btn" onclick="toggleTheme()" id="themeToggleBtn">&#x1F313; Theme</button>
+    </div>
   </div>
   <div class="tabs">
     <button class="tab active" onclick="showTab('dash',this)">&#x1F3E0; Dashboard</button>
@@ -107,7 +114,7 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
       <h2>Recomp & Maintenance Dashboard</h2>
       <div style="display:flex;gap:6px">
-        <button class="greenbtn" style="width:auto;padding:6px 12px;font-size:12px" onclick="syncToGoogleDrive(false)">&#x2601;&#xFE0F; Sync</button>
+        <button class="greenbtn" style="width:auto;padding:6px 12px;font-size:12px" onclick="syncToGoogleDrive(false)">&#x2601;&#xFE0F; Force Sync</button>
         <button class="secondary" style="width:auto;padding:6px 12px;font-size:12px" onclick="restoreFromGoogleDrive()">&#x1F4E5; Restore</button>
       </div>
     </div>
@@ -198,9 +205,9 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
       <div><label>Date</label><input id="workDate" type="date"></div>
       <div><label>Workout</label><select id="workType" onchange="renderWorkout()"></select></div>
     </div>
-    <div id="workoutBox"></div><div class="notice goodnotice">Training Note: Aesthetic V-Taper Split. Control eccentric (&darr;3s). Hold peak contraction. Compounds heavy, isolations to failure.[cite: 2]</div>
-    <label>Notes</label><textarea id="workNotes" placeholder="Energy, pump, soreness, performance..."></textarea>
-    <button onclick="saveWorkout()">Finish & Save Workout</button>
+    <div id="workoutBox"></div><div class="notice goodnotice">Training Note: Aesthetic V-Taper Split. Control eccentric (&darr;3s). Hold peak contraction. Compounds heavy, isolations to failure.[cite: 2] Every logged set auto-syncs live.</div>
+    <label>Notes</label><textarea id="workNotes" placeholder="Energy, pump, soreness, performance..." oninput="autoSaveWorkoutDraft()"></textarea>
+    <button onclick="saveWorkout()">Finish Session & Force Sync</button>
   </div>
 </section>
 
@@ -209,14 +216,14 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
     <h2>Daily Body Check-In</h2>
     <div class="row">
       <div><label>Date</label><input id="bodyDate" type="date"></div>
-      <div><label>Weight (lb)</label><input id="weight" type="number" step="0.1" placeholder="163.4"></div>
+      <div><label>Weight (lb)</label><input id="weight" type="number" step="0.1" placeholder="163.4" onchange="autoSaveBodyOnChange()"></div>
     </div>
     <label>Friday Morning Check-In &mdash; Neck & 3 Relaxed Waist Measurements</label>
     <div class="row4">
-      <div><input id="neck" type="number" step="0.01" placeholder="Neck (in)" oninput="updateWaistAverage()"></div>
-      <div><input id="waist1" type="number" step="0.01" placeholder="Waist 1" oninput="updateWaistAverage()"></div>
-      <div><input id="waist2" type="number" step="0.01" placeholder="Waist 2" oninput="updateWaistAverage()"></div>
-      <div><input id="waist3" type="number" step="0.01" placeholder="Waist 3" oninput="updateWaistAverage()"></div>
+      <div><input id="neck" type="number" step="0.01" placeholder="Neck (in)" oninput="updateWaistAverage(); autoSaveBodyOnChange()"></div>
+      <div><input id="waist1" type="number" step="0.01" placeholder="Waist 1" oninput="updateWaistAverage(); autoSaveBodyOnChange()"></div>
+      <div><input id="waist2" type="number" step="0.01" placeholder="Waist 2" oninput="updateWaistAverage(); autoSaveBodyOnChange()"></div>
+      <div><input id="waist3" type="number" step="0.01" placeholder="Waist 3" oninput="updateWaistAverage(); autoSaveBodyOnChange()"></div>
     </div>
 
     <div class="metricline" style="margin-top:12px">
@@ -231,7 +238,7 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
   <div class="card"><h2>Body Fat % Trend (Navy)</h2><canvas id="bodyFatChart" width="800" height="260"></canvas></div>
 </section>
 
-<!-- ENHANCED DAILY FOOD JOURNAL -->
+<!-- ENHANCED DAILY FOOD JOURNAL WITH LIVE AUTO-SYNC -->
 <section id="nutrition" class="screen hidden">
   <div class="card">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
@@ -288,10 +295,10 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
     <div id="mealSlotsContainer"></div>
 
     <div class="row" style="margin-top:12px">
-      <div><label>Daily Steps</label><input id="steps" type="number" placeholder="10000"></div>
-      <div><label>Nutrition Notes</label><input id="nutNotes" type="text" placeholder="Hydration, sodium, pumps..."></div>
+      <div><label>Daily Steps</label><input id="steps" type="number" placeholder="10000" oninput="autoSyncNutritionFields()"></div>
+      <div><label>Nutrition Notes</label><input id="nutNotes" type="text" placeholder="Hydration, sodium, pumps..." oninput="autoSyncNutritionFields()"></div>
     </div>
-    <button style="margin-top:12px" class="greenbtn" onclick="saveFullDailyNutrition()">Save & Sync Food Journal</button>
+    <p class="tiny" style="color:var(--muted);text-align:center;margin-top:8px">&#x2601;&#xFE0F; All changes automatically roll up and sync live in background.</p>
   </div>
 
   <!-- 12-Item Pantry Library -->
@@ -353,10 +360,10 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
   <div class="card">
     <h2>Google Drive Cloud Sync</h2>
     <div class="row" style="margin-bottom:10px">
-      <button class="greenbtn" onclick="syncToGoogleDrive(false)">&#x2601;&#xFE0F; Sync to Google Drive</button>
+      <button class="greenbtn" onclick="syncToGoogleDrive(false)">&#x2601;&#xFE0F; Manual Force Sync</button>
       <button class="secondary" onclick="restoreFromGoogleDrive()">&#x1F4E5; Restore from Google Drive</button>
     </div>
-    <p class="tiny">Syncs your data directly with <code>bobs_corner_backup.json</code> on your Google Drive. Auto-sync triggers on every log save.[cite: 2]</p>
+    <p class="tiny">Syncs your data directly with <code>bobs_corner_backup.json</code> on your Google Drive. Live background auto-sync is active.[cite: 2]</p>
   </div>
   <div class="card">
     <h2>Data Backup (File)</h2>
@@ -372,8 +379,8 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
     <table id="histTable"><thead><tr><th>Date</th><th>Workout</th><th>Weight</th><th>Waist</th><th>Body Fat</th><th>Nutrition</th><th>Steps</th><th>Notes</th></tr></thead><tbody></tbody></table>
   </div>
   <div class="card">
-    <h2>Version 1.9.0 Food Journal Edition Changelog <span class="versionchip">Bob's Corner</span></h2>
-    <div class="tiny">&bull; Complete Daily Food Journal with live remaining calorie &amp; macro meters (including Fiber)<br>&bull; 12-Item Pantry: Added Half and Half &amp; Light Cream (scaled per fl oz; 0.5 = 1 tbsp)<br>&bull; Copy Previous Day and Full-Day Template automation<br>&bull; Inline item deletion with confirmation on every meal item<br>&bull; Google Drive persistence via active deployment URL</div>
+    <h2>Version 1.9.1 Auto-Sync Edition Changelog <span class="versionchip">Bob's Corner</span></h2>
+    <div class="tiny">&bull; Automated background cloud sync: Every meal item added/deleted, rep logged, and metric entered triggers debounced background sync without manual buttons[cite: 2]<br>&bull; Header sync status badge indicates live save status (Saved / Syncing / Error)<br>&bull; Full-day copy and template creation automation<br>&bull; 12 pantry staples loaded with scaleable units (fl oz and grams)</div>
   </div>
 </section>
 </main>
@@ -400,7 +407,22 @@ function updateThemeBtn(){
   btn.textContent=isLight?"\uD83C\uDF19 Dark Mode":"\u2600\uFE0F Light Mode";
 }
 
+/* DEBOUNCED LIVE AUTO-SYNC ENGINE */
+let syncDebounceTimer = null;
+function triggerAutoSync(){
+  const badge = document.getElementById("syncStatusBadge");
+  if(badge){
+    badge.textContent = "\u2601\uFE0F Syncing...";
+    badge.className = "sync-indicator syncing";
+  }
+  clearTimeout(syncDebounceTimer);
+  syncDebounceTimer = setTimeout(()=>{
+    syncToGoogleDrive(true);
+  }, 1200); // Waits 1.2s after last interaction before uploading
+}
+
 async function syncToGoogleDrive(silent=false) {
+  const badge = document.getElementById("syncStatusBadge");
   try {
     const payload = JSON.stringify(data());
     await fetch(GOOGLE_SCRIPT_URL, {
@@ -409,8 +431,16 @@ async function syncToGoogleDrive(silent=false) {
       body: payload,
       mode: "no-cors"
     });
+    if(badge){
+      badge.textContent = "\u2601\uFE0F Saved";
+      badge.className = "sync-indicator synced";
+    }
     if(!silent) alert("\u2601\uFE0F Synced to Google Drive successfully!");
   } catch (err) {
+    if(badge){
+      badge.textContent = "\u26A0\uFE0F Sync Error";
+      badge.className = "sync-indicator error";
+    }
     if(!silent) alert("Sync error: " + err.message);
   }
 }
@@ -506,7 +536,11 @@ function data(){
   d.dayTemplates=d.dayTemplates||{};
   return d;
 }
-function save(d){localStorage.setItem("recompCoach",JSON.stringify(d));renderAll();syncToGoogleDrive(true)}
+function save(d){
+  localStorage.setItem("recompCoach",JSON.stringify(d));
+  renderAll();
+  triggerAutoSync();
+}
 function showTab(id,btn){document.querySelectorAll(".screen").forEach(s=>s.classList.add("hidden"));document.getElementById(id).classList.remove("hidden");document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));btn.classList.add("active");renderAll()}
 function setDay(type,el){document.querySelectorAll(".day").forEach(d=>d.classList.remove("active"));el.classList.add("active");workType.value=type;renderWorkout()}
 
@@ -556,10 +590,10 @@ function renderWorkout(){
     const setLabel=(ex.setLabels&&ex.setLabels[idx])?ex.setLabels[idx]:`Set ${n}`;
     return `<div class="setrow">
       <input value="${setLabel}" disabled style="text-align:center;padding:10px 2px;font-size:10.5px">
-      <input id="w_${i}_${n}" type="number" step="0.5" value="${pw}" placeholder="lb/BW" oninput="checkPR(${i},'${ex.name}')">
-      <input id="r_${i}_${n}" type="number" value="${pr}" placeholder="reps/s" oninput="checkPR(${i},'${ex.name}')">
-      <input id="t_${i}_${n}" type="number" step="1" value="${pt}" placeholder="down" style="text-align:center">
-      <input id="h_${i}_${n}" type="number" step="1" value="${ph}" placeholder="hold" style="text-align:center">
+      <input id="w_${i}_${n}" type="number" step="0.5" value="${pw}" placeholder="lb/BW" oninput="checkPR(${i},'${ex.name}'); autoSaveWorkoutDraft()">
+      <input id="r_${i}_${n}" type="number" value="${pr}" placeholder="reps/s" oninput="checkPR(${i},'${ex.name}'); autoSaveWorkoutDraft()">
+      <input id="t_${i}_${n}" type="number" step="1" value="${pt}" placeholder="down" style="text-align:center" oninput="autoSaveWorkoutDraft()">
+      <input id="h_${i}_${n}" type="number" step="1" value="${ph}" placeholder="hold" style="text-align:center" oninput="autoSaveWorkoutDraft()">
       <button class="secondary" onclick="handleSetDone(this, ${ex.rest}, ${i}, '${ex.name}')">&#x2713;</button>
     </div>`;
   }).join("")}
@@ -589,6 +623,7 @@ function handleSetDone(btn, restSeconds, exIndex, exName) {
   const isDone = btn.classList.toggle('done');
   if (isDone) startRest(restSeconds);
   checkPR(exIndex, exName);
+  autoSaveWorkoutDraft();
 }
 
 let timerInt=null, audioCtx=null;
@@ -655,41 +690,65 @@ function updateWaistAverage(){
   }
 }
 
-function saveWorkout(){
- const d=data(), type=workType.value;
- let totalTonnage = 0;
- const ex=workouts[type].map((e,i)=>({
-   name:e.name,
-   sets:Array.from({length:e.sets||3},(_,idx)=>{
-     const n=idx+1, w = val(`w_${i}_${n}`), r = val(`r_${i}_${n}`), t = val(`t_${i}_${n}`), h = val(`h_${i}_${n}`);
-     if (numeric(w) && numeric(r)) totalTonnage += (numeric(w) * numeric(r));
-     return {weight:w, reps:r, tempo:t, hold:h};
-   }).filter(s=>s.weight||s.reps)
- }));
- d.workouts.push({date:val("workDate"),type,ex,notes:val("workNotes")});
- save(d);
- alert(`\u2705 Workout saved!\nSession Tonnage: ${Math.round(totalTonnage).toLocaleString()} lb lifted.`);
+/* LIVE AUTO-SYNC FOR WORKOUT */
+function autoSaveWorkoutDraft(){
+  const d=data(), type=workType.value, curDate=val("workDate")||today();
+  let totalTonnage = 0;
+  const ex=(workouts[type]||[]).map((e,i)=>({
+    name:e.name,
+    sets:Array.from({length:e.sets||3},(_,idx)=>{
+      const n=idx+1, w = val(`w_${i}_${n}`), r = val(`r_${i}_${n}`), t = val(`t_${i}_${n}`), h = val(`h_${i}_${n}`);
+      if (numeric(w) && numeric(r)) totalTonnage += (numeric(w) * numeric(r));
+      return {weight:w, reps:r, tempo:t, hold:h};
+    }).filter(s=>s.weight||s.reps)
+  }));
+  const existingIdx = d.workouts.findIndex(w=>w.date===curDate && w.type===type);
+  const wEntry = {date:curDate, type, ex, notes:val("workNotes")};
+  if(existingIdx !== -1) d.workouts[existingIdx] = wEntry;
+  else d.workouts.push(wEntry);
+  save(d);
 }
 
-function saveBody(){
-  const d=data(), waistValues=["waist1","waist2","waist3"].map(id=>numeric(val(id)));
+function saveWorkout(){
+  autoSaveWorkoutDraft();
+  alert("\u2705 Workout saved and synced live to Google Drive!");
+}
+
+/* LIVE AUTO-SYNC FOR BODY */
+function autoSaveBodyOnChange(){
+  const weightVal = val("weight");
+  if(!weightVal) return;
+  const d=data(), curDate=val("bodyDate")||today();
+  const waistValues=["waist1","waist2","waist3"].map(id=>numeric(val(id)));
   const completeWaist=waistValues.every(v=>v!==null);
-  if(waistValues.some(v=>v!==null)&&!completeWaist){alert("Enter all three waist measurements or leave blank.");return}
   const waistAvg=completeWaist?avg(waistValues):null;
   const neckVal=numeric(val("neck")), hVal = numeric(d.settings?.height) || 68;
   const bfVal = (waistAvg && neckVal) ? calcNavyBodyFat(waistAvg, neckVal, hVal) : null;
-  d.body.push({
-    date:val("bodyDate"),weight:val("weight"),waist:waistAvg!==null?waistAvg.toFixed(2):"",
-    waist1:completeWaist?waistValues[0]:"",waist2:completeWaist?waistValues[1]:"",waist3:completeWaist?waistValues[2]:"",
-    neck:neckVal!==null?neckVal:"",bodyfat:bfVal!==null?bfVal.toFixed(1):""
-  });
+
+  const existingIdx = d.body.findIndex(b=>b.date === curDate);
+  const bEntry = {
+    date: curDate,
+    weight: weightVal,
+    waist: waistAvg!==null?waistAvg.toFixed(2):"",
+    waist1: completeWaist?waistValues[0]:"",
+    waist2: completeWaist?waistValues[1]:"",
+    waist3: completeWaist?waistValues[2]:"",
+    neck: neckVal!==null?neckVal:"",
+    bodyfat: bfVal!==null?bfVal.toFixed(1):""
+  };
+  if(existingIdx !== -1) d.body[existingIdx] = bEntry;
+  else d.body.push(bEntry);
   save(d);
-  alert("\u2705 Body check-in saved!");
+}
+
+function saveBody(){
+  autoSaveBodyOnChange();
+  alert("\u2705 Body check-in saved and synced live!");
   ["weight","neck","waist1","waist2","waist3"].forEach(id=>document.getElementById(id).value="");
   updateWaistAverage();
 }
 
-/* --- FOOD JOURNAL & TEMPLATE LOGIC --- */
+/* --- FOOD JOURNAL & AUTO-ROLLUP ENGINE --- */
 const MEAL_SLOTS = ["Breakfast", "Lunch", "Dinner", "Snacks"];
 
 function loadJournalForDate(){
@@ -768,14 +827,47 @@ function updateJournalMacroTotals(items){
   document.getElementById("jFatSub").textContent = `/ ${targets.fat}g (${targets.fat - tFat}g left)`;
 }
 
+/* AUTOMATIC PERSISTENCE & ROLLUP FOR NUTRITION */
+function autoSyncNutritionRollup(){
+  const d = data(), curDate = val("nutDate") || today();
+  const items = d.foodLogs[curDate]?.items || [];
+  
+  const totalCal = Math.round(items.reduce((a,b)=>a+(numeric(b.cal)||0),0));
+  const totalPro = Math.round(items.reduce((a,b)=>a+(numeric(b.p)||0),0));
+  const totalCarb = Math.round(items.reduce((a,b)=>a+(numeric(b.c)||0),0));
+  const totalFat = Math.round(items.reduce((a,b)=>a+(numeric(b.f)||0),0));
+  const stepsVal = val("steps") || "";
+  const notesVal = val("nutNotes") || "";
+
+  const existingIdx = d.nutrition.findIndex(n=>n.date === curDate);
+  const entry = {
+    date: curDate,
+    calories: totalCal,
+    protein: totalPro,
+    fat: totalFat,
+    carbs: totalCarb,
+    steps: stepsVal,
+    notes: notesVal
+  };
+  if(existingIdx !== -1) d.nutrition[existingIdx] = entry;
+  else d.nutrition.push(entry);
+
+  save(d); // Saves locally and kicks off live Google Drive auto-sync
+}
+
+function autoSyncNutritionFields(){
+  autoSyncNutritionRollup();
+}
+
 function addFoodToJournal(foodObj){
   const curDate = val("nutDate") || today();
   const d = data();
   d.foodLogs = d.foodLogs || {};
   d.foodLogs[curDate] = d.foodLogs[curDate] || {items:[]};
   d.foodLogs[curDate].items.push(foodObj);
-  save(d);
+  localStorage.setItem("recompCoach", JSON.stringify(d));
   loadJournalForDate();
+  autoSyncNutritionRollup();
 }
 
 function deleteJournalItem(slot, slotIndex){
@@ -789,10 +881,11 @@ function deleteJournalItem(slot, slotIndex){
   });
   if(globalIndex !== -1){
     const item = items[globalIndex];
-    if(confirm(`Delete "${item.name}" from ${slot}?`)){
+    if(confirm(`Remove "${item.name}"?`)){
       items.splice(globalIndex, 1);
-      save(d);
+      localStorage.setItem("recompCoach", JSON.stringify(d));
       loadJournalForDate();
+      autoSyncNutritionRollup();
     }
   }
 }
@@ -812,11 +905,10 @@ function copyPreviousDayFood(){
   
   if(confirm(`Copy all ${prevItems.length} items from ${prevDate} into ${curDate}?`)){
     d.foodLogs[curDate] = d.foodLogs[curDate] || {items:[]};
-    // Deep clone items
     d.foodLogs[curDate].items = JSON.parse(JSON.stringify(prevItems));
-    save(d);
+    localStorage.setItem("recompCoach", JSON.stringify(d));
     loadJournalForDate();
-    alert(`\u2705 Copied ${prevItems.length} items from ${prevDate}!`);
+    autoSyncNutritionRollup();
   }
 }
 
@@ -828,14 +920,14 @@ function saveDayAsTemplate(){
     alert("There are no items logged today to make a template.");
     return;
   }
-  const name = prompt("Enter a name for this Full Day Template (e.g. 'Standard Training Day', 'Rest Day Baseline'):");
+  const name = prompt("Enter a name for this Full Day Template (e.g. 'Training Day', 'Rest Baseline'):");
   if(!name || !name.trim()) return;
   
   d.dayTemplates = d.dayTemplates || {};
   d.dayTemplates[name.trim()] = JSON.parse(JSON.stringify(items));
   save(d);
   updateTemplatesDropdown();
-  alert(`\u2705 Saved full day template: "${name.trim()}"`);
+  alert(`\u2705 Saved template: "${name.trim()}"`);
 }
 
 function updateTemplatesDropdown(){
@@ -864,9 +956,9 @@ function applySelectedTemplate(){
   const curDate = val("nutDate") || today();
   if(confirm(`Apply template "${name}" to ${curDate}? (This will replace existing items for today)`)){
     d.foodLogs[curDate] = {items: JSON.parse(JSON.stringify(templateItems))};
-    save(d);
+    localStorage.setItem("recompCoach", JSON.stringify(d));
     loadJournalForDate();
-    alert(`\u2705 Applied template "${name}"!`);
+    autoSyncNutritionRollup();
   }
 }
 
@@ -892,7 +984,6 @@ function importJsonItem(){
     const portion = obj.portion || "custom";
     addFoodToJournal({slot, name, portion, cal, p, c, fib, f});
     document.getElementById("jsonImportBox").value = "";
-    alert(`\u2705 Imported: ${name} to ${slot}`);
   } catch(e){
     alert("Invalid JSON format. Check brackets and commas.");
   }
@@ -935,36 +1026,6 @@ function addPantryItem(index){
   addFoodToJournal(scaled);
 }
 
-function saveFullDailyNutrition(){
-  const d = data();
-  const curDate = val("nutDate") || today();
-  const items = d.foodLogs[curDate]?.items || [];
-  
-  const totalCal = Math.round(items.reduce((a,b)=>a+(numeric(b.cal)||0),0));
-  const totalPro = Math.round(items.reduce((a,b)=>a+(numeric(b.p)||0),0));
-  const totalCarb = Math.round(items.reduce((a,b)=>a+(numeric(b.c)||0),0));
-  const totalFat = Math.round(items.reduce((a,b)=>a+(numeric(b.f)||0),0));
-  const stepsVal = val("steps");
-  const notesVal = val("nutNotes");
-
-  const existingIdx = d.nutrition.findIndex(n=>n.date === curDate);
-  const entry = {
-    date: curDate,
-    calories: totalCal,
-    protein: totalPro,
-    fat: totalFat,
-    carbs: totalCarb,
-    steps: stepsVal,
-    notes: notesVal
-  };
-  
-  if(existingIdx !== -1) d.nutrition[existingIdx] = entry;
-  else d.nutrition.push(entry);
-
-  save(d);
-  alert(`\u2705 Daily Food Journal Saved!\nTotal: ${totalCal} kcal | ${totalPro}g P | ${totalCarb}g C | ${totalFat}g F\n\u2601\uFE0F Cloud sync complete.`);
-}
-
 function val(id){return document.getElementById(id).value}
 function avg(arr){let n=arr.map(Number).filter(x=>!isNaN(x)&&x>0);return n.length?n.reduce((a,b)=>a+b,0)/n.length:null}
 function latestByDate(arr){return [...arr].sort((a,b)=>a.date.localeCompare(b.date)).at(-1)||{}}
@@ -973,7 +1034,7 @@ function splitWeekAverages(arr,key){const sorted=[...arr].sort((a,b)=>a.date.loc
 function trendText(current,previous,unit){if(current===null||previous===null)return "Need another week";const diff=current-previous,eps=unit==='"'?0.05:0.15;if(Math.abs(diff)<eps)return "\u27A1\uFE0F stable";return `${diff>0?"\u2B06\uFE0F":"\u2B07\uFE0F"} ${Math.abs(diff).toFixed(unit==='"'?2:1)}${unit} vs prior 7 logs`}
 function daysSince(dateStr){if(!dateStr)return null;return Math.max(0,Math.floor((new Date(today()+"T12:00:00")-new Date(dateStr+"T12:00:00"))/86400000))}
 function workoutStreak(workouts){const dates=[...new Set(workouts.map(w=>w.date))].sort().reverse();if(!dates.length)return 0;let streak=1;for(let i=1;i<dates.length;i++){if((new Date(dates[i-1]+"T12:00:00")-new Date(dates[i]+"T12:00:00"))/86400000<=3)streak++;else break}return streak}
-function saveCutSettings(){const d=data();d.settings={cutStartDate:val("cutStartDate")||"2026-08-13",goalWeight:163,plannedRate:numeric(val("plannedRate"))||0.0,height:numeric(val("userHeight"))||68};save(d);alert("Phase settings saved")}
+function saveCutSettings(){const d=data();d.settings={cutStartDate:val("cutStartDate")||"2026-08-13",goalWeight:163,plannedRate:numeric(val("plannedRate"))||0.0,height:numeric(val("userHeight"))||68};save(d);alert("Phase settings saved and synced")}
 function loadCutSettings(){const s=data().settings||{};document.getElementById("cutStartDate").value=s.cutStartDate||"2026-08-13";document.getElementById("goalWeight").value=s.goalWeight||163;document.getElementById("plannedRate").value=s.plannedRate||0.0;document.getElementById("userHeight").value=s.height||68}
 function dateDiffDays(a,b){return Math.floor((new Date(a+"T12:00:00")-new Date(b+"T12:00:00"))/86400000)}
 function cutMetrics(d){
