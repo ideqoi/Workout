@@ -180,7 +180,7 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
       <div><label>Date</label><input id="workDate" type="date"></div>
       <div><label>Workout</label><select id="workType" onchange="renderWorkout()"></select></div>
     </div>
-    <div id="workoutBox"></div><div class="notice goodnotice">Training Note: Aesthetic V-Taper Split. Control every rep with a 3-second lowering (&darr;3s). Hold the peak contraction for the logged seconds. Push compounds hard, take isolations to failure, and enjoy weekend recovery.</div>
+    <div id="workoutBox"></div><div class="notice goodnotice">Training Note: Aesthetic V-Taper Split. Log Tempo down (&darr;s) and Hold at peak (s) to systematically overload TUT. Push compounds hard and take the final set of isolations to failure. Weekends are dedicated to full recovery.</div>
     <label>Notes</label><textarea id="workNotes" placeholder="Energy, pump, soreness, performance..."></textarea>
     <button onclick="saveWorkout()">Finish & Save Workout</button>
   </div>
@@ -228,7 +228,7 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
     <div><label>Steps</label><input id="steps" type="number" placeholder="10000"></div>
     <label>Nutrition Notes</label><textarea id="nutNotes" placeholder="Energy, hunger, pumps, hydration..."></textarea>
     <button onclick="saveNutrition()">Save Nutrition</button>
-    <p class="tiny">Targeting 2650 kcal baseline (includes 150 kcal pre-bed stack snack).</p>
+    <p class="tiny">Targeting 2650 kcal maintenance: 180g protein, 65g fat, 335g carbs.</p>
   </div>
 </section>
 
@@ -256,7 +256,7 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
   </div>
   <div class="card">
     <h2>Version 1.8.5 Aesthetic Edition Changelog <span class="versionchip">Bob's Corner</span></h2>
-    <div class="tiny">&bull; DB Shoulder Press locked to Position 5 (75&deg;&ndash;80&deg; scapular plane angle)<br>&bull; Machine Seated Cable Row configured for both Pull and Upper days (seated on floor, feet against sheet/frame)<br>&bull; Day 4 arm block programmed as 2 sets Incline DB Skull Crushers + 2 sets Standing DB Hammer Curls<br>&bull; Nutrition baseline updated to 2,650 kcal to reflect the evening stack snack</div>
+    <div class="tiny">&bull; DB Shoulder Press updated to Position 5 (75&deg;&ndash;80&deg;)<br>&bull; Machine Seated Cable Row configured for both Pull and Upper days (seated on floor, braced against frame/sheet)<br>&bull; Day 4 arms updated to 2 sets Skull Crushers + 2 sets Standing DB Hammer Curls<br>&bull; Replaced RIR column with editable Hold (s) input<br>&bull; Calf raises on Wednesday 4 sets in alternating pairs</div>
   </div>
 </section>
 </main>
@@ -335,7 +335,7 @@ const workouts={
 ],
 "Pull":[
  {name:"Wide-Grip Lat Pulldown",target:"3 sets \u2022 10-12 reps \u2022 builds outer lat wings",rest:90,defaultTempo:3,defaultHold:1},
- {name:"Machine Seated Cable Row",target:"3 sets \u2022 8-10 reps \u2022 seated on floor \u2022 underhand/neutral grip to navel for lower lats",rest:90,defaultTempo:3,defaultHold:1},
+ {name:"Machine Seated Cable Row",target:"3 sets \u2022 8-10 reps \u2022 seated on floor, braced against frame \u2022 underhand/neutral grip to navel",rest:90,defaultTempo:3,defaultHold:1},
  {name:"Incline DB Curl \u2022 Bench Position 3",target:"3 sets \u2022 10-12 reps \u2022 bicep peak builder",rest:60,defaultTempo:3,defaultHold:1},
  {name:"Loaded Decline Crunch",target:"3 sets \u2022 12 reps \u2022 etched six-pack bricks",rest:60,defaultTempo:3,defaultHold:1}
 ],
@@ -346,10 +346,10 @@ const workouts={
  {name:"Standing DB Calf Raise",target:"4 sets \u2022 15-20 reps \u2022 DB Right, Left, Right, Left \u2022 pause at peak and stretch",rest:60,defaultTempo:3,defaultHold:2,sets:4,setLabels:["Set 1 (Right)","Set 2 (Left)","Set 3 (Right)","Set 4 (Left)"]}
 ],
 "Upper":[
- {name:"Seated DB Shoulder Press \u2022 Bench Position 5",target:"3 sets \u2022 8-10 reps \u2022 75-80\u00B0 angle \u2022 scapular plane \u2022 3D shoulder caps",rest:90,defaultTempo:3,defaultHold:1},
+ {name:"Seated DB Shoulder Press \u2022 Bench Position 5",target:"3 sets \u2022 8-10 reps \u2022 75-80\u00B0 scapular plane \u2022 round, 3D caps",rest:90,defaultTempo:3,defaultHold:1},
  {name:"Underhand Lat Pulldown",target:"3 sets \u2022 10-12 reps \u2022 lower lat sweep & bicep power",rest:90,defaultTempo:3,defaultHold:1},
- {name:"Machine Seated Cable Row",target:"3 sets \u2022 8-10 reps \u2022 seated on floor \u2022 overhand flared grip to sternum for mid-back/rear delts",rest:90,defaultTempo:3,defaultHold:1},
- {name:"Arms: Incline Skull Crusher & DB Hammer Curl",target:"4 sets total \u2022 10-12 reps \u2022 2 sets tricep long-head, 2 sets brachialis/arm width",rest:60,defaultTempo:3,defaultHold:1,sets:4,setLabels:["Set 1 (Skull Crusher)","Set 2 (Skull Crusher)","Set 3 (Hammer Curl)","Set 4 (Hammer Curl)"]}
+ {name:"Machine Seated Cable Row",target:"3 sets \u2022 8-10 reps \u2022 seated on floor, braced against frame \u2022 overhand flared grip to sternum",rest:90,defaultTempo:3,defaultHold:1},
+ {name:"Arms: Incline Skull Crusher & DB Hammer Curl",target:"4 sets total \u2022 10-12 reps \u2022 2 sets tricep long-head, 2 sets brachialis width",rest:60,defaultTempo:3,defaultHold:1,sets:4,setLabels:["Set 1 (Skull Crusher)","Set 2 (Skull Crusher)","Set 3 (Hammer Curl)","Set 4 (Hammer Curl)"]}
 ],
 "Lower":[
  {name:"Romanian Deadlift",target:"3 sets \u2022 8-10 reps \u2022 heavy posterior chain loading",rest:90,defaultTempo:3,defaultHold:1},
@@ -676,7 +676,7 @@ function renderDash(){
   dFat.textContent=fatAvg?Math.round(fatAvg)+"g":"--";
   dSteps.textContent=stepsAvg?Math.round(stepsAvg).toLocaleString():"--";
   dCutDay.textContent=cm.day?`Day ${cm.day}`:"Recomp Active";
-  dCutDates.textContent=`Target: 2650 kcal baseline`;
+  dCutDates.textContent=`Target: 2650 kcal maintenance`;
   dLost.textContent=cm.lost!==null?`${Math.abs(cm.lost).toFixed(1)} lb ${cm.lost>=0?"drop":"gain"}`:"--";
   dStartWeight.textContent=cm.start?`Baseline ${Number(cm.start.weight).toFixed(1)} lb \u2022 Current avg ${cm.avgWeight!==null?cm.avgWeight.toFixed(1):"--"} lb`:"Tracking recomp stability";
   dFinish.textContent="162-165 lb";
