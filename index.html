@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <meta name="apple-mobile-web-app-title" content="Bob's Tracker"/>
 <meta name="theme-color" content="#070b12"/>
-<title>Bob's Corner v1.9.4 Quantity Edit Edition</title>
+<title>Bob's Corner v1.9.6 DB Superset Edition</title>
 <style>
 :root{
   --bg:#070b12;--panel:#111827;--panel2:#0b1220;--soft:#1f2937;--line:#2f3a4c;
@@ -94,7 +94,7 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
   <div class="header-top">
     <div>
       <h1>Bob's Corner &#x1F9EA;</h1>
-      <div class="phase">Goal: Fast Aesthetic Hypertrophy &bull; Dynamic Target Edition &bull; v1.9.4</div>
+      <div class="phase">Goal: Fast Aesthetic Hypertrophy &bull; DB Superset Edition &bull; v1.9.6</div>
     </div>
     <div style="display:flex;align-items:center;gap:8px">
       <span id="syncStatusBadge" class="sync-indicator synced">&#x2601;&#xFE0F; Synced</span>
@@ -212,7 +212,7 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
       <div><label>Date</label><input id="workDate" type="date"></div>
       <div><label>Workout</label><select id="workType" onchange="renderWorkout()"></select></div>
     </div>
-    <div id="workoutBox"></div><div class="notice goodnotice">Training Note: Aesthetic V-Taper Split. Control eccentric (&darr;3s). Hold peak contraction. Compounds heavy, isolations to failure. Every logged set auto-syncs live.</div>
+    <div id="workoutBox"></div><div class="notice goodnotice">Training Note: Aesthetic V-Taper &amp; Arm Overload Split. Control eccentric (&darr;3s). Hold peak contraction. Compounds heavy, isolations to failure. Friday ends with alternating DB Triceps &amp; Biceps (30s rest between exercises, 90s between rounds). Every logged set auto-syncs live.</div>
     <label>Notes</label><textarea id="workNotes" placeholder="Energy, pump, soreness, performance..." oninput="autoSaveWorkoutDraft()"></textarea>
     <button onclick="saveWorkout()">Finish Session & Force Sync</button>
   </div>
@@ -370,7 +370,7 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
       <button class="greenbtn" onclick="syncToGoogleDrive(false)">&#x2601;&#xFE0F; Manual Force Sync</button>
       <button class="secondary" onclick="restoreFromGoogleDrive()">&#x1F4E5; Restore from Google Drive</button>
     </div>
-    <p class="tiny">Syncs your data directly with <code>bobs_corner_backup.json</code> on your Google Drive. Live background auto-sync is active.[cite: 2]</p>
+    <p class="tiny">Syncs your data directly with <code>bobs_corner_backup.json</code> on your Google Drive. Live background auto-sync is active.[cite: 3]</p>
   </div>
   <div class="card">
     <h2>Data Backup (File)</h2>
@@ -386,8 +386,8 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
     <table id="histTable"><thead><tr><th>Date</th><th>Workout</th><th>Weight</th><th>Waist</th><th>Body Fat</th><th>Nutrition</th><th>Steps</th><th>Notes</th></tr></thead><tbody></tbody></table>
   </div>
   <div class="card">
-    <h2>Version 1.9.4 Dynamic Target &amp; Edit Edition Changelog <span class="versionchip">Bob's Corner</span></h2>
-    <div class="tiny">&bull; Added inline ✏️ Edit button on all logged food items to adjust grams or fl oz with instant proportional macro recalculation[cite: 2]<br>&bull; Dynamic target recalculation on every log and metric interaction without needing a refresh[cite: 2]<br>&bull; Pacing engine displays exact status (Ahead / On Track / Behind) toward 13.5% BF &amp; 31.25" waist by Jan 8, 2027<br>&bull; Full debounced background sync engine active</div>
+    <h2>Version 1.9.6 DB Superset Edition Changelog <span class="versionchip">Bob's Corner</span></h2>
+    <div class="tiny">&bull; Tuesday: Replaced Loaded Decline Crunch with Standing DB Hammer Curls (3 sets &bull; 10-12 reps)<br>&bull; Friday: Consolidated final slots into alternating 6-set DB Superset: Overhead DB Triceps Extension &bull; 30s rest &bull; DB Bicep Curl &bull; 90s rest<br>&bull; Dynamic target pacing, debounced background sync, and quantity inline edit active</div>
   </div>
 </section>
 </main>
@@ -509,7 +509,7 @@ const workouts={
  {name:"Wide-Grip Lat Pulldown",target:"3 sets \u2022 10-12 reps \u2022 builds outer lat wings",rest:90,defaultTempo:3,defaultHold:1},
  {name:"Machine Seated Cable Row",target:"3 sets \u2022 8-10 reps \u2022 seated on floor, braced against frame \u2022 underhand/neutral grip to navel",rest:90,defaultTempo:3,defaultHold:1},
  {name:"Incline DB Curl \u2022 Bench Position 3",target:"3 sets \u2022 10-12 reps \u2022 bicep peak builder",rest:60,defaultTempo:3,defaultHold:1},
- {name:"Loaded Decline Crunch",target:"3 sets \u2022 12 reps \u2022 etched six-pack bricks",rest:60,defaultTempo:3,defaultHold:1}
+ {name:"Standing DB Hammer Curl",target:"3 sets \u2022 10-12 reps \u2022 neutral grip \u2022 builds brachialis & forearm width",rest:60,defaultTempo:3,defaultHold:1}
 ],
 "Legs":[
  {name:"Goblet Squat",target:"3 sets \u2022 10-12 reps \u2022 upright torso, quad teardrop bias",rest:90,defaultTempo:3,defaultHold:1},
@@ -526,8 +526,7 @@ const workouts={
 "Lower":[
  {name:"Romanian Deadlift",target:"3 sets \u2022 8-10 reps \u2022 heavy posterior chain loading",rest:90,defaultTempo:3,defaultHold:1},
  {name:"Goblet Squat",target:"3 sets \u2022 10-12 reps \u2022 bilateral quad overload",rest:90,defaultTempo:3,defaultHold:1},
- {name:"Hanging Hollow Hold",target:"3 sets \u2022 20-30 sec \u2022 deep transverse corset & spinal decompression",rest:60,defaultTempo:0,defaultHold:0},
- {name:"Loaded Decline Crunch",target:"3 sets \u2022 12 reps \u2022 ab brick hypertrophy",rest:60,defaultTempo:3,defaultHold:1}
+ {name:"Arms: DB Overhead Tricep Extension & DB Bicep Curl",target:"6 sets total (3 rounds) \u2022 10-12 reps \u2022 30s rest after Triceps, 90s rest after Biceps",rest:90,defaultTempo:3,defaultHold:1,sets:6,setRests:[30,90,30,90,30,90],setLabels:["Set 1 (Triceps - 30s)","Set 2 (Biceps - 90s)","Set 3 (Triceps - 30s)","Set 4 (Biceps - 90s)","Set 5 (Triceps - 30s)","Set 6 (Biceps - 90s)"]}
 ]
 };
 
@@ -597,13 +596,14 @@ function renderWorkout(){
     const pt=p.tempo!==undefined&&p.tempo!==""?p.tempo:(ex.defaultTempo!==undefined?ex.defaultTempo:3);
     const ph=p.hold!==undefined&&p.hold!==""?p.hold:(ex.defaultHold!==undefined?ex.defaultHold:1);
     const setLabel=(ex.setLabels&&ex.setLabels[idx])?ex.setLabels[idx]:`Set ${n}`;
+    const specificRest=(ex.setRests&&ex.setRests[idx]!==undefined)?ex.setRests[idx]:ex.rest;
     return `<div class="setrow">
-      <input value="${setLabel}" disabled style="text-align:center;padding:10px 2px;font-size:10.5px">
+      <input value="${setLabel}" disabled style="text-align:center;padding:10px 2px;font-size:10px">
       <input id="w_${i}_${n}" type="number" step="0.5" value="${pw}" placeholder="lb/BW" oninput="checkPR(${i},'${ex.name}'); autoSaveWorkoutDraft()">
       <input id="r_${i}_${n}" type="number" value="${pr}" placeholder="reps/s" oninput="checkPR(${i},'${ex.name}'); autoSaveWorkoutDraft()">
       <input id="t_${i}_${n}" type="number" step="1" value="${pt}" placeholder="down" style="text-align:center" oninput="autoSaveWorkoutDraft()">
       <input id="h_${i}_${n}" type="number" step="1" value="${ph}" placeholder="hold" style="text-align:center" oninput="autoSaveWorkoutDraft()">
-      <button class="secondary" onclick="handleSetDone(this, ${ex.rest}, ${i}, '${ex.name}')">&#x2713;</button>
+      <button class="secondary" onclick="handleSetDone(this, ${specificRest}, ${i}, '${ex.name}')">&#x2713;</button>
     </div>`;
   }).join("")}
   </div>`;
