@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <meta name="apple-mobile-web-app-title" content="Bob's Tracker"/>
 <meta name="theme-color" content="#070b12"/>
-<title>Bob's Corner v1.9.6 DB Superset Edition</title>
+<title>Bob's Corner v1.9.7 3-Phase Cadence & Arm Split Edition</title>
 <style>
 :root{
   --bg:#070b12;--panel:#111827;--panel2:#0b1220;--soft:#1f2937;--line:#2f3a4c;
@@ -51,7 +51,7 @@ button.secondary{background:var(--soft);color:var(--text);border:1px solid var(-
 .exhead{display:flex;justify-content:space-between;gap:8px;align-items:center;padding:12px;border-bottom:1px solid var(--line)}
 .exname{font-weight:950}.hint{font-size:12px;color:var(--muted)}
 .sets{padding:10px}
-.setrow{display:grid;grid-template-columns:1.25fr 1fr 0.9fr 0.75fr 0.75fr 0.55fr;gap:6px;align-items:end;margin-bottom:7px}
+.setrow{display:grid;grid-template-columns:0.8fr 1.1fr 0.9fr 0.7fr 0.7fr 0.7fr 0.55fr;gap:5px;align-items:end;margin-bottom:7px}
 .setrow span{font-size:11px;color:var(--muted);padding-bottom:8px;text-align:center}
 .done{background:#064e3b!important;color:#bbf7d0!important;border:1px solid #15803d!important}
 table{width:100%;border-collapse:collapse;font-size:13px}th,td{border-bottom:1px solid var(--line);padding:8px;text-align:left;vertical-align:top}th{color:var(--blue)}
@@ -94,7 +94,7 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
   <div class="header-top">
     <div>
       <h1>Bob's Corner &#x1F9EA;</h1>
-      <div class="phase">Goal: Fast Aesthetic Hypertrophy &bull; DB Superset Edition &bull; v1.9.6</div>
+      <div class="phase">Goal: Fast Aesthetic Hypertrophy &bull; 3-Phase Cadence &bull; v1.9.7</div>
     </div>
     <div style="display:flex;align-items:center;gap:8px">
       <span id="syncStatusBadge" class="sync-indicator synced">&#x2601;&#xFE0F; Synced</span>
@@ -212,7 +212,7 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
       <div><label>Date</label><input id="workDate" type="date"></div>
       <div><label>Workout</label><select id="workType" onchange="renderWorkout()"></select></div>
     </div>
-    <div id="workoutBox"></div><div class="notice goodnotice">Training Note: Aesthetic V-Taper &amp; Arm Overload Split. Control eccentric (&darr;3s). Hold peak contraction. Compounds heavy, isolations to failure. Friday ends with alternating DB Triceps &amp; Biceps (30s rest between exercises, 90s between rounds). Every logged set auto-syncs live.</div>
+    <div id="workoutBox"></div><div class="notice goodnotice">Training Note: Aesthetic V-Taper Split. Tempo is recorded as 3 phases: Tempo (Down/Eccentric), Up (Concentric speed), and Hold (Peak pause). Every logged set auto-syncs live.</div>
     <label>Notes</label><textarea id="workNotes" placeholder="Energy, pump, soreness, performance..." oninput="autoSaveWorkoutDraft()"></textarea>
     <button onclick="saveWorkout()">Finish Session & Force Sync</button>
   </div>
@@ -386,8 +386,8 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
     <table id="histTable"><thead><tr><th>Date</th><th>Workout</th><th>Weight</th><th>Waist</th><th>Body Fat</th><th>Nutrition</th><th>Steps</th><th>Notes</th></tr></thead><tbody></tbody></table>
   </div>
   <div class="card">
-    <h2>Version 1.9.6 DB Superset Edition Changelog <span class="versionchip">Bob's Corner</span></h2>
-    <div class="tiny">&bull; Tuesday: Replaced Loaded Decline Crunch with Standing DB Hammer Curls (3 sets &bull; 10-12 reps)<br>&bull; Friday: Consolidated final slots into alternating 6-set DB Superset: Overhead DB Triceps Extension &bull; 30s rest &bull; DB Bicep Curl &bull; 90s rest<br>&bull; Dynamic target pacing, debounced background sync, and quantity inline edit active</div>
+    <h2>Version 1.9.7 3-Phase Cadence &amp; Arm Split Edition Changelog <span class="versionchip">Bob's Corner</span></h2>
+    <div class="tiny">&bull; 3-Phase Cadence inputs: Tempo (Down/Eccentric), Up (Concentric speed), and Hold (Peak pause)<br>&bull; Thursday: Split combined arm work into standalone Incline Skull Crusher (2 sets) and DB Hammer Curl (2 sets)<br>&bull; Friday: Split superset into standalone DB Overhead Tricep Extension (3 sets) and DB Bicep Curl (3 sets) with standard rests</div>
   </div>
 </section>
 </main>
@@ -500,33 +500,35 @@ const pantryItems = [
 
 const workouts={
 "Push":[
- {name:"Incline DB Bench Press \u2022 Bench Position 3",target:"3 sets \u2022 8-10 reps \u2022 upper chest armor, deep stretch",rest:90,defaultTempo:3,defaultHold:1},
- {name:"Flat DB Bench Press",target:"3 sets \u2022 8-10 reps \u2022 dense mid/lower chest mass",rest:90,defaultTempo:3,defaultHold:1},
- {name:"DB Lateral Raise",target:"4 sets \u2022 12-15 reps \u2022 lead with elbows \u2022 builds the V-taper shelf",rest:60,defaultTempo:3,defaultHold:1,sets:4},
- {name:"Cable Triceps Pushdown",target:"3 sets \u2022 10-12 reps \u2022 lateral head horseshoe sweep",rest:60,defaultTempo:3,defaultHold:1}
+ {name:"Incline DB Bench Press \u2022 Bench Position 3",target:"3 sets \u2022 8-10 reps \u2022 upper chest armor, deep stretch",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1},
+ {name:"Flat DB Bench Press",target:"3 sets \u2022 8-10 reps \u2022 dense mid/lower chest mass",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1},
+ {name:"DB Lateral Raise",target:"4 sets \u2022 12-15 reps \u2022 lead with elbows \u2022 builds the V-taper shelf",rest:60,defaultTempo:3,defaultUp:1,defaultHold:1,sets:4},
+ {name:"Cable Triceps Pushdown",target:"3 sets \u2022 10-12 reps \u2022 lateral head horseshoe sweep",rest:60,defaultTempo:3,defaultUp:1,defaultHold:1}
 ],
 "Pull":[
- {name:"Wide-Grip Lat Pulldown",target:"3 sets \u2022 10-12 reps \u2022 builds outer lat wings",rest:90,defaultTempo:3,defaultHold:1},
- {name:"Machine Seated Cable Row",target:"3 sets \u2022 8-10 reps \u2022 seated on floor, braced against frame \u2022 underhand/neutral grip to navel",rest:90,defaultTempo:3,defaultHold:1},
- {name:"Incline DB Curl \u2022 Bench Position 3",target:"3 sets \u2022 10-12 reps \u2022 bicep peak builder",rest:60,defaultTempo:3,defaultHold:1},
- {name:"Standing DB Hammer Curl",target:"3 sets \u2022 10-12 reps \u2022 neutral grip \u2022 builds brachialis & forearm width",rest:60,defaultTempo:3,defaultHold:1}
+ {name:"Wide-Grip Lat Pulldown",target:"3 sets \u2022 10-12 reps \u2022 builds outer lat wings",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1},
+ {name:"Machine Seated Cable Row",target:"3 sets \u2022 8-10 reps \u2022 seated on floor, braced against frame \u2022 underhand/neutral grip to navel",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1},
+ {name:"Incline DB Curl \u2022 Bench Position 3",target:"3 sets \u2022 10-12 reps \u2022 bicep peak builder",rest:60,defaultTempo:3,defaultUp:1,defaultHold:1},
+ {name:"Standing DB Hammer Curl",target:"3 sets \u2022 10-12 reps \u2022 neutral grip \u2022 builds brachialis & forearm width",rest:60,defaultTempo:3,defaultUp:1,defaultHold:1}
 ],
 "Legs":[
- {name:"Goblet Squat",target:"3 sets \u2022 10-12 reps \u2022 upright torso, quad teardrop bias",rest:90,defaultTempo:3,defaultHold:1},
- {name:"Romanian Deadlift",target:"3 sets \u2022 10-12 reps \u2022 hamstring-glute tie in",rest:90,defaultTempo:3,defaultHold:1},
- {name:"DB Hip Thrust \u2022 Bench Position 1",target:"3 sets \u2022 12 reps \u2022 posture & glute density",rest:90,defaultTempo:3,defaultHold:1},
- {name:"Standing DB Calf Raise",target:"4 sets \u2022 15-20 reps \u2022 DB Right, Left, Right, Left \u2022 pause at peak and stretch",rest:60,defaultTempo:3,defaultHold:2,sets:4,setLabels:["Set 1 (Right)","Set 2 (Left)","Set 3 (Right)","Set 4 (Left)"]}
+ {name:"Goblet Squat",target:"3 sets \u2022 10-12 reps \u2022 upright torso, quad teardrop bias",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1},
+ {name:"Romanian Deadlift",target:"3 sets \u2022 10-12 reps \u2022 hamstring-glute tie in",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1},
+ {name:"DB Hip Thrust \u2022 Bench Position 1",target:"3 sets \u2022 12 reps \u2022 posture & glute density",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1},
+ {name:"Standing DB Calf Raise",target:"4 sets \u2022 15-20 reps \u2022 DB Right, Left, Right, Left \u2022 pause at peak and stretch",rest:60,defaultTempo:3,defaultUp:1,defaultHold:2,sets:4,setLabels:["Set 1 (Right)","Set 2 (Left)","Set 3 (Right)","Set 4 (Left)"]}
 ],
 "Upper":[
- {name:"Seated DB Shoulder Press \u2022 Bench Position 5",target:"3 sets \u2022 8-10 reps \u2022 75-80\u00B0 scapular plane \u2022 round, 3D caps",rest:90,defaultTempo:3,defaultHold:1},
- {name:"Underhand Lat Pulldown",target:"3 sets \u2022 10-12 reps \u2022 lower lat sweep & bicep power",rest:90,defaultTempo:3,defaultHold:1},
- {name:"Machine Seated Cable Row",target:"3 sets \u2022 8-10 reps \u2022 seated on floor, braced against frame \u2022 overhand flared grip to sternum",rest:90,defaultTempo:3,defaultHold:1},
- {name:"Arms: Incline Skull Crusher & DB Hammer Curl",target:"4 sets total \u2022 10-12 reps \u2022 2 sets tricep long-head, 2 sets brachialis width",rest:60,defaultTempo:3,defaultHold:1,sets:4,setLabels:["Set 1 (Skull Crusher)","Set 2 (Skull Crusher)","Set 3 (Hammer Curl)","Set 4 (Hammer Curl)"]}
+ {name:"Seated DB Shoulder Press \u2022 Bench Position 5",target:"3 sets \u2022 8-10 reps \u2022 75-80\u00B0 scapular plane \u2022 round, 3D caps",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1},
+ {name:"Underhand Lat Pulldown",target:"3 sets \u2022 10-12 reps \u2022 lower lat sweep & bicep power",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1},
+ {name:"Machine Seated Cable Row",target:"3 sets \u2022 8-10 reps \u2022 seated on floor, braced against frame \u2022 overhand flared grip to sternum",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1},
+ {name:"Incline Skull Crusher",target:"2 sets \u2022 10-12 reps \u2022 tricep long-head stretch & density",rest:60,defaultTempo:3,defaultUp:1,defaultHold:1,sets:2},
+ {name:"DB Hammer Curl",target:"2 sets \u2022 10-12 reps \u2022 neutral grip \u2022 brachialis width",rest:60,defaultTempo:3,defaultUp:1,defaultHold:1,sets:2}
 ],
 "Lower":[
- {name:"Romanian Deadlift",target:"3 sets \u2022 8-10 reps \u2022 heavy posterior chain loading",rest:90,defaultTempo:3,defaultHold:1},
- {name:"Goblet Squat",target:"3 sets \u2022 10-12 reps \u2022 bilateral quad overload",rest:90,defaultTempo:3,defaultHold:1},
- {name:"Arms: DB Overhead Tricep Extension & DB Bicep Curl",target:"6 sets total (3 rounds) \u2022 10-12 reps \u2022 30s rest after Triceps, 90s rest after Biceps",rest:90,defaultTempo:3,defaultHold:1,sets:6,setRests:[30,90,30,90,30,90],setLabels:["Set 1 (Triceps - 30s)","Set 2 (Biceps - 90s)","Set 3 (Triceps - 30s)","Set 4 (Biceps - 90s)","Set 5 (Triceps - 30s)","Set 6 (Biceps - 90s)"]}
+ {name:"Romanian Deadlift",target:"3 sets \u2022 8-10 reps \u2022 heavy posterior chain loading",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1},
+ {name:"Goblet Squat",target:"3 sets \u2022 10-12 reps \u2022 bilateral quad overload",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1},
+ {name:"DB Overhead Tricep Extension",target:"3 sets \u2022 10-12 reps \u2022 deep long-head stretch & horseshoe fullness",rest:60,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3},
+ {name:"DB Bicep Curl",target:"3 sets \u2022 10-12 reps \u2022 supinated bicep peak builder",rest:60,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3}
 ]
 };
 
@@ -568,11 +570,12 @@ function previousExerciseSets(type,exerciseName,index){
 function setDisplay(set){
  if(!set) return "";
  const w=set.weight??set.w??"", r=set.reps??set.r??"";
- const t=set.tempo!==undefined&&set.tempo!==""?` (${set.tempo}s)`:"";
+ const t=set.tempo!==undefined&&set.tempo!==""?` (↓${set.tempo}s)`:"";
+ const u=set.up!==undefined&&set.up!==""?` [↑${set.up}s]`:"";
  const h=set.hold!==undefined&&set.hold!==""?` [H:${set.hold}s]`:"";
- if(w!==""&&r!=="") return `${w}\u00D7${r}${t}${h}`;
+ if(w!==""&&r!=="") return `${w}\u00D7${r}${t}${u}${h}`;
  if(w!=="") return `${w}`;
- if(r!=="") return `${r}${t}${h}`;
+ if(r!=="") return `${r}${t}${u}${h}`;
  return "";
 }
 
@@ -588,20 +591,22 @@ function renderWorkout(){
   const div=document.createElement("div");div.className="exercise";
   div.innerHTML=`<div class="exhead"><div><div class="exname">${ex.name} <span id="pr_badge_${i}"></span></div><div class="hint">${ex.target}</div><div class="exstats">${lastSetText?`${sourceLabel}:${lastSetText}`:"No previous sets for this exercise"}${h.best?` \u2022 Best set: ${h.best.weight} \u00D7${h.best.reps}`:""}</div></div><button class="secondary" style="width:80px" onclick="startRest(${ex.rest})">${ex.rest}s</button></div>
   <div class="sets">
-  <div class="setrow"><span>Set</span><span>Weight</span><span>Reps/Sec</span><span>Tempo</span><span>Hold</span><span>Done</span></div>
+  <div class="setrow"><span>Set</span><span>Weight</span><span>Reps</span><span>Tempo</span><span>Up</span><span>Hold</span><span>Done</span></div>
   ${Array.from({length:ex.sets||3},(_,idx)=>{
     const n=idx+1;
     const p=prevSets[idx]||{};
     const pw=p.weight??p.w??"", pr=p.reps??p.r??"";
     const pt=p.tempo!==undefined&&p.tempo!==""?p.tempo:(ex.defaultTempo!==undefined?ex.defaultTempo:3);
+    const pu=p.up!==undefined&&p.up!==""?p.up:(ex.defaultUp!==undefined?ex.defaultUp:1);
     const ph=p.hold!==undefined&&p.hold!==""?p.hold:(ex.defaultHold!==undefined?ex.defaultHold:1);
     const setLabel=(ex.setLabels&&ex.setLabels[idx])?ex.setLabels[idx]:`Set ${n}`;
     const specificRest=(ex.setRests&&ex.setRests[idx]!==undefined)?ex.setRests[idx]:ex.rest;
     return `<div class="setrow">
       <input value="${setLabel}" disabled style="text-align:center;padding:10px 2px;font-size:10px">
       <input id="w_${i}_${n}" type="number" step="0.5" value="${pw}" placeholder="lb/BW" oninput="checkPR(${i},'${ex.name}'); autoSaveWorkoutDraft()">
-      <input id="r_${i}_${n}" type="number" value="${pr}" placeholder="reps/s" oninput="checkPR(${i},'${ex.name}'); autoSaveWorkoutDraft()">
+      <input id="r_${i}_${n}" type="number" value="${pr}" placeholder="reps" oninput="checkPR(${i},'${ex.name}'); autoSaveWorkoutDraft()">
       <input id="t_${i}_${n}" type="number" step="1" value="${pt}" placeholder="down" style="text-align:center" oninput="autoSaveWorkoutDraft()">
+      <input id="u_${i}_${n}" type="number" step="1" value="${pu}" placeholder="up" style="text-align:center" oninput="autoSaveWorkoutDraft()">
       <input id="h_${i}_${n}" type="number" step="1" value="${ph}" placeholder="hold" style="text-align:center" oninput="autoSaveWorkoutDraft()">
       <button class="secondary" onclick="handleSetDone(this, ${specificRest}, ${i}, '${ex.name}')">&#x2713;</button>
     </div>`;
@@ -705,9 +710,9 @@ function autoSaveWorkoutDraft(){
   const ex=(workouts[type]||[]).map((e,i)=>({
     name:e.name,
     sets:Array.from({length:e.sets||3},(_,idx)=>{
-      const n=idx+1, w = val(`w_${i}_${n}`), r = val(`r_${i}_${n}`), t = val(`t_${i}_${n}`), h = val(`h_${i}_${n}`);
+      const n=idx+1, w = val(`w_${i}_${n}`), r = val(`r_${i}_${n}`), t = val(`t_${i}_${n}`), u = val(`u_${i}_${n}`), h = val(`h_${i}_${n}`);
       if (numeric(w) && numeric(r)) totalTonnage += (numeric(w) * numeric(r));
-      return {weight:w, reps:r, tempo:t, hold:h};
+      return {weight:w, reps:r, tempo:t, up:u, hold:h};
     }).filter(s=>s.weight||s.reps)
   }));
   const existingIdx = d.workouts.findIndex(w=>w.date===curDate && w.type===type);
@@ -1332,11 +1337,12 @@ function workoutDetails(workoutsForDate){
    const details=w.ex.map(ex=>{
      const sets=(ex.sets||[]).map(s=>{
        const wt=s.weight||s.w||"", rp=s.reps||s.r||"";
-       const tm=s.tempo!==undefined&&s.tempo!==""?` (${s.tempo}s)`:"";
+       const tm=s.tempo!==undefined&&s.tempo!==""?` (↓${s.tempo}s)`:"";
+       const up=s.up!==undefined&&s.up!==""?` [↑${s.up}s]`:"";
        const hd=s.hold!==undefined&&s.hold!==""?` [H:${s.hold}s]`:"";
-       if(wt && rp) return `${wt}\u00D7${rp}${tm}${hd}`;
+       if(wt && rp) return `${wt}\u00D7${rp}${tm}${up}${hd}`;
        if(wt) return `${wt}`;
-       if(rp) return `${rp}${tm}${hd}`;
+       if(rp) return `${rp}${tm}${up}${hd}`;
        return "";
      }).filter(Boolean).join(", ");
      return `${ex.name}: ${sets}`;
