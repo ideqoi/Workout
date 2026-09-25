@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <meta name="apple-mobile-web-app-title" content="Bob's Tracker"/>
 <meta name="theme-color" content="#070b12"/>
-<title>Bob's Corner v1.9.9 Template Manager Edition</title>
+<title>Bob's Corner v2.0.0 Milestone 1 Edition</title>
 <style>
 :root{
   --bg:#070b12;--panel:#111827;--panel2:#0b1220;--soft:#1f2937;--line:#2f3a4c;
@@ -104,7 +104,7 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
   <div class="header-top">
     <div>
       <h1>Bob's Corner &#x1F9EA;</h1>
-      <div class="phase">Goal: Fast Aesthetic Hypertrophy &bull; Deficit Recomp Edition &bull; v1.9.9</div>
+      <div class="phase">Goal: Fast Aesthetic Hypertrophy &bull; Milestone 1: Nov 6, 2026 &bull; v2.0.0</div>
     </div>
     <div style="display:flex;align-items:center;gap:8px">
       <span id="syncStatusBadge" class="sync-indicator synced">&#x2601;&#xFE0F; Synced</span>
@@ -144,7 +144,7 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
       <div class="stat"><div class="label">7-Day Avg Calories</div><div class="value" id="dCalories">--</div></div>
       <div class="stat"><div class="label">Workout Streak</div><div class="value" id="dStreak">--</div><div class="tiny">consecutive logged sessions</div></div>
       <div class="stat"><div class="label">Phase Days</div><div class="value" id="dCutDay">--</div><div class="tiny" id="dCutDates"></div></div>
-      <div class="stat"><div class="label">Target Finish Goal</div><div class="value" id="dFinish" style="font-size:19px">13.5% BF &bull; Jan 8, 2027</div><div class="tiny" id="dRate">Target Waist: 31.0" - 31.25"</div></div>
+      <div class="stat"><div class="label">Target Finish Goal</div><div class="value" id="dFinish" style="font-size:19px">13.4% BF &bull; Nov 6, 2026</div><div class="tiny" id="dRate">Milestone 1 Waist: 31.25"</div></div>
       <div class="stat"><div class="label">Pacing Status (Waist)</div><div class="value" id="dPacing" style="font-size:20px">--</div><div class="tiny" id="dPacingSub">Comparing live average to timeline</div></div>
     </div>
     <div class="card" style="margin:14px 0 0;background:var(--panel2)">
@@ -161,16 +161,16 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
     <h2>Phase Setup & Target Benchmarks</h2>
     <div class="row4">
       <div><label>Phase Start Date</label><input id="cutStartDate" type="date" value="2026-08-13"></div>
-      <div><label>Target Finish Date</label><input id="targetEndDate" type="date" value="2027-01-08"></div>
+      <div><label>Target Finish Date</label><input id="targetEndDate" type="date" value="2026-11-06"></div>
       <div><label>Goal Waist (in)</label><input id="goalWaist" type="number" step="0.05" value="31.25"></div>
-      <div><label>Goal Weight (lb)</label><input id="goalWeight" type="number" step="0.1" value="163"></div>
+      <div><label>Goal Weight (lb)</label><input id="goalWeight" type="number" step="0.1" value="160.5"></div>
     </div>
     <div class="row" style="margin-top:8px">
       <div><label>Height (Inches)</label><input id="userHeight" type="number" step="0.5" value="68"></div>
-      <div><label>Target Weekly Loss/Gain</label><input id="plannedRate" type="number" step="0.1" value="0.0"></div>
+      <div><label>Target Weekly Loss/Gain</label><input id="plannedRate" type="number" step="0.1" value="0.3"></div>
     </div>
     <button class="secondary" style="margin-top:10px" onclick="saveCutSettings()">Save Phase & Target Settings</button>
-    <p class="tiny">Configured for 2,350 kcal deficit recomp toward 13.5% body fat (~31.25" waist) by Jan 8, 2027.</p>
+    <p class="tiny">Configured for 2,350 kcal deficit recomp toward 13.4% body fat (31.25" waist) by Nov 6, 2026 (Milestone 1).</p>
   </div>
   <div class="card">
     <h2>Coach Read</h2>
@@ -393,7 +393,7 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
       <button class="greenbtn" onclick="syncToGoogleDrive(false)">&#x2601;&#xFE0F; Manual Force Sync</button>
       <button class="secondary" onclick="restoreFromGoogleDrive()">&#x1F4E5; Restore from Google Drive</button>
     </div>
-    <p class="tiny">Syncs your data directly with <code>bobs_corner_backup.json</code> on your Google Drive. Live background auto-sync is active.[cite: 4]</p>
+    <p class="tiny">Syncs your data directly with <code>bobs_corner_backup.json</code> on your Google Drive. Live background auto-sync is active.[cite: 5]</p>
   </div>
   <div class="card">
     <h2>Data Backup (File)</h2>
@@ -409,8 +409,8 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
     <table id="histTable"><thead><tr><th>Date</th><th>Workout</th><th>Weight</th><th>Waist</th><th>Body Fat</th><th>Nutrition</th><th>Steps</th><th>Notes</th></tr></thead><tbody></tbody></table>
   </div>
   <div class="card">
-    <h2>Version 1.9.9 Template Manager Edition Changelog <span class="versionchip">Bob's Corner</span></h2>
-    <div class="tiny">&bull; Dedicated Templates Tab: Inspect complete food lists and total macros for each saved day<br>&bull; Template Management: Inline rename, delete, and 1-tap apply to current day<br>&bull; Nutrition baseline: 2,350 kcal (180g P / 60g F / 270g C / 35g+ Fiber)<br>&bull; 3-Phase Cadence: Tempo (Down/Eccentric), Up (Concentric speed), and Hold (Peak pause)</div>
+    <h2>Version 2.0.0 Milestone 1 Sprint Edition Changelog <span class="versionchip">Bob's Corner</span></h2>
+    <div class="tiny">&bull; Target Milestone 1: Updated to Nov 6, 2026 (31.25" waist / 160.5 lb / 13.4% BF) for focused 6-week pacing<br>&bull; Dedicated Templates Tab: Inspect complete food lists and total macros for each saved day<br>&bull; Template Management: Inline rename, delete, and 1-tap apply to current day<br>&bull; Nutrition baseline: 2,350 kcal (180g P / 60g F / 270g C / 35g+ Fiber)<br>&bull; 3-Phase Cadence: Tempo (Down/Eccentric), Up (Concentric speed), and Hold (Peak pause)</div>
   </div>
 </section>
 </main>
@@ -563,9 +563,11 @@ Object.keys(workouts).forEach(k=>{let o=document.createElement("option");o.textC
 
 function data(){
   const d=JSON.parse(localStorage.getItem("recompCoach")||'{"workouts":[],"body":[],"nutrition":[]}');
-  d.settings=d.settings||{cutStartDate:"2026-08-13",targetEndDate:"2027-01-08",goalWaist:31.25,goalWeight:163,plannedRate:0.0,height:68};
-  if(!d.settings.targetEndDate) d.settings.targetEndDate="2027-01-08";
+  d.settings=d.settings||{cutStartDate:"2026-08-13",targetEndDate:"2026-11-06",goalWaist:31.25,goalWeight:160.5,plannedRate:0.3,height:68};
+  if(!d.settings.targetEndDate || d.settings.targetEndDate === "2027-01-08") d.settings.targetEndDate="2026-11-06";
   if(!d.settings.goalWaist) d.settings.goalWaist=31.25;
+  if(d.settings.goalWeight === 163 || d.settings.goalWeight === 148) d.settings.goalWeight=160.5;
+  if(!d.settings.plannedRate || d.settings.plannedRate === 0.0 || d.settings.plannedRate === 1) d.settings.plannedRate=0.3;
   d.foodLogs=d.foodLogs||{};
   d.dayTemplates=d.dayTemplates||{};
   return d;
@@ -1230,30 +1232,30 @@ function saveCutSettings(){
   const d=data();
   d.settings={
     cutStartDate: val("cutStartDate") || "2026-08-13",
-    targetEndDate: val("targetEndDate") || "2027-01-08",
+    targetEndDate: val("targetEndDate") || "2026-11-06",
     goalWaist: numeric(val("goalWaist")) || 31.25,
-    goalWeight: numeric(val("goalWeight")) || 163,
-    plannedRate: numeric(val("plannedRate")) || 0.0,
+    goalWeight: numeric(val("goalWeight")) || 160.5,
+    plannedRate: numeric(val("plannedRate")) || 0.3,
     height: numeric(val("userHeight")) || 68
   };
   save(d);
-  alert("Phase settings and target dates saved & synced!");
+  alert("Milestone 1 settings and target dates saved & synced!");
 }
 
 function loadCutSettings(){
   const s=data().settings||{};
   document.getElementById("cutStartDate").value = s.cutStartDate || "2026-08-13";
-  document.getElementById("targetEndDate").value = s.targetEndDate || "2027-01-08";
+  document.getElementById("targetEndDate").value = s.targetEndDate || "2026-11-06";
   document.getElementById("goalWaist").value = s.goalWaist || 31.25;
-  document.getElementById("goalWeight").value = s.goalWeight || 163;
-  document.getElementById("plannedRate").value = s.plannedRate || 0.0;
+  document.getElementById("goalWeight").value = s.goalWeight || 160.5;
+  document.getElementById("plannedRate").value = (s.plannedRate !== undefined) ? s.plannedRate : 0.3;
   document.getElementById("userHeight").value = s.height || 68;
 }
 
 function dateDiffDays(a,b){return Math.floor((new Date(a+"T12:00:00")-new Date(b+"T12:00:00"))/86400000)}
 
 function calculatePacing(d){
-  const s = d.settings || {cutStartDate:"2026-08-13", targetEndDate:"2027-01-08", goalWaist:31.25};
+  const s = d.settings || {cutStartDate:"2026-08-13", targetEndDate:"2026-11-06", goalWaist:31.25};
   const waists = [...d.body].filter(x => x.date >= s.cutStartDate && numeric(x.waist) !== null).sort((a,b) => a.date.localeCompare(b.date));
   
   if(!waists.length) return { status: "Awaiting Logs", sub: "Log Friday waist to calculate pacing", color: "blue" };
@@ -1286,7 +1288,7 @@ function calculatePacing(d){
   } else if (Math.abs(delta) < 0.15) {
     return {
       status: `On Target Pace (&plusmn;${Math.abs(delta).toFixed(2)}")`,
-      sub: `Current: ${curWaist.toFixed(2)}" &bull; Goal: ${goalWaist.toFixed(2)}" by Jan 8 (${neededRate}"/wk)`,
+      sub: `Current: ${curWaist.toFixed(2)}" &bull; Goal: ${goalWaist.toFixed(2)}" by Nov 6 (${neededRate}"/wk)`,
       color: "green"
     };
   } else {
@@ -1299,7 +1301,7 @@ function calculatePacing(d){
 }
 
 function cutMetrics(d){
- const s=d.settings||{cutStartDate:"2026-08-13", targetEndDate:"2027-01-08", goalWaist:31.25, goalWeight:163, plannedRate:0.0, height:68};
+ const s=d.settings||{cutStartDate:"2026-08-13", targetEndDate:"2026-11-06", goalWaist:31.25, goalWeight:160.5, plannedRate:0.3, height:68};
  const body=[...d.body].filter(x=>x.date>=s.cutStartDate&&numeric(x.weight)!==null).sort((a,b)=>a.date.localeCompare(b.date));
  const start=body[0]||null, current=body.at(-1)||null, avgWeight=avg(body.slice(-7).map(x=>x.weight)), todayStr=today();
  const day=todayStr<s.cutStartDate?0:dateDiffDays(todayStr,s.cutStartDate)+1;
@@ -1309,7 +1311,7 @@ function cutMetrics(d){
    const elapsed=Math.max(1,dateDiffDays(current?current.date:start.date,start.date));
    rate=lost/(elapsed/7);
  }
- return {settings:s,start,current,avgWeight,day,lost,rate,finish:"162-165 lb"}
+ return {settings:s,start,current,avgWeight,day,lost,rate,finish:"160.5-161.5 lb"}
 }
 
 function renderDash(){
@@ -1334,8 +1336,8 @@ function renderDash(){
   dCutDay.textContent=cm.day?`Day ${cm.day}`:"Recomp Active";
   dCutDates.textContent=`Target: 2350 kcal baseline`;
   
-  dFinish.textContent = "13.5% BF \u2022 Jan 8, 2027";
-  dRate.textContent = `Target Waist: 31.0" - 31.25"`;
+  dFinish.textContent = "13.4% BF \u2022 Nov 6, 2026";
+  dRate.textContent = `Milestone 1 Waist: 31.25"`;
 
   const pace = calculatePacing(d);
   const pacingEl = document.getElementById("dPacing");
@@ -1349,12 +1351,12 @@ function renderDash(){
 function makeRead(){
   const d=data(),b=[...d.body].sort((a,b)=>a.date.localeCompare(b.date));
   const pace = calculatePacing(d);
-  if(b.length<2)return `Phase active: Recomp & Deficit (2350 kcal) toward 13.5% BF finish on Jan 8, 2027. Log weekly Friday waist to calculate exact pacing.`;
+  if(b.length<2)return `Phase active: Recomp & Deficit (2350 kcal) toward Milestone 1 (13.4% BF / 31.25" waist) on Nov 6, 2026. Log weekly Friday waist to calculate exact pacing.`;
   const last=b.at(-1),av=avg(seven(b,"weight")),cal=avg(seven(d.nutrition,"calories")),pro=avg(seven(d.nutrition,"protein"));
   
-  return `Current phase: RECOMP / DEFICIT
+  return `Current phase: RECOMP / DEFICIT (MILESTONE 1 SPRINT)
 Daily targets: ${targets.calories} calories \u2022 ${targets.protein}g protein \u2022 ${targets.fat}g fat \u2022 ${targets.carbs}g carbs \u2022 35g+ fiber
-Target Milestone: 13.5% Body Fat (~31.25" Waist) by January 8, 2027
+Target Milestone 1: 13.4% Body Fat (31.25" Waist) by November 6, 2026
 
 Latest weight: ${last.weight||"--"}
 7-log average weight: ${av?av.toFixed(1):"--"}
@@ -1362,7 +1364,7 @@ Latest averaged waist: ${last.waist?Number(last.waist).toFixed(2)+'"':"--"}
 7-log calorie average: ${cal?Math.round(cal):"--"}
 7-log protein average: ${pro?Math.round(pro):"--"}g
 
-Target Tracking Status:
+Milestone 1 Tracking Status:
 ${pace.status}
 ${pace.sub.replace(/&bull;/g, "|")}`;
 }
