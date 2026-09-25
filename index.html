@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <meta name="apple-mobile-web-app-title" content="Bob's Tracker"/>
 <meta name="theme-color" content="#070b12"/>
-<title>Bob's Corner v1.9.7 3-Phase Cadence & Arm Split Edition</title>
+<title>Bob's Corner v1.9.8 Deficit Recomp Edition</title>
 <style>
 :root{
   --bg:#070b12;--panel:#111827;--panel2:#0b1220;--soft:#1f2937;--line:#2f3a4c;
@@ -94,7 +94,7 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
   <div class="header-top">
     <div>
       <h1>Bob's Corner &#x1F9EA;</h1>
-      <div class="phase">Goal: Fast Aesthetic Hypertrophy &bull; 3-Phase Cadence &bull; v1.9.7</div>
+      <div class="phase">Goal: Fast Aesthetic Hypertrophy &bull; Deficit Recomp Edition &bull; v1.9.8</div>
     </div>
     <div style="display:flex;align-items:center;gap:8px">
       <span id="syncStatusBadge" class="sync-indicator synced">&#x2601;&#xFE0F; Synced</span>
@@ -115,14 +115,14 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
 <section id="dash" class="screen">
   <div class="card">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-      <h2>Recomp & Maintenance Dashboard</h2>
+      <h2>Recomp & Deficit Dashboard</h2>
       <div style="display:flex;gap:6px">
         <button class="greenbtn" style="width:auto;padding:6px 12px;font-size:12px" onclick="syncToGoogleDrive(false)">&#x2601;&#xFE0F; Force Sync</button>
         <button class="secondary" style="width:auto;padding:6px 12px;font-size:12px" onclick="restoreFromGoogleDrive()">&#x1F4E5; Restore</button>
       </div>
     </div>
     <div>
-      <span class="badge">Calories 2650</span><span class="badge">Protein 180g</span><span class="badge">Fat 65g</span><span class="badge">Carbs 335g</span><span class="badge">Fiber 38g+</span>
+      <span class="badge">Calories 2350</span><span class="badge">Protein 180g</span><span class="badge">Fat 60g</span><span class="badge">Carbs 270g</span><span class="badge">Fiber 35g+</span>
     </div>
     <div class="grid" style="margin-top:10px">
       <div class="stat"><div class="label">Latest Weight</div><div class="value" id="dWeight">--</div></div>
@@ -159,7 +159,7 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
       <div><label>Target Weekly Loss/Gain</label><input id="plannedRate" type="number" step="0.1" value="0.0"></div>
     </div>
     <button class="secondary" style="margin-top:10px" onclick="saveCutSettings()">Save Phase & Target Settings</button>
-    <p class="tiny">Configured for 2,650 kcal maintenance recomp toward 13.5% body fat (~31.25" waist) by Jan 8, 2027.</p>
+    <p class="tiny">Configured for 2,350 kcal deficit recomp toward 13.5% body fat (~31.25" waist) by Jan 8, 2027.</p>
   </div>
   <div class="card">
     <h2>Coach Read</h2>
@@ -258,7 +258,7 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
       <div class="macroCard">
         <div class="mLabel">Calories</div>
         <div class="mVal" id="jCal">0</div>
-        <div class="mSub" id="jCalSub">/ 2650 kcal</div>
+        <div class="mSub" id="jCalSub">/ 2350 kcal</div>
       </div>
       <div class="macroCard">
         <div class="mLabel">Protein</div>
@@ -268,17 +268,17 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
       <div class="macroCard">
         <div class="mLabel">Carbs</div>
         <div class="mVal" id="jCarb" style="color:var(--cyan)">0g</div>
-        <div class="mSub" id="jCarbSub">/ 335g</div>
+        <div class="mSub" id="jCarbSub">/ 270g</div>
       </div>
       <div class="macroCard">
         <div class="mLabel">Fiber</div>
         <div class="mVal" id="jFiber" style="color:var(--green)">0g</div>
-        <div class="mSub" id="jFiberSub">Goal: 38g+</div>
+        <div class="mSub" id="jFiberSub">Goal: 35g+</div>
       </div>
       <div class="macroCard">
         <div class="mLabel">Fat</div>
         <div class="mVal" id="jFat" style="color:var(--orange)">0g</div>
-        <div class="mSub" id="jFatSub">/ 65g</div>
+        <div class="mSub" id="jFatSub">/ 60g</div>
       </div>
     </div>
 
@@ -370,7 +370,7 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
       <button class="greenbtn" onclick="syncToGoogleDrive(false)">&#x2601;&#xFE0F; Manual Force Sync</button>
       <button class="secondary" onclick="restoreFromGoogleDrive()">&#x1F4E5; Restore from Google Drive</button>
     </div>
-    <p class="tiny">Syncs your data directly with <code>bobs_corner_backup.json</code> on your Google Drive. Live background auto-sync is active.[cite: 3]</p>
+    <p class="tiny">Syncs your data directly with <code>bobs_corner_backup.json</code> on your Google Drive. Live background auto-sync is active.[span_1](start_span)[span_1](end_span)</p>
   </div>
   <div class="card">
     <h2>Data Backup (File)</h2>
@@ -386,8 +386,8 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
     <table id="histTable"><thead><tr><th>Date</th><th>Workout</th><th>Weight</th><th>Waist</th><th>Body Fat</th><th>Nutrition</th><th>Steps</th><th>Notes</th></tr></thead><tbody></tbody></table>
   </div>
   <div class="card">
-    <h2>Version 1.9.7 3-Phase Cadence &amp; Arm Split Edition Changelog <span class="versionchip">Bob's Corner</span></h2>
-    <div class="tiny">&bull; 3-Phase Cadence inputs: Tempo (Down/Eccentric), Up (Concentric speed), and Hold (Peak pause)<br>&bull; Thursday: Split combined arm work into standalone Incline Skull Crusher (2 sets) and DB Hammer Curl (2 sets)<br>&bull; Friday: Split superset into standalone DB Overhead Tricep Extension (3 sets) and DB Bicep Curl (3 sets) with standard rests</div>
+    <h2>Version 1.9.8 Deficit Recomp Edition Changelog <span class="versionchip">Bob's Corner</span></h2>
+    <div class="tiny">&bull; Nutrition baseline updated to 2,350 kcal (180g P / 60g F / 270g C / 35g+ Fiber) for steady abdominal fat loss<br>&bull; 3-Phase Cadence inputs: Tempo (Down/Eccentric), Up (Concentric speed), and Hold (Peak pause)<br>&bull; Thursday: Split combined arm work into standalone Incline Skull Crusher (2 sets) and DB Hammer Curl (2 sets)<br>&bull; Friday: Split superset into standalone DB Overhead Tricep Extension (3 sets) and DB Bicep Curl (3 sets) with standard rests</div>
   </div>
 </section>
 </main>
@@ -480,7 +480,7 @@ function restoreFromGoogleDrive() {
   document.body.appendChild(script);
 }
 
-const targets={calories:2650, protein:180, fat:65, carbs:335, fiber:38};
+const targets={calories:2350, protein:180, fat:60, carbs:270, fiber:35};
 
 // 12 PANTRY STAPLES (Milk & Creams scaled per fl oz; solids per 100g)
 const pantryItems = [
@@ -1195,7 +1195,7 @@ function renderDash(){
   dFat.textContent=fatAvg?Math.round(fatAvg)+"g":"--";
   dSteps.textContent=stepsAvg?Math.round(stepsAvg).toLocaleString():"--";
   dCutDay.textContent=cm.day?`Day ${cm.day}`:"Recomp Active";
-  dCutDates.textContent=`Target: 2650 kcal baseline`;
+  dCutDates.textContent=`Target: 2350 kcal baseline`;
   
   dFinish.textContent = "13.5% BF \u2022 Jan 8, 2027";
   dRate.textContent = `Target Waist: 31.0" - 31.25"`;
@@ -1212,11 +1212,11 @@ function renderDash(){
 function makeRead(){
   const d=data(),b=[...d.body].sort((a,b)=>a.date.localeCompare(b.date));
   const pace = calculatePacing(d);
-  if(b.length<2)return `Phase active: Recomp & Maintenance (2650 kcal) toward 13.5% BF finish on Jan 8, 2027. Log weekly Friday waist to calculate exact pacing.`;
+  if(b.length<2)return `Phase active: Recomp & Deficit (2350 kcal) toward 13.5% BF finish on Jan 8, 2027. Log weekly Friday waist to calculate exact pacing.`;
   const last=b.at(-1),av=avg(seven(b,"weight")),cal=avg(seven(d.nutrition,"calories")),pro=avg(seven(d.nutrition,"protein"));
   
-  return `Current phase: RECOMP / MAINTENANCE
-Daily targets: ${targets.calories} calories \u2022 ${targets.protein}g protein \u2022 ${targets.fat}g fat \u2022 ${targets.carbs}g carbs \u2022 38g+ fiber
+  return `Current phase: RECOMP / DEFICIT
+Daily targets: ${targets.calories} calories \u2022 ${targets.protein}g protein \u2022 ${targets.fat}g fat \u2022 ${targets.carbs}g carbs \u2022 35g+ fiber
 Target Milestone: 13.5% Body Fat (~31.25" Waist) by January 8, 2027
 
 Latest weight: ${last.weight||"--"}
