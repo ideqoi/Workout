@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <meta name="apple-mobile-web-app-title" content="Bob's Tracker"/>
 <meta name="theme-color" content="#070b12"/>
-<title>Bob's Corner v1.9.8 Deficit Recomp Edition</title>
+<title>Bob's Corner v1.9.9 Template Manager Edition</title>
 <style>
 :root{
   --bg:#070b12;--panel:#111827;--panel2:#0b1220;--soft:#1f2937;--line:#2f3a4c;
@@ -87,6 +87,16 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
 .delItemBtn:hover{background:var(--red);color:#fff}
 .editItemBtn{width:auto;padding:3px 8px;font-size:11px;border-radius:8px;background:rgba(59,130,246,0.2);color:var(--blue);border:1px solid rgba(59,130,246,0.4);cursor:pointer}
 .editItemBtn:hover{background:var(--blue);color:#fff}
+
+/* Template Manager Specific Styles */
+.templateCard{background:var(--panel2);border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:14px}
+.templateHeader{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;padding-bottom:10px;border-bottom:1px solid var(--line)}
+.templateHeader h3{margin:0;font-size:16px}
+.templateActions{display:flex;gap:6px;align-items:center}
+.templateActions button{width:auto;padding:5px 10px;font-size:12px}
+.templateSlotGroup{margin-top:10px}
+.templateSlotTitle{font-size:12px;font-weight:900;color:var(--blue);text-transform:uppercase;margin-bottom:4px}
+.templateFoodItem{display:flex;justify-content:space-between;align-items:center;padding:5px 0;font-size:12.5px;border-bottom:1px solid rgba(255,255,255,0.04)}
 </style>
 </head>
 <body>
@@ -94,7 +104,7 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
   <div class="header-top">
     <div>
       <h1>Bob's Corner &#x1F9EA;</h1>
-      <div class="phase">Goal: Fast Aesthetic Hypertrophy &bull; Deficit Recomp Edition &bull; v1.9.8</div>
+      <div class="phase">Goal: Fast Aesthetic Hypertrophy &bull; Deficit Recomp Edition &bull; v1.9.9</div>
     </div>
     <div style="display:flex;align-items:center;gap:8px">
       <span id="syncStatusBadge" class="sync-indicator synced">&#x2601;&#xFE0F; Synced</span>
@@ -107,6 +117,7 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
     <button class="tab" onclick="showTab('train',this)">&#x1F3CB;&#xFE0F; Training</button>
     <button class="tab" onclick="showTab('body',this)">&#x1F4CF; Body</button>
     <button class="tab" onclick="showTab('nutrition',this)">&#x1F957; Nutrition</button>
+    <button class="tab" onclick="showTab('templates',this)">&#x1F4CB; Templates</button>
     <button class="tab" onclick="showTab('history',this)">&#x1F4CA; History</button>
   </div>
 </header>
@@ -363,6 +374,18 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
   </div>
 </section>
 
+<!-- DEDICATED TEMPLATE MANAGER TAB -->
+<section id="templates" class="screen hidden">
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <h2>Saved Day Templates</h2>
+      <button class="secondary" style="width:auto;font-size:12px;padding:6px 12px" onclick="showTab('nutrition', document.querySelectorAll('.tab')[4])">+ Save Current Day</button>
+    </div>
+    <p class="tiny" style="color:var(--muted);margin-bottom:14px">Inspect the full meal itemization and total macros for every saved day template. Rename, delete, or apply templates directly to today.</p>
+    <div id="templatesListContainer"></div>
+  </div>
+</section>
+
 <section id="history" class="screen hidden">
   <div class="card">
     <h2>Google Drive Cloud Sync</h2>
@@ -370,7 +393,7 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
       <button class="greenbtn" onclick="syncToGoogleDrive(false)">&#x2601;&#xFE0F; Manual Force Sync</button>
       <button class="secondary" onclick="restoreFromGoogleDrive()">&#x1F4E5; Restore from Google Drive</button>
     </div>
-    <p class="tiny">Syncs your data directly with <code>bobs_corner_backup.json</code> on your Google Drive. Live background auto-sync is active.[span_1](start_span)[span_1](end_span)</p>
+    <p class="tiny">Syncs your data directly with <code>bobs_corner_backup.json</code> on your Google Drive. Live background auto-sync is active.[cite: 4]</p>
   </div>
   <div class="card">
     <h2>Data Backup (File)</h2>
@@ -386,8 +409,8 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
     <table id="histTable"><thead><tr><th>Date</th><th>Workout</th><th>Weight</th><th>Waist</th><th>Body Fat</th><th>Nutrition</th><th>Steps</th><th>Notes</th></tr></thead><tbody></tbody></table>
   </div>
   <div class="card">
-    <h2>Version 1.9.8 Deficit Recomp Edition Changelog <span class="versionchip">Bob's Corner</span></h2>
-    <div class="tiny">&bull; Nutrition baseline updated to 2,350 kcal (180g P / 60g F / 270g C / 35g+ Fiber) for steady abdominal fat loss<br>&bull; 3-Phase Cadence inputs: Tempo (Down/Eccentric), Up (Concentric speed), and Hold (Peak pause)<br>&bull; Thursday: Split combined arm work into standalone Incline Skull Crusher (2 sets) and DB Hammer Curl (2 sets)<br>&bull; Friday: Split superset into standalone DB Overhead Tricep Extension (3 sets) and DB Bicep Curl (3 sets) with standard rests</div>
+    <h2>Version 1.9.9 Template Manager Edition Changelog <span class="versionchip">Bob's Corner</span></h2>
+    <div class="tiny">&bull; Dedicated Templates Tab: Inspect complete food lists and total macros for each saved day<br>&bull; Template Management: Inline rename, delete, and 1-tap apply to current day<br>&bull; Nutrition baseline: 2,350 kcal (180g P / 60g F / 270g C / 35g+ Fiber)<br>&bull; 3-Phase Cadence: Tempo (Down/Eccentric), Up (Concentric speed), and Hold (Peak pause)</div>
   </div>
 </section>
 </main>
@@ -462,6 +485,7 @@ function restoreFromGoogleDrive() {
       localStorage.setItem("recompCoach", JSON.stringify(remoteData));
       renderAll();
       loadJournalForDate();
+      renderTemplateManager();
       alert("\uD83D\uDCE5 Data restored from Google Drive successfully!");
     } else {
       alert("No valid backup found on Google Drive. Perform a sync first.");
@@ -551,7 +575,14 @@ function save(d){
   renderAll();
   triggerAutoSync();
 }
-function showTab(id,btn){document.querySelectorAll(".screen").forEach(s=>s.classList.add("hidden"));document.getElementById(id).classList.remove("hidden");document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));btn.classList.add("active");renderAll()}
+function showTab(id,btn){
+  document.querySelectorAll(".screen").forEach(s=>s.classList.add("hidden"));
+  document.getElementById(id).classList.remove("hidden");
+  document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
+  btn.classList.add("active");
+  renderAll();
+  if(id==="templates") renderTemplateManager();
+}
 function setDay(type,el){document.querySelectorAll(".day").forEach(d=>d.classList.remove("active"));el.classList.add("active");workType.value=type;renderWorkout()}
 
 function baseExerciseName(name){return String(name||"").replace(/\s*\u2193\d+s/g,"").replace(/\s*\u2022\s*Bench Position\s*\d+/g,"").trim()}
@@ -981,6 +1012,7 @@ function saveDayAsTemplate(){
   d.dayTemplates[name.trim()] = JSON.parse(JSON.stringify(items));
   save(d);
   updateTemplatesDropdown();
+  renderTemplateManager();
   alert(`\u2705 Saved template: "${name.trim()}"`);
 }
 
@@ -1003,8 +1035,12 @@ function applySelectedTemplate(){
     alert("Select a template from the dropdown first.");
     return;
   }
+  applyTemplateByName(name);
+}
+
+function applyTemplateByName(name){
   const d = data();
-  const templateItems = d.dayTemplates[name];
+  const templateItems = (d.dayTemplates || {})[name];
   if(!templateItems || !templateItems.length) return;
   
   const curDate = val("nutDate") || today();
@@ -1013,6 +1049,107 @@ function applySelectedTemplate(){
     localStorage.setItem("recompCoach", JSON.stringify(d));
     loadJournalForDate();
     autoSyncNutritionRollup();
+    alert(`\u2705 Template "${name}" applied to ${curDate}!`);
+  }
+}
+
+/* --- DEDICATED TEMPLATE MANAGER ENGINE --- */
+function renderTemplateManager(){
+  const container = document.getElementById("templatesListContainer");
+  if(!container) return;
+  const d = data();
+  const templates = d.dayTemplates || {};
+  const names = Object.keys(templates);
+  
+  if(!names.length){
+    container.innerHTML = `
+      <div style="text-align:center;padding:30px 10px;color:var(--muted)">
+        <p style="font-size:15px;margin:0 0 6px">No day templates saved yet.</p>
+        <p class="tiny" style="margin:0">Log your meals under Nutrition and tap <b>"Save Day as Template"</b> to store routines here.</p>
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = names.map(name=>{
+    const items = templates[name] || [];
+    const tCal = Math.round(items.reduce((a,b)=>a+(numeric(b.cal)||0),0));
+    const tPro = Math.round(items.reduce((a,b)=>a+(numeric(b.p)||0),0));
+    const tCarb = Math.round(items.reduce((a,b)=>a+(numeric(b.c)||0),0));
+    const tFib = Math.round(items.reduce((a,b)=>a+(numeric(b.fib)||0),0));
+    const tFat = Math.round(items.reduce((a,b)=>a+(numeric(b.f)||0),0));
+
+    let slotHtml = "";
+    MEAL_SLOTS.forEach(slot=>{
+      const slotItems = items.filter(i=>i.slot === slot);
+      if(slotItems.length){
+        const slotCal = Math.round(slotItems.reduce((a,b)=>a+(numeric(b.cal)||0),0));
+        const foodList = slotItems.map(item=>`
+          <div class="templateFoodItem">
+            <div>
+              <strong>${item.name}</strong> <small style="color:var(--muted)">(${item.portion})</small>
+            </div>
+            <div class="tiny" style="color:var(--muted)">
+              ${item.cal} kcal &bull; P:${item.p}g &bull; C:${item.c}g &bull; F:${item.f}g
+            </div>
+          </div>
+        `).join("");
+
+        slotHtml += `
+          <div class="templateSlotGroup">
+            <div class="templateSlotTitle">${slot} &bull; ${slotCal} kcal</div>
+            ${foodList}
+          </div>
+        `;
+      }
+    });
+
+    return `
+      <div class="templateCard">
+        <div class="templateHeader">
+          <div>
+            <h3>${name}</h3>
+            <span class="tiny" style="color:var(--muted)">${items.length} items &bull; <b style="color:var(--text)">${tCal} kcal</b> &bull; P:${tPro}g &bull; C:${tCarb}g &bull; Fib:${tFib}g &bull; F:${tFat}g</span>
+          </div>
+          <div class="templateActions">
+            <button class="secondary" onclick="applyTemplateByName('${encodeURIComponent(name).replace(/'/g, "%27")}')">&#x1F4E5; Apply to Today</button>
+            <button class="editItemBtn" onclick="renameTemplate('${encodeURIComponent(name).replace(/'/g, "%27")}')">&#x270F;&#xFE0F; Rename</button>
+            <button class="delItemBtn" onclick="deleteTemplate('${encodeURIComponent(name).replace(/'/g, "%27")}')">&#x1F5D1;&#xFE0F; Delete</button>
+          </div>
+        </div>
+        ${slotHtml}
+      </div>
+    `;
+  }).join("");
+}
+
+function renameTemplate(encodedName){
+  const oldName = decodeURIComponent(encodedName);
+  const newName = prompt(`Enter new name for template "${oldName}":`, oldName);
+  if(!newName || !newName.trim() || newName.trim() === oldName) return;
+  
+  const d = data();
+  d.dayTemplates = d.dayTemplates || {};
+  if(d.dayTemplates[newName.trim()] && !confirm(`A template named "${newName.trim()}" already exists. Overwrite it?`)){
+    return;
+  }
+  
+  d.dayTemplates[newName.trim()] = d.dayTemplates[oldName];
+  delete d.dayTemplates[oldName];
+  save(d);
+  updateTemplatesDropdown();
+  renderTemplateManager();
+}
+
+function deleteTemplate(encodedName){
+  const name = decodeURIComponent(encodedName);
+  if(confirm(`Permanently delete the template "${name}"?`)){
+    const d = data();
+    d.dayTemplates = d.dayTemplates || {};
+    delete d.dayTemplates[name];
+    save(d);
+    updateTemplatesDropdown();
+    renderTemplateManager();
   }
 }
 
@@ -1385,7 +1522,7 @@ function importDataFromFile(){
       const parsed=JSON.parse(text);
       if(!parsed.workouts||!parsed.body||!parsed.nutrition){alert("Invalid backup file.");return;}
       localStorage.setItem("recompCoach",JSON.stringify(parsed));
-      renderAll(); loadJournalForDate();
+      renderAll(); loadJournalForDate(); renderTemplateManager();
       alert("Backup loaded into the app.");
     }catch(e){alert("Could not load that file.");}
   };
@@ -1409,6 +1546,7 @@ initTheme();
 renderWorkout();
 renderPantryGrid();
 loadJournalForDate();
+renderTemplateManager();
 renderAll();
 </script>
 </body>
