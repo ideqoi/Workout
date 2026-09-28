@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <meta name="apple-mobile-web-app-title" content="Bob's Tracker"/>
 <meta name="theme-color" content="#070b12"/>
-<title>Bob's Corner v2.0.1 Milestone 1 Edition</title>
+<title>Bob's Corner v2.0.2 Milestone 1 Edition</title>
 <style>
 :root{
   --bg:#070b12;--panel:#111827;--panel2:#0b1220;--soft:#1f2937;--line:#2f3a4c;
@@ -104,7 +104,7 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
   <div class="header-top">
     <div>
       <h1>Bob's Corner &#x1F9EA;</h1>
-      <div class="phase">Goal: Fast Aesthetic Hypertrophy &bull; Milestone 1: Nov 6, 2026 &bull; v2.0.1</div>
+      <div class="phase">Goal: Fast Aesthetic Hypertrophy &bull; Milestone 1: Nov 6, 2026 &bull; v2.0.2</div>
     </div>
     <div style="display:flex;align-items:center;gap:8px">
       <span id="syncStatusBadge" class="sync-indicator synced">&#x2601;&#xFE0F; Synced</span>
@@ -133,7 +133,7 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
       </div>
     </div>
     <div>
-      <span class="badge">Calories 2350</span><span class="badge">Protein 180g</span><span class="badge">Fat 60g</span><span class="badge">Carbs 270g</span><span class="badge">Fiber 35g+</span>
+      <span class="badge">Calories 2650</span><span class="badge">Protein 180g</span><span class="badge">Fat 70g</span><span class="badge">Carbs 325g</span><span class="badge">Fiber 35g+</span>
     </div>
     <div class="grid" style="margin-top:10px">
       <div class="stat"><div class="label">Latest Weight</div><div class="value" id="dWeight">--</div></div>
@@ -170,7 +170,7 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
       <div><label>Target Weekly Loss/Gain</label><input id="plannedRate" type="number" step="0.1" value="0.3"></div>
     </div>
     <button class="secondary" style="margin-top:10px" onclick="saveCutSettings()">Save Phase & Target Settings</button>
-    <p class="tiny">Configured for 2,350 kcal deficit recomp toward 13.4% body fat (31.25" waist) by Nov 6, 2026 (Milestone 1).</p>
+    <p class="tiny">Configured for 2,650 kcal performance recomp toward 13.4% body fat (31.25" waist) by Nov 6, 2026 (Milestone 1).</p>
   </div>
   <div class="card">
     <h2>Coach Read</h2>
@@ -269,7 +269,7 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
       <div class="macroCard">
         <div class="mLabel">Calories</div>
         <div class="mVal" id="jCal">0</div>
-        <div class="mSub" id="jCalSub">/ 2350 kcal</div>
+        <div class="mSub" id="jCalSub">/ 2650 kcal</div>
       </div>
       <div class="macroCard">
         <div class="mLabel">Protein</div>
@@ -279,7 +279,7 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
       <div class="macroCard">
         <div class="mLabel">Carbs</div>
         <div class="mVal" id="jCarb" style="color:var(--cyan)">0g</div>
-        <div class="mSub" id="jCarbSub">/ 270g</div>
+        <div class="mSub" id="jCarbSub">/ 325g</div>
       </div>
       <div class="macroCard">
         <div class="mLabel">Fiber</div>
@@ -289,7 +289,7 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
       <div class="macroCard">
         <div class="mLabel">Fat</div>
         <div class="mVal" id="jFat" style="color:var(--orange)">0g</div>
-        <div class="mSub" id="jFatSub">/ 60g</div>
+        <div class="mSub" id="jFatSub">/ 70g</div>
       </div>
     </div>
 
@@ -393,7 +393,7 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
       <button class="greenbtn" onclick="syncToGoogleDrive(false)">&#x2601;&#xFE0F; Manual Force Sync</button>
       <button class="secondary" onclick="restoreFromGoogleDrive()">&#x1F4E5; Restore from Google Drive</button>
     </div>
-    <p class="tiny">Syncs your data directly with <code>bobs_corner_backup.json</code> on your Google Drive. Live background auto-sync is active.[cite: 5]</p>
+    <p class="tiny">Syncs your data directly with <code>bobs_corner_backup.json</code> on your Google Drive. Live background auto-sync is active.</p>
   </div>
   <div class="card">
     <h2>Data Backup (File)</h2>
@@ -409,8 +409,8 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
     <table id="histTable"><thead><tr><th>Date</th><th>Workout</th><th>Weight</th><th>Waist</th><th>Body Fat</th><th>Nutrition</th><th>Steps</th><th>Notes</th></tr></thead><tbody></tbody></table>
   </div>
   <div class="card">
-    <h2>Version 2.0.1 Milestone 1 Sprint Edition Changelog <span class="versionchip">Bob's Corner</span></h2>
-    <div class="tiny">&bull; Pacing Bug Fix: Corrected HTML rendering to display standard &plusmn; symbol cleanly on dashboard<br>&bull; Target Milestone 1: Nov 6, 2026 (31.25" waist / 160.5 lb / 13.4% BF) for focused 6-week sprint pacing<br>&bull; Dedicated Templates Tab: Inspect complete food lists and total macros for each saved day<br>&bull; Template Management: Inline rename, delete, and 1-tap apply to current day<br>&bull; Nutrition baseline: 2,350 kcal (180g P / 60g F / 270g C / 35g+ Fiber)<br>&bull; 3-Phase Cadence: Tempo (Down/Eccentric), Up (Concentric speed), and Hold (Peak pause)</div>
+    <h2>Version 2.0.2 Performance Recomp Edition Changelog <span class="versionchip">Bob's Corner</span></h2>
+    <div class="tiny">&bull; Baseline Recalibration: Re-locked target intake to 2,650 kcal (180g P / 70g F / 325g C / 35g+ Fiber)<br>&bull; Pacing Engine: Displays clean HTML entity &plusmn; linear milestone pacing toward Nov 6, 2026 (31.25" waist)<br>&bull; Dedicated Templates Tab: Inspect complete food lists and total macros for each saved day<br>&bull; Template Management: Inline rename, delete, and 1-tap apply to current day<br>&bull; 3-Phase Cadence: Tempo (Down/Eccentric), Up (Concentric speed), and Hold (Peak pause)</div>
   </div>
 </section>
 </main>
@@ -504,7 +504,7 @@ function restoreFromGoogleDrive() {
   document.body.appendChild(script);
 }
 
-const targets={calories:2350, protein:180, fat:60, carbs:270, fiber:35};
+const targets={calories:2650, protein:180, fat:70, carbs:325, fiber:35};
 
 // 12 PANTRY STAPLES (Milk & Creams scaled per fl oz; solids per 100g)
 const pantryItems = [
@@ -1334,7 +1334,7 @@ function renderDash(){
   dFat.textContent=fatAvg?Math.round(fatAvg)+"g":"--";
   dSteps.textContent=stepsAvg?Math.round(stepsAvg).toLocaleString():"--";
   dCutDay.textContent=cm.day?`Day ${cm.day}`:"Recomp Active";
-  dCutDates.textContent=`Target: 2350 kcal baseline`;
+  dCutDates.textContent=`Target: 2650 kcal baseline`;
   
   dFinish.textContent = "13.4% BF \u2022 Nov 6, 2026";
   dRate.textContent = `Milestone 1 Waist: 31.25"`;
@@ -1351,7 +1351,7 @@ function renderDash(){
 function makeRead(){
   const d=data(),b=[...d.body].sort((a,b)=>a.date.localeCompare(b.date));
   const pace = calculatePacing(d);
-  if(b.length<2)return `Phase active: Recomp & Deficit (2350 kcal) toward Milestone 1 (13.4% BF / 31.25" waist) on Nov 6, 2026. Log weekly Friday waist to calculate exact pacing.`;
+  if(b.length<2)return `Phase active: Recomp & Deficit (2650 kcal) toward Milestone 1 (13.4% BF / 31.25" waist) on Nov 6, 2026. Log weekly Friday waist to calculate exact pacing.`;
   const last=b.at(-1),av=avg(seven(b,"weight")),cal=avg(seven(d.nutrition,"calories")),pro=avg(seven(d.nutrition,"protein"));
   
   return `Current phase: RECOMP / DEFICIT (MILESTONE 1 SPRINT)
