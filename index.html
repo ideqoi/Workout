@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <meta name="apple-mobile-web-app-title" content="Bob's Tracker"/>
 <meta name="theme-color" content="#070b12"/>
-<title>Bob's Corner v2.0.2 Milestone 1 Edition</title>
+<title>Bob's Corner v2.0.3 Milestone 1 Edition</title>
 <style>
 :root{
   --bg:#070b12;--panel:#111827;--panel2:#0b1220;--soft:#1f2937;--line:#2f3a4c;
@@ -104,7 +104,7 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
   <div class="header-top">
     <div>
       <h1>Bob's Corner &#x1F9EA;</h1>
-      <div class="phase">Goal: Fast Aesthetic Hypertrophy &bull; Milestone 1: Nov 6, 2026 &bull; v2.0.2</div>
+      <div class="phase">Goal: Fast Aesthetic Hypertrophy &bull; Milestone 1: Nov 6, 2026 &bull; v2.0.3</div>
     </div>
     <div style="display:flex;align-items:center;gap:8px">
       <span id="syncStatusBadge" class="sync-indicator synced">&#x2601;&#xFE0F; Synced</span>
@@ -223,7 +223,7 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
       <div><label>Date</label><input id="workDate" type="date"></div>
       <div><label>Workout</label><select id="workType" onchange="renderWorkout()"></select></div>
     </div>
-    <div id="workoutBox"></div><div class="notice goodnotice">Training Note: Aesthetic V-Taper Split. Tempo is recorded as 3 phases: Tempo (Down/Eccentric), Up (Concentric speed), and Hold (Peak pause). Every logged set auto-syncs live.</div>
+    <div id="workoutBox"></div><div class="notice goodnotice">Training Note: Aesthetic V-Taper Split (10-Rep Cap Protocol). Tempo is recorded as 3 phases: Tempo (Down/Eccentric), Up (Concentric speed), and Hold (Peak pause). Every logged set auto-syncs live.</div>
     <label>Notes</label><textarea id="workNotes" placeholder="Energy, pump, soreness, performance..." oninput="autoSaveWorkoutDraft()"></textarea>
     <button onclick="saveWorkout()">Finish Session & Force Sync</button>
   </div>
@@ -409,8 +409,8 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
     <table id="histTable"><thead><tr><th>Date</th><th>Workout</th><th>Weight</th><th>Waist</th><th>Body Fat</th><th>Nutrition</th><th>Steps</th><th>Notes</th></tr></thead><tbody></tbody></table>
   </div>
   <div class="card">
-    <h2>Version 2.0.2 Performance Recomp Edition Changelog <span class="versionchip">Bob's Corner</span></h2>
-    <div class="tiny">&bull; Baseline Recalibration: Re-locked target intake to 2,650 kcal (180g P / 70g F / 325g C / 35g+ Fiber)<br>&bull; Pacing Engine: Displays clean HTML entity &plusmn; linear milestone pacing toward Nov 6, 2026 (31.25" waist)<br>&bull; Dedicated Templates Tab: Inspect complete food lists and total macros for each saved day<br>&bull; Template Management: Inline rename, delete, and 1-tap apply to current day<br>&bull; 3-Phase Cadence: Tempo (Down/Eccentric), Up (Concentric speed), and Hold (Peak pause)</div>
+    <h2>Version 2.0.3 10-Rep Cap Protocol Changelog <span class="versionchip">Bob's Corner</span></h2>
+    <div class="tiny">&bull; 10-Rep Ceiling: All target cues and rep schemes capped at a maximum of 10 reps across Push, Pull, Legs, Upper, Lower<br>&bull; Baseline Recalibration: Re-locked target intake to 2,650 kcal (180g P / 70g F / 325g C / 35g+ Fiber)<br>&bull; Pacing Engine: Displays clean HTML entity &plusmn; linear milestone pacing toward Nov 6, 2026 (31.25" waist)<br>&bull; Dedicated Templates Tab: Inspect complete food lists and total macros for each saved day<br>&bull; Template Management: Inline rename, delete, and 1-tap apply to current day<br>&bull; 3-Phase Cadence: Tempo (Down/Eccentric), Up (Concentric speed), and Hold (Peak pause)</div>
   </div>
 </section>
 </main>
@@ -522,37 +522,38 @@ const pantryItems = [
   {name:"Pre-Bed Stack Snack", unit:"g", baseQty:100, cal:150, p:10.0, c:15.0, fib:2.0, f:5.0, defSlot:"Snacks"}
 ];
 
+// WORKOUTS: STANDARDIZED TO MAX 10-REP CEILING
 const workouts={
 "Push":[
  {name:"Incline DB Bench Press \u2022 Bench Position 3",target:"3 sets \u2022 8-10 reps \u2022 upper chest armor, deep stretch",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1},
  {name:"Flat DB Bench Press",target:"3 sets \u2022 8-10 reps \u2022 dense mid/lower chest mass",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1},
- {name:"DB Lateral Raise",target:"4 sets \u2022 12-15 reps \u2022 lead with elbows \u2022 builds the V-taper shelf",rest:60,defaultTempo:3,defaultUp:1,defaultHold:1,sets:4},
- {name:"Cable Triceps Pushdown",target:"3 sets \u2022 10-12 reps \u2022 lateral head horseshoe sweep",rest:60,defaultTempo:3,defaultUp:1,defaultHold:1}
+ {name:"DB Lateral Raise",target:"4 sets \u2022 8-10 reps \u2022 strict form, lead with elbows \u2022 V-taper shelf",rest:60,defaultTempo:3,defaultUp:1,defaultHold:1,sets:4},
+ {name:"Cable Triceps Pushdown",target:"3 sets \u2022 8-10 reps \u2022 locked elbows, triceps horseshoe focus",rest:60,defaultTempo:3,defaultUp:1,defaultHold:1}
 ],
 "Pull":[
- {name:"Wide-Grip Lat Pulldown",target:"3 sets \u2022 10-12 reps \u2022 builds outer lat wings",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1},
+ {name:"Wide-Grip Lat Pulldown",target:"3 sets \u2022 8-10 reps \u2022 outer lat wings & width",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1},
  {name:"Machine Seated Cable Row",target:"3 sets \u2022 8-10 reps \u2022 seated on floor, braced against frame \u2022 underhand/neutral grip to navel",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1},
- {name:"Incline DB Curl \u2022 Bench Position 3",target:"3 sets \u2022 10-12 reps \u2022 bicep peak builder",rest:60,defaultTempo:3,defaultUp:1,defaultHold:1},
- {name:"Standing DB Hammer Curl",target:"3 sets \u2022 10-12 reps \u2022 neutral grip \u2022 builds brachialis & forearm width",rest:60,defaultTempo:3,defaultUp:1,defaultHold:1}
+ {name:"Incline DB Curl \u2022 Bench Position 3",target:"3 sets \u2022 8-10 reps \u2022 deep bicep stretch & peak",rest:60,defaultTempo:3,defaultUp:1,defaultHold:1},
+ {name:"Standing DB Hammer Curl",target:"3 sets \u2022 8-10 reps \u2022 neutral grip \u2022 brachialis & forearm density",rest:60,defaultTempo:3,defaultUp:1,defaultHold:1}
 ],
 "Legs":[
- {name:"Goblet Squat",target:"3 sets \u2022 10-12 reps \u2022 upright torso, quad teardrop bias",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1},
- {name:"Romanian Deadlift",target:"3 sets \u2022 10-12 reps \u2022 hamstring-glute tie in",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1},
- {name:"DB Hip Thrust \u2022 Bench Position 1",target:"3 sets \u2022 12 reps \u2022 posture & glute density",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1},
- {name:"Standing DB Calf Raise",target:"4 sets \u2022 15-20 reps \u2022 DB Right, Left, Right, Left \u2022 pause at peak and stretch",rest:60,defaultTempo:3,defaultUp:1,defaultHold:2,sets:4,setLabels:["Set 1 (Right)","Set 2 (Left)","Set 3 (Right)","Set 4 (Left)"]}
+ {name:"Goblet Squat",target:"3 sets \u2022 8-10 reps \u2022 upright torso, quad teardrop bias",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1},
+ {name:"Romanian Deadlift",target:"3 sets \u2022 8-10 reps \u2022 hamstring-glute tie in",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1},
+ {name:"DB Hip Thrust \u2022 Bench Position 1",target:"3 sets \u2022 8-10 reps \u2022 glute density & lock-out pause",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1},
+ {name:"Standing DB Calf Raise",target:"4 sets \u2022 8-10 reps \u2022 DB Right, Left, Right, Left \u2022 strict pause at peak",rest:60,defaultTempo:3,defaultUp:1,defaultHold:2,sets:4,setLabels:["Set 1 (Right)","Set 2 (Left)","Set 3 (Right)","Set 4 (Left)"]}
 ],
 "Upper":[
- {name:"Seated DB Shoulder Press \u2022 Bench Position 5",target:"3 sets \u2022 8-10 reps \u2022 75-80\u00B0 scapular plane \u2022 round, 3D caps",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1},
- {name:"Underhand Lat Pulldown",target:"3 sets \u2022 10-12 reps \u2022 lower lat sweep & bicep power",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1},
+ {name:"Seated DB Shoulder Press \u2022 Bench Position 5",target:"3 sets \u2022 8-10 reps \u2022 75-80\u00B0 scapular plane \u2022 3D caps",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1},
+ {name:"Underhand Lat Pulldown",target:"3 sets \u2022 8-10 reps \u2022 lower lat sweep & bicep power",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1},
  {name:"Machine Seated Cable Row",target:"3 sets \u2022 8-10 reps \u2022 seated on floor, braced against frame \u2022 overhand flared grip to sternum",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1},
- {name:"Incline Skull Crusher",target:"2 sets \u2022 10-12 reps \u2022 tricep long-head stretch & density",rest:60,defaultTempo:3,defaultUp:1,defaultHold:1,sets:2},
- {name:"DB Hammer Curl",target:"2 sets \u2022 10-12 reps \u2022 neutral grip \u2022 brachialis width",rest:60,defaultTempo:3,defaultUp:1,defaultHold:1,sets:2}
+ {name:"Incline Skull Crusher",target:"2 sets \u2022 8-10 reps \u2022 tricep long-head stretch & density",rest:60,defaultTempo:3,defaultUp:1,defaultHold:1,sets:2},
+ {name:"DB Hammer Curl",target:"2 sets \u2022 8-10 reps \u2022 neutral grip \u2022 brachialis width",rest:60,defaultTempo:3,defaultUp:1,defaultHold:1,sets:2}
 ],
 "Lower":[
  {name:"Romanian Deadlift",target:"3 sets \u2022 8-10 reps \u2022 heavy posterior chain loading",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1},
- {name:"Goblet Squat",target:"3 sets \u2022 10-12 reps \u2022 bilateral quad overload",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1},
- {name:"DB Overhead Tricep Extension",target:"3 sets \u2022 10-12 reps \u2022 deep long-head stretch & horseshoe fullness",rest:60,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3},
- {name:"DB Bicep Curl",target:"3 sets \u2022 10-12 reps \u2022 supinated bicep peak builder",rest:60,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3}
+ {name:"Goblet Squat",target:"3 sets \u2022 8-10 reps \u2022 bilateral quad overload",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1},
+ {name:"DB Overhead Tricep Extension",target:"3 sets \u2022 8-10 reps \u2022 deep long-head stretch & horseshoe fullness",rest:60,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3},
+ {name:"DB Bicep Curl",target:"3 sets \u2022 8-10 reps \u2022 supinated bicep peak builder",rest:60,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3}
 ]
 };
 
