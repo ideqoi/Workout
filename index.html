@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <meta name="apple-mobile-web-app-title" content="Bob's Tracker"/>
 <meta name="theme-color" content="#070b12"/>
-<title>Bob's Corner v2.0.4 Milestone 1 Edition</title>
+<title>Bob's Corner v2.0.5 Milestone 1 Edition</title>
 <style>
 :root{
   --bg:#070b12;--panel:#111827;--panel2:#0b1220;--soft:#1f2937;--line:#2f3a4c;
@@ -104,7 +104,7 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
   <div class="header-top">
     <div>
       <h1>Bob's Corner &#x1F9EA;</h1>
-      <div class="phase">Goal: Fast Aesthetic Hypertrophy &bull; Milestone 1: Nov 6, 2026 &bull; v2.0.4</div>
+      <div class="phase">Goal: Fast Aesthetic Hypertrophy &bull; Milestone 1: Nov 6, 2026 &bull; v2.0.5</div>
     </div>
     <div style="display:flex;align-items:center;gap:8px">
       <span id="syncStatusBadge" class="sync-indicator synced">&#x2601;&#xFE0F; Synced</span>
@@ -223,7 +223,7 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
       <div><label>Date</label><input id="workDate" type="date"></div>
       <div><label>Workout</label><select id="workType" onchange="renderWorkout()"></select></div>
     </div>
-    <div id="workoutBox"></div><div class="notice goodnotice">Training Note: Aesthetic V-Taper Split (10-Rep Cap Protocol). Tempo is recorded as 3 phases: Tempo (Down/Eccentric), Up (Concentric speed), and Hold (Peak pause). Every logged set auto-syncs live.</div>
+    <div id="workoutBox"></div><div class="notice goodnotice">Training Note: Aesthetic V-Taper Split (10-Rep Cap Protocol &bull; 15 Reps Calf Focus). Tempo is recorded as 3 phases: Tempo (Down/Eccentric), Up (Concentric speed), and Hold (Peak pause). Every logged set auto-syncs live.</div>
     <label>Notes</label><textarea id="workNotes" placeholder="Energy, pump, soreness, performance..." oninput="autoSaveWorkoutDraft()"></textarea>
     <button onclick="saveWorkout()">Finish Session & Force Sync</button>
   </div>
@@ -409,8 +409,8 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
     <table id="histTable"><thead><tr><th>Date</th><th>Workout</th><th>Weight</th><th>Waist</th><th>Body Fat</th><th>Nutrition</th><th>Steps</th><th>Notes</th></tr></thead><tbody></tbody></table>
   </div>
   <div class="card">
-    <h2>Version 2.0.4 Macro Shift & Custom Pantry Changelog <span class="versionchip">Bob's Corner</span></h2>
-    <div class="tiny">&bull; Macro Recalibration: Rebalanced to 2,650 kcal (160g P / 345g C / 70g F / 35g+ Fiber)<br>&bull; Pantry Modernization: Added Cooked Pasta, PICS Semi-Sweet Chocolate Chips, and PICS Caramel Rice Cakes; removed Greek Yogurt and Pre-Bed Snack<br>&bull; 10-Rep Ceiling: All target cues and rep schemes capped at a maximum of 10 reps across Push, Pull, Legs, Upper, Lower<br>&bull; Pacing Engine: Displays clean HTML entity &plusmn; linear milestone pacing toward Nov 6, 2026 (31.25" waist)<br>&bull; Dedicated Templates Tab: Inspect complete food lists and total macros for each saved day<br>&bull; 3-Phase Cadence: Tempo (Down/Eccentric), Up (Concentric speed), and Hold (Peak pause)</div>
+    <h2>Version 2.0.5 Glute Bridge & Calf Specialization Changelog <span class="versionchip">Bob's Corner</span></h2>
+    <div class="tiny">&bull; Exercise Swap: Replaced DB Hip Thrust with floor DB Glute Bridge (8-10 reps with 2-second hard lockout pause)<br>&bull; Seamless Data Migration: Historical DB Hip Thrust logs, set weights, and PRs automatically populate and track under DB Glute Bridge<br>&bull; Calf Hypertrophy Exception: Standing DB Calf Raise updated to strict 15-rep target (all other lifts remain capped at 10 reps)<br>&bull; Macro Balance: Locked at 2,650 kcal (160g P / 345g C / 70g F / 35g+ Fiber)<br>&bull; Full Pantry Library: Cooked Pasta, PICS Semi-Sweet Chocolate Chips, and PICS Caramel Rice Cakes with 1-tap scaling</div>
   </div>
 </section>
 </main>
@@ -504,10 +504,10 @@ function restoreFromGoogleDrive() {
   document.body.appendChild(script);
 }
 
-// TARGETS: 160g Protein, 345g Carbs, 70g Fat (2,650 kcal Total)
+// TARGETS: 160g Protein, 345g Carbs, 70g Fat (2,650 kcal Total)[span_0](start_span)[span_0](end_span)
 const targets={calories:2650, protein:160, fat:70, carbs:345, fiber:35};
 
-// CUSTOMIZED PANTRY STAPLES (Removed Greek Yogurt & Pre-Bed Snack; Added Pasta, Chocolate Chips, Rice Cakes)
+// CUSTOMIZED PANTRY STAPLES[span_1](start_span)[span_1](end_span)
 const pantryItems = [
   {name:"Cooked Chicken Breast", unit:"g", baseQty:100, cal:165, p:31.0, c:0.0, fib:0.0, f:3.6, defSlot:"Lunch"},
   {name:"Cooked Chicken Thighs", unit:"g", baseQty:100, cal:209, p:24.7, c:0.0, fib:0.0, f:10.9, defSlot:"Dinner"},
@@ -524,7 +524,7 @@ const pantryItems = [
   {name:"PICS Caramel Rice Cake", unit:"cake", baseQty:1, cal:50, p:0.5, c:11.0, fib:0.0, f:0.0, defSlot:"Snacks"}
 ];
 
-// WORKOUTS: STANDARDIZED TO MAX 10-REP CEILING
+// WORKOUTS: STANDARDIZED TO MAX 10-REP CEILING (CALF RAISES AT 15 REPS)
 const workouts={
 "Push":[
  {name:"Incline DB Bench Press \u2022 Bench Position 3",target:"3 sets \u2022 8-10 reps \u2022 upper chest armor, deep stretch",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1},
@@ -541,8 +541,8 @@ const workouts={
 "Legs":[
  {name:"Goblet Squat",target:"3 sets \u2022 8-10 reps \u2022 upright torso, quad teardrop bias",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1},
  {name:"Romanian Deadlift",target:"3 sets \u2022 8-10 reps \u2022 hamstring-glute tie in",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1},
- {name:"DB Hip Thrust \u2022 Bench Position 1",target:"3 sets \u2022 8-10 reps \u2022 glute density & lock-out pause",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1},
- {name:"Standing DB Calf Raise",target:"4 sets \u2022 8-10 reps \u2022 DB Right, Left, Right, Left \u2022 strict pause at peak",rest:60,defaultTempo:3,defaultUp:1,defaultHold:2,sets:4,setLabels:["Set 1 (Right)","Set 2 (Left)","Set 3 (Right)","Set 4 (Left)"]}
+ {name:"DB Glute Bridge",target:"3 sets \u2022 8-10 reps \u2022 floor drive, hard glute lock-out pause",rest:90,defaultTempo:3,defaultUp:1,defaultHold:2},
+ {name:"Standing DB Calf Raise",target:"4 sets \u2022 15 reps \u2022 DB Right, Left, Right, Left \u2022 strict pause at peak",rest:60,defaultTempo:3,defaultUp:1,defaultHold:2,sets:4,setLabels:["Set 1 (Right)","Set 2 (Left)","Set 3 (Right)","Set 4 (Left)"]}
 ],
 "Upper":[
  {name:"Seated DB Shoulder Press \u2022 Bench Position 5",target:"3 sets \u2022 8-10 reps \u2022 75-80\u00B0 scapular plane \u2022 3D caps",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1},
@@ -590,7 +590,12 @@ function showTab(id,btn){
 }
 function setDay(type,el){document.querySelectorAll(".day").forEach(d=>d.classList.remove("active"));el.classList.add("active");workType.value=type;renderWorkout()}
 
-function baseExerciseName(name){return String(name||"").replace(/\s*\u2193\d+s/g,"").replace(/\s*\u2022\s*Bench Position\s*\d+/g,"").trim()}
+function baseExerciseName(name){
+  let n = String(name||"").replace(/\s*\u2193\d+s/g,"").replace(/\s*\u2022\s*Bench Position\s*\d+/g,"").trim();
+  // Automatically alias previous DB Hip Thrust logs to DB Glute Bridge
+  if(n === "DB Hip Thrust") return "DB Glute Bridge";
+  return n;
+}
 function lastWorkoutOfType(type){const matches=data().workouts.filter(w=>w.type===type).sort((a,b)=>a.date.localeCompare(b.date));return matches.at(-1)||null}
 function previousExerciseSets(type,exerciseName,index){
  const d=data(),base=baseExerciseName(exerciseName),last=lastWorkoutOfType(type);
