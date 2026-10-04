@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <meta name="apple-mobile-web-app-title" content="Bob's Tracker"/>
 <meta name="theme-color" content="#070b12"/>
-<title>Bob's Corner v2.0.5 Milestone 1 Edition</title>
+<title>Bob's Corner v2.0.6 Milestone 1 Edition</title>
 <style>
 :root{
   --bg:#070b12;--panel:#111827;--panel2:#0b1220;--soft:#1f2937;--line:#2f3a4c;
@@ -104,7 +104,7 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
   <div class="header-top">
     <div>
       <h1>Bob's Corner &#x1F9EA;</h1>
-      <div class="phase">Goal: Fast Aesthetic Hypertrophy &bull; Milestone 1: Nov 6, 2026 &bull; v2.0.5</div>
+      <div class="phase">Goal: Fast Aesthetic Hypertrophy &bull; Milestone 1: Nov 6, 2026 &bull; v2.0.6</div>
     </div>
     <div style="display:flex;align-items:center;gap:8px">
       <span id="syncStatusBadge" class="sync-indicator synced">&#x2601;&#xFE0F; Synced</span>
@@ -216,8 +216,8 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
       <div class="day active blue" onclick="setDay('Push',this)">Mon<small>Push</small></div>
       <div class="day green" onclick="setDay('Pull',this)">Tue<small>Pull</small></div>
       <div class="day purple" onclick="setDay('Legs',this)">Wed<small>Legs</small></div>
-      <div class="day red" onclick="setDay('Upper',this)">Thu<small>Upper</small></div>
-      <div class="day orange" onclick="setDay('Lower',this)">Fri<small>Lower</small></div>
+      <div class="day red" onclick="setDay('Upper A',this)">Thu<small>Upper A</small></div>
+      <div class="day orange" onclick="setDay('Upper B',this)">Fri<small>Upper B</small></div>
     </div>
     <div class="row">
       <div><label>Date</label><input id="workDate" type="date"></div>
@@ -409,8 +409,8 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
     <table id="histTable"><thead><tr><th>Date</th><th>Workout</th><th>Weight</th><th>Waist</th><th>Body Fat</th><th>Nutrition</th><th>Steps</th><th>Notes</th></tr></thead><tbody></tbody></table>
   </div>
   <div class="card">
-    <h2>Version 2.0.5 Glute Bridge & Calf Specialization Changelog <span class="versionchip">Bob's Corner</span></h2>
-    <div class="tiny">&bull; Exercise Swap: Replaced DB Hip Thrust with floor DB Glute Bridge (8-10 reps with 2-second hard lockout pause)<br>&bull; Seamless Data Migration: Historical DB Hip Thrust logs, set weights, and PRs automatically populate and track under DB Glute Bridge<br>&bull; Calf Hypertrophy Exception: Standing DB Calf Raise updated to strict 15-rep target (all other lifts remain capped at 10 reps)<br>&bull; Macro Balance: Locked at 2,650 kcal (160g P / 345g C / 70g F / 35g+ Fiber)<br>&bull; Full Pantry Library: Cooked Pasta, PICS Semi-Sweet Chocolate Chips, and PICS Caramel Rice Cakes with 1-tap scaling</div>
+    <h2>Version 2.0.6 Upper Split Realignment Changelog <span class="versionchip">Bob's Corner</span></h2>
+    <div class="tiny">&bull; Thursday Upper A Restructure: Seated DB Shoulder Press (Pos 5), Underhand Lat Pulldown, Machine Seated Row (Overhand Grip), and Superset (Cable Triceps Pushdown + DB Hammer Curl) capped at 3&times;10<br>&bull; Friday Upper B Restructure: Machine Chest Press, Pec Deck, DB Lateral Raise, and Superset (Overhead Cable Triceps Ext + Incline DB Curl) capped at 3&times;10<br>&bull; Glute Bridge Floor Focus: DB Glute Bridge maintains previous hip thrust benchmarks and PR tracking<br>&bull; Specialized Calf Range: Standing DB Calf Raise remains at strict 4&times;15 reps<br>&bull; Macro Target: Locked at 2,650 kcal (160g P / 345g C / 70g F / 35g+ Fiber)</div>
   </div>
 </section>
 </main>
@@ -521,10 +521,10 @@ const pantryItems = [
   {name:"Baked Sweet Potato", unit:"g", baseQty:100, cal:90, p:2.0, c:20.7, fib:3.3, f:0.1, defSlot:"Dinner"},
   {name:"Greek Yogurt Dip", unit:"g", baseQty:100, cal:60, p:10.0, c:4.0, fib:0.0, f:0.3, defSlot:"Snacks"},
   {name:"PICS Semi-Sweet Chocolate Chips", unit:"g", baseQty:15, cal:70, p:0.5, c:10.0, fib:1.0, f:4.0, defSlot:"Snacks"},
-  {name:"PICS Caramel Rice Cake", unit:"cake", baseQty:1, cal:50, p:0.5, c:11.0, fib:0.0, f:0.0, defSlot:"Snacks"}
+  {name:"PICS Caramel Rice Cake", unit:"cake", baseQty:1, cal:50, p:0.5, c:11.0, fiber:0.0, f:0.0, defSlot:"Snacks"}
 ];
 
-// WORKOUTS: STANDARDIZED TO MAX 10-REP CEILING (CALF RAISES AT 15 REPS)
+// WORKOUTS: RESTRUCTURED AESTHETIC V-TAPER SPLIT (10-REP CEILING PROTOCOL)
 const workouts={
 "Push":[
  {name:"Incline DB Bench Press \u2022 Bench Position 3",target:"3 sets \u2022 8-10 reps \u2022 upper chest armor, deep stretch",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1},
@@ -544,18 +544,17 @@ const workouts={
  {name:"DB Glute Bridge",target:"3 sets \u2022 8-10 reps \u2022 floor drive, hard glute lock-out pause",rest:90,defaultTempo:3,defaultUp:1,defaultHold:2},
  {name:"Standing DB Calf Raise",target:"4 sets \u2022 15 reps \u2022 DB Right, Left, Right, Left \u2022 strict pause at peak",rest:60,defaultTempo:3,defaultUp:1,defaultHold:2,sets:4,setLabels:["Set 1 (Right)","Set 2 (Left)","Set 3 (Right)","Set 4 (Left)"]}
 ],
-"Upper":[
- {name:"Seated DB Shoulder Press \u2022 Bench Position 5",target:"3 sets \u2022 8-10 reps \u2022 75-80\u00B0 scapular plane \u2022 3D caps",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1},
+"Upper A":[
+ {name:"Seated DB Shoulder Press \u2022 Bench Position 5",target:"3 sets \u2022 8-10 reps \u2022 75-80\u00B0 scapular plane \u2022 3D deltoid caps",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1},
  {name:"Underhand Lat Pulldown",target:"3 sets \u2022 8-10 reps \u2022 lower lat sweep & bicep power",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1},
- {name:"Machine Seated Cable Row",target:"3 sets \u2022 8-10 reps \u2022 seated on floor, braced against frame \u2022 overhand flared grip to sternum",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1},
- {name:"Incline Skull Crusher",target:"2 sets \u2022 8-10 reps \u2022 tricep long-head stretch & density",rest:60,defaultTempo:3,defaultUp:1,defaultHold:1,sets:2},
- {name:"DB Hammer Curl",target:"2 sets \u2022 8-10 reps \u2022 neutral grip \u2022 brachialis width",rest:60,defaultTempo:3,defaultUp:1,defaultHold:1,sets:2}
+ {name:"Machine Seated Cable Row (Overhand Grip)",target:"3 sets \u2022 8-10 reps \u2022 seated on floor, braced against frame \u2022 overhand flared grip to sternum",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1},
+ {name:"Superset: Cable Triceps Pushdown + DB Hammer Curl",target:"3 supersets \u2022 8-10 reps each \u2022 pushdown immediately into hammer curls",rest:75,defaultTempo:3,defaultUp:1,defaultHold:1,sets:6,setLabels:["Set 1 (Pushdown)","Set 1 (Hammer)","Set 2 (Pushdown)","Set 2 (Hammer)","Set 3 (Pushdown)","Set 3 (Hammer)"]}
 ],
-"Lower":[
- {name:"Romanian Deadlift",target:"3 sets \u2022 8-10 reps \u2022 heavy posterior chain loading",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1},
- {name:"Goblet Squat",target:"3 sets \u2022 8-10 reps \u2022 bilateral quad overload",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1},
- {name:"DB Overhead Tricep Extension",target:"3 sets \u2022 8-10 reps \u2022 deep long-head stretch & horseshoe fullness",rest:60,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3},
- {name:"DB Bicep Curl",target:"3 sets \u2022 8-10 reps \u2022 supinated bicep peak builder",rest:60,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3}
+"Upper B":[
+ {name:"Machine Chest Press",target:"3 sets \u2022 8-10 reps \u2022 forward path, dense mid-chest overload",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1},
+ {name:"Pec Deck",target:"3 sets \u2022 8-10 reps \u2022 deep stretch & peak inner chest squeeze",rest:75,defaultTempo:3,defaultUp:1,defaultHold:1},
+ {name:"DB Lateral Raise",target:"3 sets \u2022 8-10 reps \u2022 lead with elbows \u2022 strict lateral deltoid shelf",rest:60,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3},
+ {name:"Superset: Overhead Cable Triceps Ext + Incline DB Curl",target:"3 supersets \u2022 8-10 reps each \u2022 triceps long-head into full bicep stretch",rest:75,defaultTempo:3,defaultUp:1,defaultHold:1,sets:6,setLabels:["Set 1 (Tri Ext)","Set 1 (Incline Curl)","Set 2 (Tri Ext)","Set 2 (Incline Curl)","Set 3 (Tri Ext)","Set 3 (Incline Curl)"]}
 ]
 };
 
@@ -594,9 +593,16 @@ function baseExerciseName(name){
   let n = String(name||"").replace(/\s*\u2193\d+s/g,"").replace(/\s*\u2022\s*Bench Position\s*\d+/g,"").trim();
   // Automatically alias previous DB Hip Thrust logs to DB Glute Bridge
   if(n === "DB Hip Thrust") return "DB Glute Bridge";
+  // Maintain backward-compatibility mapping for historical cable rows and upper variations
+  if(n === "Machine Seated Cable Row") return "Machine Seated Cable Row (Overhand Grip)";
   return n;
 }
-function lastWorkoutOfType(type){const matches=data().workouts.filter(w=>w.type===type).sort((a,b)=>a.date.localeCompare(b.date));return matches.at(-1)||null}
+function lastWorkoutOfType(type){
+  const d=data();
+  // Map historical "Upper" or "Upper A" workouts seamlessly
+  const matches=d.workouts.filter(w=>w.type===type || (type==="Upper A" && w.type==="Upper")).sort((a,b)=>a.date.localeCompare(b.date));
+  return matches.at(-1)||null;
+}
 function previousExerciseSets(type,exerciseName,index){
  const d=data(),base=baseExerciseName(exerciseName),last=lastWorkoutOfType(type);
  if(last&&Array.isArray(last.ex)){
