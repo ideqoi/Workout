@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <meta name="apple-mobile-web-app-title" content="Bob's Tracker"/>
 <meta name="theme-color" content="#070b12"/>
-<title>Bob's Corner v2.0.6 Milestone 1 Edition</title>
+<title>Bob's Corner v2.0.7 Milestone 1 Edition</title>
 <style>
 :root{
   --bg:#070b12;--panel:#111827;--panel2:#0b1220;--soft:#1f2937;--line:#2f3a4c;
@@ -37,6 +37,7 @@ main{max-width:1050px;margin:0 auto;padding:14px 14px 70px}
 h2{font-size:18px;margin:0 0 12px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
 .stat{background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:12px}.stat .label{font-size:12px;color:var(--muted)}.stat .value{font-size:24px;font-weight:950;margin-top:4px}
 .badge{display:inline-flex;align-items:center;gap:5px;border-radius:999px;padding:5px 9px;background:rgba(59,130,246,0.15);color:var(--blue);border:1px solid var(--line);font-size:12px;font-weight:800;margin:3px}
+.superset-badge{display:inline-flex;align-items:center;gap:4px;border-radius:999px;padding:3px 8px;background:rgba(168,85,247,0.2);color:var(--purple);border:1px solid rgba(168,85,247,0.4);font-size:11px;font-weight:900;margin-left:6px;vertical-align:middle}
 .green{color:var(--green)}.orange{color:var(--orange)}.red{color:var(--red)}.blue{color:var(--blue)}.purple{color:var(--purple)}.cyan{color:var(--cyan)}
 label{display:block;font-size:12px;color:var(--muted);margin:10px 0 5px}
 input,select,textarea,button{width:100%;border:1px solid var(--line);border-radius:12px;background:var(--panel2);color:var(--text);padding:11px;font-size:15px}
@@ -104,7 +105,7 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
   <div class="header-top">
     <div>
       <h1>Bob's Corner &#x1F9EA;</h1>
-      <div class="phase">Goal: Fast Aesthetic Hypertrophy &bull; Milestone 1: Nov 6, 2026 &bull; v2.0.6</div>
+      <div class="phase">Goal: Fast Aesthetic Hypertrophy &bull; Milestone 1: Nov 6, 2026 &bull; v2.0.7</div>
     </div>
     <div style="display:flex;align-items:center;gap:8px">
       <span id="syncStatusBadge" class="sync-indicator synced">&#x2601;&#xFE0F; Synced</span>
@@ -409,8 +410,8 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
     <table id="histTable"><thead><tr><th>Date</th><th>Workout</th><th>Weight</th><th>Waist</th><th>Body Fat</th><th>Nutrition</th><th>Steps</th><th>Notes</th></tr></thead><tbody></tbody></table>
   </div>
   <div class="card">
-    <h2>Version 2.0.6 Upper Split Realignment Changelog <span class="versionchip">Bob's Corner</span></h2>
-    <div class="tiny">&bull; Thursday Upper A Restructure: Seated DB Shoulder Press (Pos 5), Underhand Lat Pulldown, Machine Seated Row (Overhand Grip), and Superset (Cable Triceps Pushdown + DB Hammer Curl) capped at 3&times;10<br>&bull; Friday Upper B Restructure: Machine Chest Press, Pec Deck, DB Lateral Raise, and Superset (Overhead Cable Triceps Ext + Incline DB Curl) capped at 3&times;10<br>&bull; Glute Bridge Floor Focus: DB Glute Bridge maintains previous hip thrust benchmarks and PR tracking<br>&bull; Specialized Calf Range: Standing DB Calf Raise remains at strict 4&times;15 reps<br>&bull; Macro Target: Locked at 2,650 kcal (160g P / 345g C / 70g F / 35g+ Fiber)</div>
+    <h2>Version 2.0.7 Realignment Changelog <span class="versionchip">Bob's Corner</span></h2>
+    <div class="tiny">&bull; Monday Volume Calibration: DB Lateral Raise capped at 3 sets &times; 8-10 reps<br>&bull; Thursday &amp; Friday Supersets Decoupled: Exercises listed individually with dedicated 3-set inputs and visual &#x26A1; Superset badges<br>&bull; Floor Glute Bridge &amp; Calf Target: DB Glute Bridge maintains historical hip thrust data; Standing DB Calf Raise remains at 4&times;15 reps<br>&bull; Macro Target: Locked at 2,650 kcal (160g P / 345g C / 70g F / 35g+ Fiber)</div>
   </div>
 </section>
 </main>
@@ -521,7 +522,7 @@ const pantryItems = [
   {name:"Baked Sweet Potato", unit:"g", baseQty:100, cal:90, p:2.0, c:20.7, fib:3.3, f:0.1, defSlot:"Dinner"},
   {name:"Greek Yogurt Dip", unit:"g", baseQty:100, cal:60, p:10.0, c:4.0, fib:0.0, f:0.3, defSlot:"Snacks"},
   {name:"PICS Semi-Sweet Chocolate Chips", unit:"g", baseQty:15, cal:70, p:0.5, c:10.0, fib:1.0, f:4.0, defSlot:"Snacks"},
-  {name:"PICS Caramel Rice Cake", unit:"cake", baseQty:1, cal:50, p:0.5, c:11.0, fiber:0.0, f:0.0, defSlot:"Snacks"}
+  {name:"PICS Caramel Rice Cake", unit:"cake", baseQty:1, cal:50, p:0.5, c:11.0, fib:0.0, f:0.0, defSlot:"Snacks"}
 ];
 
 // WORKOUTS: RESTRUCTURED AESTHETIC V-TAPER SPLIT (10-REP CEILING PROTOCOL)
@@ -529,7 +530,7 @@ const workouts={
 "Push":[
  {name:"Incline DB Bench Press \u2022 Bench Position 3",target:"3 sets \u2022 8-10 reps \u2022 upper chest armor, deep stretch",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1},
  {name:"Flat DB Bench Press",target:"3 sets \u2022 8-10 reps \u2022 dense mid/lower chest mass",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1},
- {name:"DB Lateral Raise",target:"4 sets \u2022 8-10 reps \u2022 strict form, lead with elbows \u2022 V-taper shelf",rest:60,defaultTempo:3,defaultUp:1,defaultHold:1,sets:4},
+ {name:"DB Lateral Raise",target:"3 sets \u2022 8-10 reps \u2022 strict form, lead with elbows \u2022 V-taper shelf",rest:60,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3},
  {name:"Cable Triceps Pushdown",target:"3 sets \u2022 8-10 reps \u2022 locked elbows, triceps horseshoe focus",rest:60,defaultTempo:3,defaultUp:1,defaultHold:1}
 ],
 "Pull":[
@@ -548,13 +549,15 @@ const workouts={
  {name:"Seated DB Shoulder Press \u2022 Bench Position 5",target:"3 sets \u2022 8-10 reps \u2022 75-80\u00B0 scapular plane \u2022 3D deltoid caps",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1},
  {name:"Underhand Lat Pulldown",target:"3 sets \u2022 8-10 reps \u2022 lower lat sweep & bicep power",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1},
  {name:"Machine Seated Cable Row (Overhand Grip)",target:"3 sets \u2022 8-10 reps \u2022 seated on floor, braced against frame \u2022 overhand flared grip to sternum",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1},
- {name:"Superset: Cable Triceps Pushdown + DB Hammer Curl",target:"3 supersets \u2022 8-10 reps each \u2022 pushdown immediately into hammer curls",rest:75,defaultTempo:3,defaultUp:1,defaultHold:1,sets:6,setLabels:["Set 1 (Pushdown)","Set 1 (Hammer)","Set 2 (Pushdown)","Set 2 (Hammer)","Set 3 (Pushdown)","Set 3 (Hammer)"]}
+ {name:"Cable Triceps Pushdown",target:"3 sets \u2022 8-10 reps \u2022 locked elbows, triceps horseshoe \u2022 pair with Hammer Curls",rest:0,defaultTempo:3,defaultUp:1,defaultHold:1,isSuperset:true},
+ {name:"DB Hammer Curl",target:"3 sets \u2022 8-10 reps \u2022 neutral grip \u2022 brachialis width \u2022 rest after this move",rest:75,defaultTempo:3,defaultUp:1,defaultHold:1,isSuperset:true}
 ],
 "Upper B":[
  {name:"Machine Chest Press",target:"3 sets \u2022 8-10 reps \u2022 forward path, dense mid-chest overload",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1},
  {name:"Pec Deck",target:"3 sets \u2022 8-10 reps \u2022 deep stretch & peak inner chest squeeze",rest:75,defaultTempo:3,defaultUp:1,defaultHold:1},
  {name:"DB Lateral Raise",target:"3 sets \u2022 8-10 reps \u2022 lead with elbows \u2022 strict lateral deltoid shelf",rest:60,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3},
- {name:"Superset: Overhead Cable Triceps Ext + Incline DB Curl",target:"3 supersets \u2022 8-10 reps each \u2022 triceps long-head into full bicep stretch",rest:75,defaultTempo:3,defaultUp:1,defaultHold:1,sets:6,setLabels:["Set 1 (Tri Ext)","Set 1 (Incline Curl)","Set 2 (Tri Ext)","Set 2 (Incline Curl)","Set 3 (Tri Ext)","Set 3 (Incline Curl)"]}
+ {name:"Overhead Cable Triceps Extension",target:"3 sets \u2022 8-10 reps \u2022 deep long-head stretch \u2022 pair with Incline Curl",rest:0,defaultTempo:3,defaultUp:1,defaultHold:1,isSuperset:true},
+ {name:"Incline DB Curl \u2022 Bench Position 3",target:"3 sets \u2022 8-10 reps \u2022 deep bicep stretch & peak \u2022 rest after this move",rest:75,defaultTempo:3,defaultUp:1,defaultHold:1,isSuperset:true}
 ]
 };
 
@@ -595,6 +598,7 @@ function baseExerciseName(name){
   if(n === "DB Hip Thrust") return "DB Glute Bridge";
   // Maintain backward-compatibility mapping for historical cable rows and upper variations
   if(n === "Machine Seated Cable Row") return "Machine Seated Cable Row (Overhand Grip)";
+  if(n === "DB Overhead Tricep Extension") return "Overhead Cable Triceps Extension";
   return n;
 }
 function lastWorkoutOfType(type){
@@ -635,8 +639,9 @@ function renderWorkout(){
   const h=exerciseHistory(ex.name,data().workouts);
   const lastSetText=prevSets.map(setDisplay).filter(Boolean).join(" \u2022 ");
   const sourceLabel=lastWorkoutOfType(type)?`Last ${type}`:"Previous exercise";
+  const supersetTag = ex.isSuperset ? `<span class="superset-badge">&#x26A1; Superset</span>` : "";
   const div=document.createElement("div");div.className="exercise";
-  div.innerHTML=`<div class="exhead"><div><div class="exname">${ex.name} <span id="pr_badge_${i}"></span></div><div class="hint">${ex.target}</div><div class="exstats">${lastSetText?`${sourceLabel}:${lastSetText}`:"No previous sets for this exercise"}${h.best?` \u2022 Best set: ${h.best.weight} \u00D7${h.best.reps}`:""}</div></div><button class="secondary" style="width:80px" onclick="startRest(${ex.rest})">${ex.rest}s</button></div>
+  div.innerHTML=`<div class="exhead"><div><div class="exname">${ex.name} ${supersetTag} <span id="pr_badge_${i}"></span></div><div class="hint">${ex.target}</div><div class="exstats">${lastSetText?`${sourceLabel}:${lastSetText}`:"No previous sets for this exercise"}${h.best?` \u2022 Best set: ${h.best.weight} \u00D7${h.best.reps}`:""}</div></div><button class="secondary" style="width:80px" onclick="startRest(${ex.rest})">${ex.rest}s</button></div>
   <div class="sets">
   <div class="setrow"><span>Set</span><span>Weight</span><span>Reps</span><span>Tempo</span><span>Up</span><span>Hold</span><span>Done</span></div>
   ${Array.from({length:ex.sets||3},(_,idx)=>{
@@ -682,7 +687,7 @@ function checkPR(exIndex, exName) {
 
 function handleSetDone(btn, restSeconds, exIndex, exName) {
   const isDone = btn.classList.toggle('done');
-  if (isDone) startRest(restSeconds);
+  if (isDone && restSeconds > 0) startRest(restSeconds);
   checkPR(exIndex, exName);
   autoSaveWorkoutDraft();
 }
@@ -701,6 +706,7 @@ function playTimerBeep() {
   } catch(e){}
 }
 function startRest(seconds){
+  if(seconds <= 0) return;
   clearInterval(timerInt);
   let t=seconds;
   const timerEl = document.getElementById("timer");
