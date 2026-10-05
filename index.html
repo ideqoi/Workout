@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <meta name="apple-mobile-web-app-title" content="Bob's Tracker"/>
 <meta name="theme-color" content="#070b12"/>
-<title>Bob's Corner v2.0.7 Milestone 1 Edition</title>
+<title>Bob's Corner v2.0.8 Milestone 1 Edition</title>
 <style>
 :root{
   --bg:#070b12;--panel:#111827;--panel2:#0b1220;--soft:#1f2937;--line:#2f3a4c;
@@ -105,7 +105,7 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
   <div class="header-top">
     <div>
       <h1>Bob's Corner &#x1F9EA;</h1>
-      <div class="phase">Goal: Fast Aesthetic Hypertrophy &bull; Milestone 1: Nov 6, 2026 &bull; v2.0.7</div>
+      <div class="phase">Goal: Fast Aesthetic Hypertrophy &bull; Milestone 1: Nov 6, 2026 &bull; v2.0.8</div>
     </div>
     <div style="display:flex;align-items:center;gap:8px">
       <span id="syncStatusBadge" class="sync-indicator synced">&#x2601;&#xFE0F; Synced</span>
@@ -410,8 +410,8 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
     <table id="histTable"><thead><tr><th>Date</th><th>Workout</th><th>Weight</th><th>Waist</th><th>Body Fat</th><th>Nutrition</th><th>Steps</th><th>Notes</th></tr></thead><tbody></tbody></table>
   </div>
   <div class="card">
-    <h2>Version 2.0.7 Realignment Changelog <span class="versionchip">Bob's Corner</span></h2>
-    <div class="tiny">&bull; Monday Volume Calibration: DB Lateral Raise capped at 3 sets &times; 8-10 reps<br>&bull; Thursday &amp; Friday Supersets Decoupled: Exercises listed individually with dedicated 3-set inputs and visual &#x26A1; Superset badges<br>&bull; Floor Glute Bridge &amp; Calf Target: DB Glute Bridge maintains historical hip thrust data; Standing DB Calf Raise remains at 4&times;15 reps<br>&bull; Macro Target: Locked at 2,650 kcal (160g P / 345g C / 70g F / 35g+ Fiber)</div>
+    <h2>Version 2.0.8 History Lookup Fix Changelog <span class="versionchip">Bob's Corner</span></h2>
+    <div class="tiny">&bull; Global Exercise History Lookup: Evaluates workouts strictly by date across all types rather than prioritizing workout names (resolves Friday's Incline Curl pulling from August)<br>&bull; Exercise Alias Normalization: Bridges "Standing DB Hammer Curl" to "DB Hammer Curl" to restore recent logs<br>&bull; History Isolation: Removes cross-aliasing between cable and dumbbell overhead triceps extensions, as well as overhand vs. underhand seated cable rows<br>&bull; Monday Volume Calibration: DB Lateral Raise capped at 3 sets &times; 8-10 reps<br>&bull; Thursday &amp; Friday Supersets Decoupled: Exercises listed individually with dedicated 3-set inputs and visual &#x26A1; Superset badges<br>&bull; Floor Glute Bridge &amp; Calf Target: DB Glute Bridge maintains historical hip thrust data; Standing DB Calf Raise remains at 4&times;15 reps<br>&bull; Macro Target: Locked at 2,650 kcal (160g P / 345g C / 70g F / 35g+ Fiber)</div>
   </div>
 </section>
 </main>
@@ -505,10 +505,10 @@ function restoreFromGoogleDrive() {
   document.body.appendChild(script);
 }
 
-// TARGETS: 160g Protein, 345g Carbs, 70g Fat (2,650 kcal Total)[span_0](start_span)[span_0](end_span)
+// TARGETS: 160g Protein, 345g Carbs, 70g Fat (2,650 kcal Total)
 const targets={calories:2650, protein:160, fat:70, carbs:345, fiber:35};
 
-// CUSTOMIZED PANTRY STAPLES[span_1](start_span)[span_1](end_span)
+// CUSTOMIZED PANTRY STAPLES
 const pantryItems = [
   {name:"Cooked Chicken Breast", unit:"g", baseQty:100, cal:165, p:31.0, c:0.0, fib:0.0, f:3.6, defSlot:"Lunch"},
   {name:"Cooked Chicken Thighs", unit:"g", baseQty:100, cal:209, p:24.7, c:0.0, fib:0.0, f:10.9, defSlot:"Dinner"},
@@ -522,7 +522,7 @@ const pantryItems = [
   {name:"Baked Sweet Potato", unit:"g", baseQty:100, cal:90, p:2.0, c:20.7, fib:3.3, f:0.1, defSlot:"Dinner"},
   {name:"Greek Yogurt Dip", unit:"g", baseQty:100, cal:60, p:10.0, c:4.0, fib:0.0, f:0.3, defSlot:"Snacks"},
   {name:"PICS Semi-Sweet Chocolate Chips", unit:"g", baseQty:15, cal:70, p:0.5, c:10.0, fib:1.0, f:4.0, defSlot:"Snacks"},
-  {name:"PICS Caramel Rice Cake", unit:"cake", baseQty:1, cal:50, p:0.5, c:11.0, fib:0.0, f:0.0, defSlot:"Snacks"}
+  {name:"PICS Caramel Rice Cake", unit:"cake", baseQty:1, cal:50, p:0.5, c:11.0, fiber:0.0, f:0.0, defSlot:"Snacks"}
 ];
 
 // WORKOUTS: RESTRUCTURED AESTHETIC V-TAPER SPLIT (10-REP CEILING PROTOCOL)
@@ -593,31 +593,40 @@ function showTab(id,btn){
 function setDay(type,el){document.querySelectorAll(".day").forEach(d=>d.classList.remove("active"));el.classList.add("active");workType.value=type;renderWorkout()}
 
 function baseExerciseName(name){
-  let n = String(name||"").replace(/\s*\u2193\d+s/g,"").replace(/\s*\u2022\s*Bench Position\s*\d+/g,"").trim();
-  // Automatically alias previous DB Hip Thrust logs to DB Glute Bridge
-  if(n === "DB Hip Thrust") return "DB Glute Bridge";
-  // Maintain backward-compatibility mapping for historical cable rows and upper variations
-  if(n === "Machine Seated Cable Row") return "Machine Seated Cable Row (Overhand Grip)";
-  if(n === "DB Overhead Tricep Extension") return "Overhead Cable Triceps Extension";
+  let n = String(name||"")
+    .replace(/\s*\u2193\d+s/g,"")
+    .replace(/\s*\u2022\s*Bench Position\s*\d+/g,"")
+    .trim();
+
+  // Alias historical DB Hip Thrust logs to DB Glute Bridge
+  if (n === "DB Hip Thrust") return "DB Glute Bridge";
+
+  // Alias Standing DB Hammer Curl to DB Hammer Curl
+  if (n === "Standing DB Hammer Curl") return "DB Hammer Curl";
+
   return n;
 }
-function lastWorkoutOfType(type){
-  const d=data();
-  // Map historical "Upper" or "Upper A" workouts seamlessly
-  const matches=d.workouts.filter(w=>w.type===type || (type==="Upper A" && w.type==="Upper")).sort((a,b)=>a.date.localeCompare(b.date));
-  return matches.at(-1)||null;
+
+function previousExerciseSets(type, exerciseName, index){
+  const d = data(), base = baseExerciseName(exerciseName);
+  
+  // Sort all logged workouts strictly newest-to-oldest by date
+  const sortedWorkouts = [...d.workouts].sort((a,b) => b.date.localeCompare(a.date));
+  
+  for (const w of sortedWorkouts) {
+    if (!Array.isArray(w.ex)) continue;
+    const match = w.ex.find(e => baseExerciseName(e.name) === base);
+    if (match && Array.isArray(match.sets) && match.sets.length > 0) {
+      // Ensure we actually have logged values in the sets
+      const hasLogs = match.sets.some(s => (s.weight ?? s.w ?? "") !== "" || (s.reps ?? s.r ?? "") !== "");
+      if (hasLogs) {
+        return { sets: match.sets, date: w.date, type: w.type };
+      }
+    }
+  }
+  return { sets: [], date: null, type: null };
 }
-function previousExerciseSets(type,exerciseName,index){
- const d=data(),base=baseExerciseName(exerciseName),last=lastWorkoutOfType(type);
- if(last&&Array.isArray(last.ex)){
-   const match=last.ex.find(e=>baseExerciseName(e.name)===base);
-   if(match&&Array.isArray(match.sets)) return match.sets;
- }
- const matches=[...d.workouts].sort((a,b)=>b.date.localeCompare(a.date))
-   .map(w=>(w.ex||[]).find(e=>baseExerciseName(e.name)===base))
-   .filter(Boolean);
- return (matches[0]&&Array.isArray(matches[0].sets))?matches[0].sets:[];
-}
+
 function setDisplay(set){
  if(!set) return "";
  const w=set.weight??set.w??"", r=set.reps??set.r??"";
@@ -635,13 +644,14 @@ function renderWorkout(){
  const type=workType.value;
  if(!workouts[type]) return;
  workouts[type].forEach((ex,i)=>{
-  const prevSets=previousExerciseSets(type,ex.name,i);
+  const prevData=previousExerciseSets(type,ex.name,i);
+  const prevSets=prevData.sets;
   const h=exerciseHistory(ex.name,data().workouts);
   const lastSetText=prevSets.map(setDisplay).filter(Boolean).join(" \u2022 ");
-  const sourceLabel=lastWorkoutOfType(type)?`Last ${type}`:"Previous exercise";
+  const sourceLabel=prevData.date ? `Last Log (${prevData.date})` : "Previous exercise";
   const supersetTag = ex.isSuperset ? `<span class="superset-badge">&#x26A1; Superset</span>` : "";
   const div=document.createElement("div");div.className="exercise";
-  div.innerHTML=`<div class="exhead"><div><div class="exname">${ex.name} ${supersetTag} <span id="pr_badge_${i}"></span></div><div class="hint">${ex.target}</div><div class="exstats">${lastSetText?`${sourceLabel}:${lastSetText}`:"No previous sets for this exercise"}${h.best?` \u2022 Best set: ${h.best.weight} \u00D7${h.best.reps}`:""}</div></div><button class="secondary" style="width:80px" onclick="startRest(${ex.rest})">${ex.rest}s</button></div>
+  div.innerHTML=`<div class="exhead"><div><div class="exname">${ex.name} ${supersetTag} <span id="pr_badge_${i}"></span></div><div class="hint">${ex.target}</div><div class="exstats">${lastSetText?`${sourceLabel}: ${lastSetText}`:"No previous sets for this exercise"}${h.best?` \u2022 Best set: ${h.best.weight} \u00D7${h.best.reps}`:""}</div></div><button class="secondary" style="width:80px" onclick="startRest(${ex.rest})">${ex.rest}s</button></div>
   <div class="sets">
   <div class="setrow"><span>Set</span><span>Weight</span><span>Reps</span><span>Tempo</span><span>Up</span><span>Hold</span><span>Done</span></div>
   ${Array.from({length:ex.sets||3},(_,idx)=>{
