@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <meta name="apple-mobile-web-app-title" content="Bob's Tracker"/>
 <meta name="theme-color" content="#070b12"/>
-<title>Bob's Corner v2.0.8 Milestone 1 Edition</title>
+<title>Bob's Corner v2.0.9 Milestone 1 Edition</title>
 <style>
 :root{
   --bg:#070b12;--panel:#111827;--panel2:#0b1220;--soft:#1f2937;--line:#2f3a4c;
@@ -50,6 +50,8 @@ button.secondary{background:var(--soft);color:var(--text);border:1px solid var(-
 .day small{display:block;color:var(--muted);font-weight:700;font-size:11px;margin-top:2px}.day.active{outline:2px solid currentColor}
 .exercise{border:1px solid var(--line);border-radius:16px;margin:10px 0;background:var(--panel2);overflow:hidden}
 .exhead{display:flex;justify-content:space-between;gap:8px;align-items:center;padding:12px;border-bottom:1px solid var(--line)}
+.exhead-actions{display:flex;align-items:center;gap:6px}
+.set-adj-btn{width:auto;padding:6px 10px;font-size:12px;border-radius:10px}
 .exname{font-weight:950}.hint{font-size:12px;color:var(--muted)}
 .sets{padding:10px}
 .setrow{display:grid;grid-template-columns:0.8fr 1.1fr 0.9fr 0.7fr 0.7fr 0.7fr 0.55fr;gap:5px;align-items:end;margin-bottom:7px}
@@ -105,7 +107,7 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
   <div class="header-top">
     <div>
       <h1>Bob's Corner &#x1F9EA;</h1>
-      <div class="phase">Goal: Fast Aesthetic Hypertrophy &bull; Milestone 1: Nov 6, 2026 &bull; v2.0.8</div>
+      <div class="phase">Goal: Fast Aesthetic Hypertrophy &bull; Milestone 1: Nov 6, 2026 &bull; v2.0.9</div>
     </div>
     <div style="display:flex;align-items:center;gap:8px">
       <span id="syncStatusBadge" class="sync-indicator synced">&#x2601;&#xFE0F; Synced</span>
@@ -410,8 +412,8 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
     <table id="histTable"><thead><tr><th>Date</th><th>Workout</th><th>Weight</th><th>Waist</th><th>Body Fat</th><th>Nutrition</th><th>Steps</th><th>Notes</th></tr></thead><tbody></tbody></table>
   </div>
   <div class="card">
-    <h2>Version 2.0.8 History Lookup Fix Changelog <span class="versionchip">Bob's Corner</span></h2>
-    <div class="tiny">&bull; Global Exercise History Lookup: Evaluates workouts strictly by date across all types rather than prioritizing workout names (resolves Friday's Incline Curl pulling from August)<br>&bull; Exercise Alias Normalization: Bridges "Standing DB Hammer Curl" to "DB Hammer Curl" to restore recent logs<br>&bull; History Isolation: Removes cross-aliasing between cable and dumbbell overhead triceps extensions, as well as overhand vs. underhand seated cable rows<br>&bull; Monday Volume Calibration: DB Lateral Raise capped at 3 sets &times; 8-10 reps<br>&bull; Thursday &amp; Friday Supersets Decoupled: Exercises listed individually with dedicated 3-set inputs and visual &#x26A1; Superset badges<br>&bull; Floor Glute Bridge &amp; Calf Target: DB Glute Bridge maintains historical hip thrust data; Standing DB Calf Raise remains at 4&times;15 reps<br>&bull; Macro Target: Locked at 2,650 kcal (160g P / 345g C / 70g F / 35g+ Fiber)</div>
+    <h2>Version 2.0.9 Changelog <span class="versionchip">Bob's Corner</span></h2>
+    <div class="tiny">&bull; Persistent Add/Remove Sets: Added "+ Set" and "– Set" buttons to each exercise. Target set counts persist per exercise across future sessions and sync with Google Drive; blank rows without both weight and reps are excluded from logs.<br>&bull; Local Date Bug Resolved: Upgraded today() calculation from UTC to device local time so dates no longer skip to tomorrow after 8 PM Eastern.<br>&bull; Pantry Fiber Key Fix: Corrected "fiber" to "fib" for PICS Caramel Rice Cake for consistent macro aggregation.<br>&bull; Global Exercise History Lookup: Evaluates workouts strictly by date across all types rather than prioritizing workout names.<br>&bull; Exercise Alias Normalization: Bridges "Standing DB Hammer Curl" to "DB Hammer Curl" to restore recent logs.<br>&bull; History Isolation: Removes cross-aliasing between cable and dumbbell overhead triceps extensions, as well as overhand vs. underhand seated cable rows.<br>&bull; Macro Target: Locked at 2,650 kcal (160g P / 345g C / 70g F / 35g+ Fiber).</div>
   </div>
 </section>
 </main>
@@ -522,7 +524,7 @@ const pantryItems = [
   {name:"Baked Sweet Potato", unit:"g", baseQty:100, cal:90, p:2.0, c:20.7, fib:3.3, f:0.1, defSlot:"Dinner"},
   {name:"Greek Yogurt Dip", unit:"g", baseQty:100, cal:60, p:10.0, c:4.0, fib:0.0, f:0.3, defSlot:"Snacks"},
   {name:"PICS Semi-Sweet Chocolate Chips", unit:"g", baseQty:15, cal:70, p:0.5, c:10.0, fib:1.0, f:4.0, defSlot:"Snacks"},
-  {name:"PICS Caramel Rice Cake", unit:"cake", baseQty:1, cal:50, p:0.5, c:11.0, fiber:0.0, f:0.0, defSlot:"Snacks"}
+  {name:"PICS Caramel Rice Cake", unit:"cake", baseQty:1, cal:50, p:0.5, c:11.0, fib:0.0, f:0.0, defSlot:"Snacks"}
 ];
 
 // WORKOUTS: RESTRUCTURED AESTHETIC V-TAPER SPLIT (10-REP CEILING PROTOCOL)
@@ -561,7 +563,10 @@ const workouts={
 ]
 };
 
-function today(){return new Date().toISOString().slice(0,10)}
+function today(){
+  const d = new Date();
+  return new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+}
 ["workDate","bodyDate","nutDate"].forEach(id=>document.getElementById(id).value=today());
 const workType=document.getElementById("workType");
 Object.keys(workouts).forEach(k=>{let o=document.createElement("option");o.textContent=k;workType.appendChild(o)});
@@ -573,6 +578,7 @@ function data(){
   if(!d.settings.goalWaist) d.settings.goalWaist=31.25;
   if(d.settings.goalWeight === 163 || d.settings.goalWeight === 148) d.settings.goalWeight=160.5;
   if(!d.settings.plannedRate || d.settings.plannedRate === 0.0 || d.settings.plannedRate === 1) d.settings.plannedRate=0.3;
+  d.settings.exerciseSets = d.settings.exerciseSets || {};
   d.foodLogs=d.foodLogs||{};
   d.dayTemplates=d.dayTemplates||{};
   return d;
@@ -607,6 +613,32 @@ function baseExerciseName(name){
   return n;
 }
 
+function getExerciseSetCount(ex){
+  const d = data();
+  const key = baseExerciseName(ex.name);
+  if (d.settings && d.settings.exerciseSets && d.settings.exerciseSets[key]) {
+    return Math.max(1, parseInt(d.settings.exerciseSets[key], 10) || 1);
+  }
+  return ex.sets || 3;
+}
+
+function adjustExerciseSetCount(exIndex, delta){
+  const type = workType.value;
+  if (!workouts[type] || !workouts[type][exIndex]) return;
+  const ex = workouts[type][exIndex];
+  const key = baseExerciseName(ex.name);
+  const curCount = getExerciseSetCount(ex);
+  const nextCount = Math.max(1, curCount + delta);
+  if (curCount === nextCount) return;
+
+  const d = data();
+  d.settings = d.settings || {};
+  d.settings.exerciseSets = d.settings.exerciseSets || {};
+  d.settings.exerciseSets[key] = nextCount;
+  save(d);
+  renderWorkout();
+}
+
 function previousExerciseSets(type, exerciseName, index){
   const d = data(), base = baseExerciseName(exerciseName);
   
@@ -618,7 +650,7 @@ function previousExerciseSets(type, exerciseName, index){
     const match = w.ex.find(e => baseExerciseName(e.name) === base);
     if (match && Array.isArray(match.sets) && match.sets.length > 0) {
       // Ensure we actually have logged values in the sets
-      const hasLogs = match.sets.some(s => (s.weight ?? s.w ?? "") !== "" || (s.reps ?? s.r ?? "") !== "");
+      const hasLogs = match.sets.some(s => (s.weight ?? s.w ?? "") !== "" && (s.reps ?? s.r ?? "") !== "");
       if (hasLogs) {
         return { sets: match.sets, date: w.date, type: w.type };
       }
@@ -650,11 +682,24 @@ function renderWorkout(){
   const lastSetText=prevSets.map(setDisplay).filter(Boolean).join(" \u2022 ");
   const sourceLabel=prevData.date ? `Last Log (${prevData.date})` : "Previous exercise";
   const supersetTag = ex.isSuperset ? `<span class="superset-badge">&#x26A1; Superset</span>` : "";
+  const effectiveSets = getExerciseSetCount(ex);
+
   const div=document.createElement("div");div.className="exercise";
-  div.innerHTML=`<div class="exhead"><div><div class="exname">${ex.name} ${supersetTag} <span id="pr_badge_${i}"></span></div><div class="hint">${ex.target}</div><div class="exstats">${lastSetText?`${sourceLabel}: ${lastSetText}`:"No previous sets for this exercise"}${h.best?` \u2022 Best set: ${h.best.weight} \u00D7${h.best.reps}`:""}</div></div><button class="secondary" style="width:80px" onclick="startRest(${ex.rest})">${ex.rest}s</button></div>
+  div.innerHTML=`<div class="exhead">
+    <div>
+      <div class="exname">${ex.name} ${supersetTag} <span id="pr_badge_${i}"></span></div>
+      <div class="hint">${ex.target}</div>
+      <div class="exstats">${lastSetText?`${sourceLabel}: ${lastSetText}`:"No previous sets for this exercise"}${h.best?` \u2022 Best set: ${h.best.weight} \u00D7${h.best.reps}`:""}</div>
+    </div>
+    <div class="exhead-actions">
+      <button class="secondary set-adj-btn" onclick="adjustExerciseSetCount(${i}, -1)" title="Remove set">– Set</button>
+      <button class="secondary set-adj-btn" onclick="adjustExerciseSetCount(${i}, 1)" title="Add set">+ Set</button>
+      <button class="secondary" style="width:70px" onclick="startRest(${ex.rest})">${ex.rest}s</button>
+    </div>
+  </div>
   <div class="sets">
   <div class="setrow"><span>Set</span><span>Weight</span><span>Reps</span><span>Tempo</span><span>Up</span><span>Hold</span><span>Done</span></div>
-  ${Array.from({length:ex.sets||3},(_,idx)=>{
+  ${Array.from({length:effectiveSets},(_,idx)=>{
     const n=idx+1;
     const p=prevSets[idx]||{};
     const pw=p.weight??p.w??"", pr=p.reps??p.r??"";
@@ -684,7 +729,8 @@ function checkPR(exIndex, exName) {
   const badge = document.getElementById(`pr_badge_${exIndex}`);
   if (!badge) return;
   let currentBestScore = 0;
-  const numSets = (workouts[workType.value][exIndex] && workouts[workType.value][exIndex].sets) || 3;
+  const ex = (workouts[workType.value] && workouts[workType.value][exIndex]);
+  const numSets = ex ? getExerciseSetCount(ex) : 3;
   for (let n = 1; n <= numSets; n++) {
     const w = numeric(val(`w_${exIndex}_${n}`));
     const r = numeric(val(`r_${exIndex}_${n}`));
@@ -770,14 +816,20 @@ function updateWaistAverage(){
 function autoSaveWorkoutDraft(){
   const d=data(), type=workType.value, curDate=val("workDate")||today();
   let totalTonnage = 0;
-  const ex=(workouts[type]||[]).map((e,i)=>({
-    name:e.name,
-    sets:Array.from({length:e.sets||3},(_,idx)=>{
+  const ex=(workouts[type]||[]).map((e,i)=>{
+    const setCount = getExerciseSetCount(e);
+    const sets = [];
+    for(let idx=0; idx < setCount; idx++){
       const n=idx+1, w = val(`w_${i}_${n}`), r = val(`r_${i}_${n}`), t = val(`t_${i}_${n}`), u = val(`u_${i}_${n}`), h = val(`h_${i}_${n}`);
-      if (numeric(w) && numeric(r)) totalTonnage += (numeric(w) * numeric(r));
-      return {weight:w, reps:r, tempo:t, up:u, hold:h};
-    }).filter(s=>s.weight||s.reps)
-  }));
+      const nw = numeric(w), nr = numeric(r);
+      // Strictly store sets that have both weight and reps filled in
+      if (nw !== null && nr !== null) {
+        totalTonnage += (nw * nr);
+        sets.push({weight:w, reps:r, tempo:t, up:u, hold:h});
+      }
+    }
+    return {name:e.name, sets};
+  });
   const existingIdx = d.workouts.findIndex(w=>w.date===curDate && w.type===type);
   const wEntry = {date:curDate, type, ex, notes:val("workNotes")};
   if(existingIdx !== -1) d.workouts[existingIdx] = wEntry;
@@ -1261,6 +1313,7 @@ function workoutStreak(workouts){const dates=[...new Set(workouts.map(w=>w.date)
 function saveCutSettings(){
   const d=data();
   d.settings={
+    ...d.settings,
     cutStartDate: val("cutStartDate") || "2026-08-13",
     targetEndDate: val("targetEndDate") || "2026-11-06",
     goalWaist: numeric(val("goalWaist")) || 31.25,
