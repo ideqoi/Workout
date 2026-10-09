@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <meta name="apple-mobile-web-app-title" content="Bob's Tracker"/>
 <meta name="theme-color" content="#070b12"/>
-<title>Bob's Corner v2.0.9 Milestone 1 Edition</title>
+<title>Bob's Corner v2.1.0 Milestone 1 Edition</title>
 <style>
 :root{
   --bg:#070b12;--panel:#111827;--panel2:#0b1220;--soft:#1f2937;--line:#2f3a4c;
@@ -79,7 +79,7 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
 .mealBox{background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
 .mealHeader{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
 .mealHeader h3{margin:0;font-size:15px}
-.foodItemRow{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.06);font-size:13px}
+.foodItemRow{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(255,255,200,0.06);font-size:13px}
 .foodItemActions{display:flex;gap:5px;align-items:center}
 .pantryGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px;margin-top:8px}
 .pantryBtn{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:10px 8px;text-align:left;color:var(--text);cursor:pointer;display:flex;flex-direction:column;justify-content:space-between}
@@ -107,7 +107,7 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
   <div class="header-top">
     <div>
       <h1>Bob's Corner &#x1F9EA;</h1>
-      <div class="phase">Goal: Fast Aesthetic Hypertrophy &bull; Milestone 1: Nov 6, 2026 &bull; v2.0.9</div>
+      <div class="phase">Goal: Fast Aesthetic Hypertrophy &bull; Milestone 1: Nov 6, 2026 &bull; v2.1.0</div>
     </div>
     <div style="display:flex;align-items:center;gap:8px">
       <span id="syncStatusBadge" class="sync-indicator synced">&#x2601;&#xFE0F; Synced</span>
@@ -412,8 +412,8 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
     <table id="histTable"><thead><tr><th>Date</th><th>Workout</th><th>Weight</th><th>Waist</th><th>Body Fat</th><th>Nutrition</th><th>Steps</th><th>Notes</th></tr></thead><tbody></tbody></table>
   </div>
   <div class="card">
-    <h2>Version 2.0.9 Changelog <span class="versionchip">Bob's Corner</span></h2>
-    <div class="tiny">&bull; Persistent Add/Remove Sets: Added "+ Set" and "– Set" buttons to each exercise. Target set counts persist per exercise across future sessions and sync with Google Drive; blank rows without both weight and reps are excluded from logs.<br>&bull; Local Date Bug Resolved: Upgraded today() calculation from UTC to device local time so dates no longer skip to tomorrow after 8 PM Eastern.<br>&bull; Pantry Fiber Key Fix: Corrected "fiber" to "fib" for PICS Caramel Rice Cake for consistent macro aggregation.<br>&bull; Global Exercise History Lookup: Evaluates workouts strictly by date across all types rather than prioritizing workout names.<br>&bull; Exercise Alias Normalization: Bridges "Standing DB Hammer Curl" to "DB Hammer Curl" to restore recent logs.<br>&bull; History Isolation: Removes cross-aliasing between cable and dumbbell overhead triceps extensions, as well as overhand vs. underhand seated cable rows.<br>&bull; Macro Target: Locked at 2,650 kcal (160g P / 345g C / 70g F / 35g+ Fiber).</div>
+    <h2>Version 2.1.0 Changelog <span class="versionchip">Bob's Corner</span></h2>
+    <div class="tiny">&bull; DB Chest Fly: Renamed Pec Deck to DB Chest Fly with full backward compatibility to preserve historical best sets and logs.<br>&bull; Stable Waist Pacing: Pacing comparison is evaluated strictly as of the most recent waist measurement date, preventing daily drift between weigh-ins.<br>&bull; Persistent Sets: Configurable +/– Set counts per exercise synced directly to Google Drive.<br>&bull; Local Date Calculation: Accurate device local date handling preventing early rollover.<br>&bull; Fiber Consistency: Standardized pantry staples to use the "fib" key across all items.</div>
   </div>
 </section>
 </main>
@@ -556,7 +556,7 @@ const workouts={
 ],
 "Upper B":[
  {name:"Machine Chest Press",target:"3 sets \u2022 8-10 reps \u2022 forward path, dense mid-chest overload",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1},
- {name:"Pec Deck",target:"3 sets \u2022 8-10 reps \u2022 deep stretch & peak inner chest squeeze",rest:75,defaultTempo:3,defaultUp:1,defaultHold:1},
+ {name:"DB Chest Fly",target:"3 sets \u2022 8-10 reps \u2022 deep stretch & peak inner chest squeeze",rest:75,defaultTempo:3,defaultUp:1,defaultHold:1},
  {name:"DB Lateral Raise",target:"3 sets \u2022 8-10 reps \u2022 lead with elbows \u2022 strict lateral deltoid shelf",rest:60,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3},
  {name:"Overhead Cable Triceps Extension",target:"3 sets \u2022 8-10 reps \u2022 deep long-head stretch \u2022 pair with Incline Curl",rest:0,defaultTempo:3,defaultUp:1,defaultHold:1,isSuperset:true},
  {name:"Incline DB Curl \u2022 Bench Position 3",target:"3 sets \u2022 8-10 reps \u2022 deep bicep stretch & peak \u2022 rest after this move",rest:75,defaultTempo:3,defaultUp:1,defaultHold:1,isSuperset:true}
@@ -609,6 +609,9 @@ function baseExerciseName(name){
 
   // Alias Standing DB Hammer Curl to DB Hammer Curl
   if (n === "Standing DB Hammer Curl") return "DB Hammer Curl";
+
+  // Alias Pec Deck to DB Chest Fly to preserve historical sets
+  if (n === "Pec Deck") return "DB Chest Fly";
 
   return n;
 }
@@ -1344,20 +1347,24 @@ function calculatePacing(d){
   if(!waists.length) return { status: "Awaiting Logs", sub: "Log Friday waist to calculate pacing", color: "blue" };
 
   const startWaist = numeric(waists[0].waist);
-  const curWaist = numeric(waists.at(-1).waist);
+  const curWaistEntry = waists.at(-1);
+  const curWaist = numeric(curWaistEntry.waist);
+  const curWaistDate = curWaistEntry.date;
   const goalWaist = numeric(s.goalWaist) || 31.25;
   const totalDays = Math.max(1, dateDiffDays(s.targetEndDate, s.cutStartDate));
-  const daysPassed = Math.max(0, dateDiffDays(today(), s.cutStartDate));
-  const daysLeft = Math.max(0, dateDiffDays(s.targetEndDate, today()));
+  
+  // Calculate pacing as of the exact date the waist was recorded, not today
+  const daysPassed = Math.max(0, dateDiffDays(curWaistDate, s.cutStartDate));
+  const daysLeft = Math.max(0, dateDiffDays(s.targetEndDate, curWaistDate));
 
   if(curWaist <= goalWaist) {
-    return { status: "Goal Met", sub: `Waist reached ${curWaist.toFixed(2)}"`, color: "green" };
+    return { status: "Goal Met", sub: `Waist reached ${curWaist.toFixed(2)}" on ${curWaistDate}`, color: "green" };
   }
 
   const fractionTimeline = Math.min(1, daysPassed / totalDays);
   const expectedDropSoFar = (startWaist - goalWaist) * fractionTimeline;
-  const expectedWaistNow = startWaist - expectedDropSoFar;
-  const delta = curWaist - expectedWaistNow;
+  const expectedWaistAtLog = startWaist - expectedDropSoFar;
+  const delta = curWaist - expectedWaistAtLog;
   const remainingDropNeeded = curWaist - goalWaist;
   const weeksLeft = Math.max(0.1, daysLeft / 7);
   const neededRate = remainingDropNeeded > 0 ? (remainingDropNeeded / weeksLeft).toFixed(2) : "0.00";
@@ -1365,19 +1372,19 @@ function calculatePacing(d){
   if (delta <= -0.15) {
     return {
       status: `Ahead of Target (${Math.abs(delta).toFixed(2)}" lower)`,
-      sub: `Current: ${curWaist.toFixed(2)}" vs Pace: ${expectedWaistNow.toFixed(2)}" &bull; Needs ${neededRate}"/wk`,
+      sub: `As of ${curWaistDate}: ${curWaist.toFixed(2)}" vs Pace: ${expectedWaistAtLog.toFixed(2)}" &bull; Needs ${neededRate}"/wk`,
       color: "green"
     };
   } else if (Math.abs(delta) < 0.15) {
     return {
       status: `On Target Pace (&plusmn;${Math.abs(delta).toFixed(2)}")`,
-      sub: `Current: ${curWaist.toFixed(2)}" &bull; Goal: ${goalWaist.toFixed(2)}" by Nov 6 (${neededRate}"/wk)`,
+      sub: `As of ${curWaistDate}: ${curWaist.toFixed(2)}" &bull; Goal: ${goalWaist.toFixed(2)}" by Nov 6 (${neededRate}"/wk)`,
       color: "green"
     };
   } else {
     return {
       status: `Behind Pace (+${delta.toFixed(2)}" above)`,
-      sub: `Current: ${curWaist.toFixed(2)}" vs Pace: ${expectedWaistNow.toFixed(2)}" &bull; Needs ${neededRate}"/wk to catch up`,
+      sub: `As of ${curWaistDate}: ${curWaist.toFixed(2)}" vs Pace: ${expectedWaistAtLog.toFixed(2)}" &bull; Needs ${neededRate}"/wk to catch up`,
       color: "orange"
     };
   }
