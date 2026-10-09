@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <meta name="apple-mobile-web-app-title" content="Bob's Tracker"/>
 <meta name="theme-color" content="#070b12"/>
-<title>Bob's Corner v2.1.0 Milestone 1 Edition</title>
+<title>Bob's Corner v2.2.0 Milestone 1 Edition</title>
 <style>
 :root{
   --bg:#070b12;--panel:#111827;--panel2:#0b1220;--soft:#1f2937;--line:#2f3a4c;
@@ -107,7 +107,7 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
   <div class="header-top">
     <div>
       <h1>Bob's Corner &#x1F9EA;</h1>
-      <div class="phase">Goal: Fast Aesthetic Hypertrophy &bull; Milestone 1: Nov 6, 2026 &bull; v2.1.0</div>
+      <div class="phase">Goal: Fast Aesthetic Hypertrophy &bull; Milestone 1: Nov 6, 2026 &bull; v2.2.0</div>
     </div>
     <div style="display:flex;align-items:center;gap:8px">
       <span id="syncStatusBadge" class="sync-indicator synced">&#x2601;&#xFE0F; Synced</span>
@@ -226,7 +226,7 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
       <div><label>Date</label><input id="workDate" type="date"></div>
       <div><label>Workout</label><select id="workType" onchange="renderWorkout()"></select></div>
     </div>
-    <div id="workoutBox"></div><div class="notice goodnotice">Training Note: Aesthetic V-Taper Split (10-Rep Cap Protocol &bull; 15 Reps Calf Focus). Tempo is recorded as 3 phases: Tempo (Down/Eccentric), Up (Concentric speed), and Hold (Peak pause). Every logged set auto-syncs live.</div>
+    <div id="workoutBox"></div><div class="notice goodnotice">Training Note: Aesthetic V-Taper Split (10-Rep Cap Protocol &bull; 15 Reps Calf Focus &bull; Superset Calves & Crunches). Tempo is recorded as 3 phases: Tempo (Down/Eccentric), Up (Concentric speed), and Hold (Peak pause). Every logged set auto-syncs live.</div>
     <label>Notes</label><textarea id="workNotes" placeholder="Energy, pump, soreness, performance..." oninput="autoSaveWorkoutDraft()"></textarea>
     <button onclick="saveWorkout()">Finish Session & Force Sync</button>
   </div>
@@ -337,10 +337,10 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
       </div>
       <div>
         <label>Portion / Scale Input:</label>
-        <input id="pantryPortion" type="number" step="0.1" value="100" placeholder="grams, fl oz, or cakes">
+        <input id="pantryPortion" type="number" step="0.1" value="100" placeholder="grams, tbsp, fl oz, or cakes">
       </div>
     </div>
-    <div class="tiny" style="margin-bottom:10px;color:var(--muted)">Milk, Half &amp; Half, and Light Cream scale per <b>fl oz</b>. Caramel Rice Cakes scale per <b>cake</b>. Solid foods scale per <b>gram (g)</b>. Adjust portion above before tapping.</div>
+    <div class="tiny" style="margin-bottom:10px;color:var(--muted)">Milk and Half &amp; Half scale per <b>fl oz</b>. Light Cream scales per <b>tbsp</b> (1 tbsp = 0.5 fl oz). Caramel Rice Cakes scale per <b>cake</b>. Solid foods scale per <b>gram (g)</b>. Adjust portion above before tapping.</div>
     <div class="pantryGrid" id="pantryGrid"></div>
   </div>
 
@@ -412,8 +412,8 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
     <table id="histTable"><thead><tr><th>Date</th><th>Workout</th><th>Weight</th><th>Waist</th><th>Body Fat</th><th>Nutrition</th><th>Steps</th><th>Notes</th></tr></thead><tbody></tbody></table>
   </div>
   <div class="card">
-    <h2>Version 2.1.0 Changelog <span class="versionchip">Bob's Corner</span></h2>
-    <div class="tiny">&bull; DB Chest Fly: Renamed Pec Deck to DB Chest Fly with full backward compatibility to preserve historical best sets and logs.<br>&bull; Stable Waist Pacing: Pacing comparison is evaluated strictly as of the most recent waist measurement date, preventing daily drift between weigh-ins.<br>&bull; Persistent Sets: Configurable +/– Set counts per exercise synced directly to Google Drive.<br>&bull; Local Date Calculation: Accurate device local date handling preventing early rollover.<br>&bull; Fiber Consistency: Standardized pantry staples to use the "fib" key across all items.</div>
+    <h2>Version 2.2.0 Changelog <span class="versionchip">Bob's Corner</span></h2>
+    <div class="tiny">&bull; Wednesday Legs Superset: Standing DB Calf Raise updated to 3 standard sets of 15 reps, superset directly with Cable Crunch (3 sets of 8-10 reps, 75s rest).<br>&bull; Light Cream 1 Tbsp Serving: Updated Light Cream pantry staple to scale per 1 tablespoon (15 ml / 29 kcal, 0.4g P, 0.6g C, 2.9g F) instead of 2 tbsp.<br>&bull; DB Chest Fly: Maintained backward compatibility to preserve historical best sets and logs.<br>&bull; Stable Waist Pacing: Pacing comparison is evaluated strictly as of the most recent waist measurement date.<br>&bull; Persistent Sets &amp; Local Date Engine intact.</div>
   </div>
 </section>
 </main>
@@ -519,7 +519,7 @@ const pantryItems = [
   {name:"1% Low-Fat Milk", unit:"fl oz", baseQty:1, cal:13, p:1.0, c:1.5, fib:0.0, f:0.3, defSlot:"Breakfast"},
   {name:"2% Reduced-Fat Milk", unit:"fl oz", baseQty:1, cal:15, p:1.0, c:1.5, fib:0.0, f:0.6, defSlot:"Breakfast"},
   {name:"Half and Half", unit:"fl oz", baseQty:1, cal:39, p:0.9, c:1.3, fib:0.0, f:3.5, defSlot:"Breakfast"},
-  {name:"Light Cream", unit:"fl oz", baseQty:1, cal:58, p:0.8, c:1.1, fib:0.0, f:5.8, defSlot:"Breakfast"},
+  {name:"Light Cream", unit:"tbsp", baseQty:1, cal:29, p:0.4, c:0.6, fib:0.0, f:2.9, defSlot:"Breakfast"},
   {name:"PB2 & Jelly Sandwich", unit:"g", baseQty:100, cal:138, p:15.0, c:24.2, fib:14.2, f:2.5, defSlot:"Snacks"},
   {name:"Baked Sweet Potato", unit:"g", baseQty:100, cal:90, p:2.0, c:20.7, fib:3.3, f:0.1, defSlot:"Dinner"},
   {name:"Greek Yogurt Dip", unit:"g", baseQty:100, cal:60, p:10.0, c:4.0, fib:0.0, f:0.3, defSlot:"Snacks"},
@@ -545,7 +545,8 @@ const workouts={
  {name:"Goblet Squat",target:"3 sets \u2022 8-10 reps \u2022 upright torso, quad teardrop bias",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1},
  {name:"Romanian Deadlift",target:"3 sets \u2022 8-10 reps \u2022 hamstring-glute tie in",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1},
  {name:"DB Glute Bridge",target:"3 sets \u2022 8-10 reps \u2022 floor drive, hard glute lock-out pause",rest:90,defaultTempo:3,defaultUp:1,defaultHold:2},
- {name:"Standing DB Calf Raise",target:"4 sets \u2022 15 reps \u2022 DB Right, Left, Right, Left \u2022 strict pause at peak",rest:60,defaultTempo:3,defaultUp:1,defaultHold:2,sets:4,setLabels:["Set 1 (Right)","Set 2 (Left)","Set 3 (Right)","Set 4 (Left)"]}
+ {name:"Standing DB Calf Raise",target:"3 sets \u2022 15 reps \u2022 bilateral \u2022 strict pause at peak \u2022 pair with Cable Crunch",rest:0,defaultTempo:3,defaultUp:1,defaultHold:2,sets:3,isSuperset:true},
+ {name:"Cable Crunch",target:"3 sets \u2022 8-10 reps \u2022 locked hips, spine curl overload \u2022 rest after this move",rest:75,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3,isSuperset:true}
 ],
 "Upper A":[
  {name:"Seated DB Shoulder Press \u2022 Bench Position 5",target:"3 sets \u2022 8-10 reps \u2022 75-80\u00B0 scapular plane \u2022 3D deltoid caps",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1},
@@ -1019,7 +1020,7 @@ function editJournalItemQuantity(slot, slotIndex){
   const numMatch = currentPortionStr.match(/[\d\.]+/);
   const unitMatch = currentPortionStr.match(/[a-zA-Z\s]+/);
   const currentVal = numMatch ? parseFloat(numMatch[0]) : 1;
-  const unit = unitMatch ? unitMatch[0].trim() : (item.name.toLowerCase().includes("milk") || item.name.toLowerCase().includes("cream") ? "fl oz" : (item.name.toLowerCase().includes("cake") ? "cake" : "g"));
+  const unit = unitMatch ? unitMatch[0].trim() : (item.name.toLowerCase().includes("cream") ? "tbsp" : (item.name.toLowerCase().includes("milk") ? "fl oz" : (item.name.toLowerCase().includes("cake") ? "cake" : "g")));
 
   const inputPrompt = prompt(`Update quantity for ${item.name} (${unit}):`, currentVal);
   if(inputPrompt === null) return;
@@ -1277,7 +1278,7 @@ function renderPantryGrid(){
     btn.innerHTML = `
       <div>
         <strong>${item.name}</strong>
-        <small>${item.cal} kcal / ${item.baseQty}${item.unit}</small>
+        <small>${item.cal} kcal / ${item.baseQty} ${item.unit}</small>
       </div>
       <span class="tiny" style="color:var(--muted);margin-top:6px">P:${item.p}g &bull; C:${item.c}g &bull; F:${item.f}g</span>
     `;
