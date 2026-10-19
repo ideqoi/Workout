@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <meta name="apple-mobile-web-app-title" content="Bob's Tracker"/>
 <meta name="theme-color" content="#070b12"/>
-<title>Bob's Corner v2.2.0 Milestone 1 Edition</title>
+<title>Bob's Corner v2.3.0 Milestone 1 Edition</title>
 <style>
 :root{
   --bg:#070b12;--panel:#111827;--panel2:#0b1220;--soft:#1f2937;--line:#2f3a4c;
@@ -107,7 +107,7 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
   <div class="header-top">
     <div>
       <h1>Bob's Corner &#x1F9EA;</h1>
-      <div class="phase">Goal: Fast Aesthetic Hypertrophy &bull; Milestone 1: Nov 6, 2026 &bull; v2.2.0</div>
+      <div class="phase">Goal: Fast Aesthetic Hypertrophy &bull; Milestone 1: Nov 6, 2026 &bull; v2.3.0</div>
     </div>
     <div style="display:flex;align-items:center;gap:8px">
       <span id="syncStatusBadge" class="sync-indicator synced">&#x2601;&#xFE0F; Synced</span>
@@ -412,8 +412,8 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
     <table id="histTable"><thead><tr><th>Date</th><th>Workout</th><th>Weight</th><th>Waist</th><th>Body Fat</th><th>Nutrition</th><th>Steps</th><th>Notes</th></tr></thead><tbody></tbody></table>
   </div>
   <div class="card">
-    <h2>Version 2.2.0 Changelog <span class="versionchip">Bob's Corner</span></h2>
-    <div class="tiny">&bull; Wednesday Legs Superset: Standing DB Calf Raise updated to 3 standard sets of 15 reps, superset directly with Cable Crunch (3 sets of 8-10 reps, 75s rest).<br>&bull; Light Cream 1 Tbsp Serving: Updated Light Cream pantry staple to scale per 1 tablespoon (15 ml / 29 kcal, 0.4g P, 0.6g C, 2.9g F) instead of 2 tbsp.<br>&bull; DB Chest Fly: Maintained backward compatibility to preserve historical best sets and logs.<br>&bull; Stable Waist Pacing: Pacing comparison is evaluated strictly as of the most recent waist measurement date.<br>&bull; Persistent Sets &amp; Local Date Engine intact.</div>
+    <h2>Version 2.3.0 Changelog <span class="versionchip">Bob's Corner</span></h2>
+    <div class="tiny">&bull; Monday Pre-Workout Fresh Chin-Up Test: Added 1 set bodyweight max-effort test prior to Monday Push workouts to monitor strength development.<br>&bull; Session Update (2026-10-19): Pre-loaded today's session with 8 fresh chin-ups.<br>&bull; Wednesday Legs Superset: Standing DB Calf Raise updated to 3 standard sets of 15 reps, superset directly with Cable Crunch (3 sets of 8-10 reps, 75s rest).<br>&bull; Light Cream 1 Tbsp Serving: Updated Light Cream pantry staple to scale per 1 tablespoon (15 ml / 29 kcal, 0.4g P, 0.6g C, 2.9g F).<br>&bull; DB Chest Fly: Maintained backward compatibility to preserve historical best sets and logs.<br>&bull; Stable Waist Pacing: Pacing comparison is evaluated strictly as of the most recent waist measurement date.</div>
   </div>
 </section>
 </main>
@@ -530,6 +530,7 @@ const pantryItems = [
 // WORKOUTS: RESTRUCTURED AESTHETIC V-TAPER SPLIT (10-REP CEILING PROTOCOL)
 const workouts={
 "Push":[
+ {name:"Pre-Workout Fresh Chin-Up Test",target:"1 set \u2022 fresh benchmark \u2022 max reps to track strength",rest:120,defaultTempo:3,defaultUp:1,defaultHold:1,sets:1,defaultWeight:"BW"},
  {name:"Incline DB Bench Press \u2022 Bench Position 3",target:"3 sets \u2022 8-10 reps \u2022 upper chest armor, deep stretch",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1},
  {name:"Flat DB Bench Press",target:"3 sets \u2022 8-10 reps \u2022 dense mid/lower chest mass",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1},
  {name:"DB Lateral Raise",target:"3 sets \u2022 8-10 reps \u2022 strict form, lead with elbows \u2022 V-taper shelf",rest:60,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3},
@@ -678,6 +679,10 @@ function setDisplay(set){
 function renderWorkout(){
  const box=document.getElementById("workoutBox"); box.innerHTML="";
  const type=workType.value;
+ const curDate = val("workDate") || today();
+ const d = data();
+ const currentWorkoutEntry = d.workouts.find(w => w.date === curDate && w.type === type);
+
  if(!workouts[type]) return;
  workouts[type].forEach((ex,i)=>{
   const prevData=previousExerciseSets(type,ex.name,i);
@@ -687,6 +692,9 @@ function renderWorkout(){
   const sourceLabel=prevData.date ? `Last Log (${prevData.date})` : "Previous exercise";
   const supersetTag = ex.isSuperset ? `<span class="superset-badge">&#x26A1; Superset</span>` : "";
   const effectiveSets = getExerciseSetCount(ex);
+
+  // Look for any set data already stored for this current date
+  const currentExEntry = currentWorkoutEntry?.ex?.find(e => baseExerciseName(e.name) === baseExerciseName(ex.name));
 
   const div=document.createElement("div");div.className="exercise";
   div.innerHTML=`<div class="exhead">
@@ -706,20 +714,23 @@ function renderWorkout(){
   ${Array.from({length:effectiveSets},(_,idx)=>{
     const n=idx+1;
     const p=prevSets[idx]||{};
-    const pw=p.weight??p.w??"", pr=p.reps??p.r??"";
-    const pt=p.tempo!==undefined&&p.tempo!==""?p.tempo:(ex.defaultTempo!==undefined?ex.defaultTempo:3);
-    const pu=p.up!==undefined&&p.up!==""?p.up:(ex.defaultUp!==undefined?ex.defaultUp:1);
-    const ph=p.hold!==undefined&&p.hold!==""?p.hold:(ex.defaultHold!==undefined?ex.defaultHold:1);
+    const activeSet = currentExEntry?.sets?.[idx];
+    const pw=activeSet ? (activeSet.weight ?? activeSet.w ?? "") : (p.weight??p.w??(ex.defaultWeight||""));
+    const pr=activeSet ? (activeSet.reps ?? activeSet.r ?? "") : (p.reps??p.r??"");
+    const pt=activeSet ? activeSet.tempo : (p.tempo!==undefined&&p.tempo!==""?p.tempo:(ex.defaultTempo!==undefined?ex.defaultTempo:3));
+    const pu=activeSet ? activeSet.up : (p.up!==undefined&&p.up!==""?p.up:(ex.defaultUp!==undefined?ex.defaultUp:1));
+    const ph=activeSet ? activeSet.hold : (p.hold!==undefined&&p.hold!==""?p.hold:(ex.defaultHold!==undefined?ex.defaultHold:1));
+    const isDone = (activeSet && (activeSet.weight || activeSet.reps)) ? "done" : "";
     const setLabel=(ex.setLabels&&ex.setLabels[idx])?ex.setLabels[idx]:`Set ${n}`;
     const specificRest=(ex.setRests&&ex.setRests[idx]!==undefined)?ex.setRests[idx]:ex.rest;
     return `<div class="setrow">
       <input value="${setLabel}" disabled style="text-align:center;padding:10px 2px;font-size:10px">
-      <input id="w_${i}_${n}" type="number" step="0.5" value="${pw}" placeholder="lb/BW" oninput="checkPR(${i},'${ex.name}'); autoSaveWorkoutDraft()">
+      <input id="w_${i}_${n}" type="text" value="${pw}" placeholder="lb/BW" oninput="checkPR(${i},'${ex.name}'); autoSaveWorkoutDraft()">
       <input id="r_${i}_${n}" type="number" value="${pr}" placeholder="reps" oninput="checkPR(${i},'${ex.name}'); autoSaveWorkoutDraft()">
       <input id="t_${i}_${n}" type="number" step="1" value="${pt}" placeholder="down" style="text-align:center" oninput="autoSaveWorkoutDraft()">
       <input id="u_${i}_${n}" type="number" step="1" value="${pu}" placeholder="up" style="text-align:center" oninput="autoSaveWorkoutDraft()">
       <input id="h_${i}_${n}" type="number" step="1" value="${ph}" placeholder="hold" style="text-align:center" oninput="autoSaveWorkoutDraft()">
-      <button class="secondary" onclick="handleSetDone(this, ${specificRest}, ${i}, '${ex.name}')">&#x2713;</button>
+      <button class="secondary ${isDone}" onclick="handleSetDone(this, ${specificRest}, ${i}, '${ex.name}')">&#x2713;</button>
     </div>`;
   }).join("")}
   </div>`;
@@ -736,7 +747,8 @@ function checkPR(exIndex, exName) {
   const ex = (workouts[workType.value] && workouts[workType.value][exIndex]);
   const numSets = ex ? getExerciseSetCount(ex) : 3;
   for (let n = 1; n <= numSets; n++) {
-    const w = numeric(val(`w_${exIndex}_${n}`));
+    const wVal = val(`w_${exIndex}_${n}`);
+    const w = numeric(wVal === "BW" ? 1 : wVal);
     const r = numeric(val(`r_${exIndex}_${n}`));
     if (w !== null && r !== null && (w * r > currentBestScore)) currentBestScore = w * r;
   }
@@ -787,8 +799,10 @@ function numeric(v){const n=parseFloat(v);return Number.isFinite(n)?n:null}
 function exerciseHistory(name,allWorkouts){
  const sets=[],base=baseExerciseName(name);
  allWorkouts.forEach(w=>(w.ex||[]).filter(e=>baseExerciseName(e.name)===base).forEach(e=>(e.sets||[]).forEach(s=>{
-  const weight=numeric(s.weight??s.w),reps=numeric(s.reps??s.r);
-  if(weight!==null&&reps!==null)sets.push({weight,reps,date:w.date,score:weight*reps});
+  const rawW = s.weight??s.w;
+  const weight = rawW === "BW" ? 1 : numeric(rawW);
+  const reps = numeric(s.reps??s.r);
+  if(weight!==null&&reps!==null)sets.push({weight:rawW,reps,date:w.date,score:weight*reps});
  })));
  sets.sort((a,b)=>a.date.localeCompare(b.date));
  return {last:sets.at(-1)||null, best:sets.length?[...sets].sort((a,b)=>b.score-a.score||b.weight-a.weight)[0]:null};
@@ -825,10 +839,11 @@ function autoSaveWorkoutDraft(){
     const sets = [];
     for(let idx=0; idx < setCount; idx++){
       const n=idx+1, w = val(`w_${i}_${n}`), r = val(`r_${i}_${n}`), t = val(`t_${i}_${n}`), u = val(`u_${i}_${n}`), h = val(`h_${i}_${n}`);
-      const nw = numeric(w), nr = numeric(r);
+      const nw = w === "BW" ? 1 : numeric(w);
+      const nr = numeric(r);
       // Strictly store sets that have both weight and reps filled in
-      if (nw !== null && nr !== null) {
-        totalTonnage += (nw * nr);
+      if (w && nr !== null) {
+        if(nw !== null) totalTonnage += (nw * nr);
         sets.push({weight:w, reps:r, tempo:t, up:u, hold:h});
       }
     }
@@ -1635,7 +1650,39 @@ function renderAll(){
   drawChart("bodyFatChart",b,"bodyfat","Body Fat %");
 }
 
+/* Auto-seed the 2026-10-19 Monday session with 8 fresh chin-ups */
+function seedChinUpTestSession(){
+  const d = data();
+  const targetDate = "2026-10-19";
+  let workout = d.workouts.find(w => w.date === targetDate && w.type === "Push");
+  
+  const chinUpExerciseData = {
+    name: "Pre-Workout Fresh Chin-Up Test",
+    sets: [{ weight: "BW", reps: 8, tempo: 3, up: 1, hold: 1 }]
+  };
+
+  if(!workout){
+    d.workouts.push({
+      date: targetDate,
+      type: "Push",
+      ex: [chinUpExerciseData],
+      notes: "Fresh test: 8 chin-ups."
+    });
+    localStorage.setItem("recompCoach", JSON.stringify(d));
+  } else {
+    const existingTest = workout.ex.find(e => baseExerciseName(e.name) === "Pre-Workout Fresh Chin-Up Test");
+    if(!existingTest){
+      workout.ex.unshift(chinUpExerciseData);
+      localStorage.setItem("recompCoach", JSON.stringify(d));
+    } else if(!existingTest.sets || !existingTest.sets.length || !existingTest.sets[0].reps){
+      existingTest.sets = [{ weight: "BW", reps: 8, tempo: 3, up: 1, hold: 1 }];
+      localStorage.setItem("recompCoach", JSON.stringify(d));
+    }
+  }
+}
+
 initTheme();
+seedChinUpTestSession();
 renderWorkout();
 renderPantryGrid();
 loadJournalForDate();
