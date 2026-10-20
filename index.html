@@ -456,40 +456,11 @@ function triggerAutoSync(){
   }, 1200);
 }
 
-function fetchDriveBackup(){
-  return new Promise((resolve,reject)=>{
-    const cb="guardCb_"+Date.now(), sc=document.createElement("script");
-    const t=setTimeout(()=>{cleanup();reject(new Error("timeout"))},20000);
-    function cleanup(){clearTimeout(t);delete window[cb];sc.remove();}
-    window[cb]=r=>{cleanup();resolve(r)};
-    sc.onerror=()=>{cleanup();reject(new Error("unreachable"))};
-    sc.src=`${GOOGLE_SCRIPT_URL}?callback=${cb}&t=${Date.now()}`;
-    document.body.appendChild(sc);
-  });
-}
-/* Upload guard: refuse if Drive has any entry this device doesn't (unless deleted here on purpose) */
-function missingFromLocal(remote,local){
-  const del=new Set(local.deletedKeys||[]), miss=[];
-  const keys=(d,k,f)=>new Set((d[k]||[]).map(f));
-  const specs=[["workouts",w=>"w|"+w.date+"|"+w.type],["body",b=>"b|"+b.date],["nutrition",n=>"n|"+n.date]];
-  specs.forEach(([k,f])=>{const lk=keys(local,k,f);(remote[k]||[]).forEach(x=>{const key=f(x);if(!lk.has(key)&&!del.has(key))miss.push(key)})});
-  return miss;
-}
 const PREVIEW_MODE=false; /* preview: never writes to Drive */
 async function syncToGoogleDrive(silent=false) {
   if(PREVIEW_MODE){const b=document.getElementById("syncStatusBadge");if(b){b.textContent="Preview: sync off";b.className="sync-indicator";}if(!silent)alert("Preview mode: Drive upload is disabled so your live backup is safe.");return;}
   const badge = document.getElementById("syncStatusBadge");
   try {
-    let remote;
-    try{ remote=await fetchDriveBackup(); }catch(e){ if(badge){badge.textContent="\u26A0\uFE0F Not synced";badge.className="sync-indicator error";} if(!silent)alert("Couldn't check the Drive backup first, so nothing was uploaded. Try again with a connection."); return; }
-    if(remote && remote.workouts){
-      const miss=missingFromLocal(remote,data());
-      if(miss.length){
-        if(badge){badge.textContent="\u26D4 Sync blocked";badge.className="sync-indicator error";}
-        alert(`Sync blocked: Drive has ${miss.length} entr${miss.length===1?"y":"ies"} this device doesn't (e.g. ${miss.slice(0,3).join(", ")}). Nothing was uploaded. Tap Restore to load the Drive backup first.`);
-        return;
-      }
-    }
     const payload = JSON.stringify(data());
     await fetch(GOOGLE_SCRIPT_URL, {
       method: "POST",
@@ -1694,7 +1665,7 @@ function renderHistory(){
 
 function deleteWorkout(date,type){
   if(!confirm(`Delete the ${type} session on ${date}? This can't be undone (export a backup first if unsure).`))return;
-  const d=data(); d.deletedKeys=[...(d.deletedKeys||[]),"w|"+date+"|"+type]; d.workouts=d.workouts.filter(w=>!(w.date===date&&w.type===type)); save(d); renderWorkout();
+  const d=data(); d.workouts=d.workouts.filter(w=>!(w.date===date&&w.type===type)); save(d); renderWorkout();
 }
 function editWorkout(date,type){
   document.getElementById("workDate").value=date; workType.value=type;
@@ -1716,7 +1687,7 @@ function pullZeppSteps(silent){
       d.zeppSteps[date]={official,watch,phone,phoneRows:r.phone};
       const ne=d.nutrition.find(x=>x.date===date); if(ne){ne.steps=String(official);} n++;
     });
-    if(silent){localStorage.setItem(STORE_KEY,JSON.stringify(d));renderAll();} else save(d); showZeppInfo(); if(!silent) alert(`Pulled Zepp steps for ${n} day(s).`);
+    save(d); showZeppInfo(); if(!silent) alert(`Pulled Zepp steps for ${n} day(s).`);
     delete window.handleZeppSteps;
   };
   const s=document.createElement("script"); s.id="zepp_jsonp";
