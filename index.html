@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <meta name="apple-mobile-web-app-title" content="Bob's Tracker"/>
 <meta name="theme-color" content="#070b12"/>
-<title>Bob's Corner v2.3.0 Milestone 1 Edition</title>
+<title>Bob's Corner v3.0</title>
 <style>
 :root{
   --bg:#070b12;--panel:#111827;--panel2:#0b1220;--soft:#1f2937;--line:#2f3a4c;
@@ -223,12 +223,13 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
       <div class="day orange" onclick="setDay('Upper B',this)">Fri<small>Upper B</small></div>
     </div>
     <div class="row">
-      <div><label>Date</label><input id="workDate" type="date"></div>
+      <div><label>Date</label><input id="workDate" type="date" onchange="renderWorkout()"></div>
       <div><label>Workout</label><select id="workType" onchange="renderWorkout()"></select></div>
     </div>
     <div id="workoutBox"></div><div class="notice goodnotice">Training Note: Aesthetic V-Taper Split (10-Rep Cap Protocol &bull; 15 Reps Calf Focus &bull; Superset Calves & Crunches). Tempo is recorded as 3 phases: Tempo (Down/Eccentric), Up (Concentric speed), and Hold (Peak pause). Every logged set auto-syncs live.</div>
     <label>Notes</label><textarea id="workNotes" placeholder="Energy, pump, soreness, performance..." oninput="autoSaveWorkoutDraft()"></textarea>
     <button onclick="saveWorkout()">Finish Session & Force Sync</button>
+    <button class="secondary" onclick="editProgressionRules()">Edit Progression Rules</button>
   </div>
 </section>
 
@@ -316,7 +317,7 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
     <div id="mealSlotsContainer"></div>
 
     <div class="row" style="margin-top:12px">
-      <div><label>Daily Steps</label><input id="steps" type="number" placeholder="10000" oninput="autoSyncNutritionFields()"></div>
+      <div><label>Daily Steps</label><input id="steps" type="number" placeholder="10000" oninput="autoSyncNutritionFields()"><div class="hint" id="zeppStepsInfo"></div><button class="secondary" style="margin-top:6px" onclick="pullZeppSteps(false)">Pull Zepp Steps</button></div>
       <div><label>Nutrition Notes</label><input id="nutNotes" type="text" placeholder="Hydration, sodium, pumps..." oninput="autoSyncNutritionFields()"></div>
     </div>
     <p class="tiny" style="color:var(--muted);text-align:center;margin-top:8px">&#x2601;&#xFE0F; All changes automatically roll up and sync live in background.</p>
@@ -409,7 +410,7 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
   </div>
   <div class="card">
     <h2>Recent History</h2>
-    <table id="histTable"><thead><tr><th>Date</th><th>Workout</th><th>Weight</th><th>Waist</th><th>Body Fat</th><th>Nutrition</th><th>Steps</th><th>Notes</th></tr></thead><tbody></tbody></table>
+    <div id="histCounts" class="hint" style="font-weight:800;margin-bottom:8px"></div><table id="histTable"><thead><tr><th>Date</th><th>Workout</th><th>Weight</th><th>Waist</th><th>Body Fat</th><th>Nutrition</th><th>Steps</th><th>Notes</th></tr></thead><tbody></tbody></table>
   </div>
   <div class="card">
     <h2>Version 2.3.0 Changelog <span class="versionchip">Bob's Corner</span></h2>
@@ -419,6 +420,7 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
 </main>
 
 <script>
+const STORE_KEY="recompCoach";
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzAj5731Vkp8BMeEMBPJA7VlYFp_SBtvOcymdr5DgT7fqifRcy-aPhWBzh5vpchT_qW/exec";
 
 function initTheme(){
@@ -454,7 +456,9 @@ function triggerAutoSync(){
   }, 1200);
 }
 
+const PREVIEW_MODE=false; /* preview: never writes to Drive */
 async function syncToGoogleDrive(silent=false) {
+  if(PREVIEW_MODE){const b=document.getElementById("syncStatusBadge");if(b){b.textContent="Preview: sync off";b.className="sync-indicator";}if(!silent)alert("Preview mode: Drive upload is disabled so your live backup is safe.");return;}
   const badge = document.getElementById("syncStatusBadge");
   try {
     const payload = JSON.stringify(data());
@@ -485,7 +489,7 @@ function restoreFromGoogleDrive() {
 
   window.handleDriveRestore = function(remoteData) {
     if (remoteData && (remoteData.workouts || remoteData.body || remoteData.nutrition || remoteData.foodLogs)) {
-      localStorage.setItem("recompCoach", JSON.stringify(remoteData));
+      localStorage.setItem(STORE_KEY, JSON.stringify(remoteData));
       renderAll();
       loadJournalForDate();
       renderTemplateManager();
@@ -530,7 +534,6 @@ const pantryItems = [
 // WORKOUTS: RESTRUCTURED AESTHETIC V-TAPER SPLIT (10-REP CEILING PROTOCOL)
 const workouts={
 "Push":[
- {name:"Pre-Workout Fresh Chin-Up Test",target:"1 set \u2022 fresh benchmark \u2022 max reps to track strength",rest:120,defaultTempo:3,defaultUp:1,defaultHold:1,sets:1,defaultWeight:"BW"},
  {name:"Incline DB Bench Press \u2022 Bench Position 3",target:"3 sets \u2022 8-10 reps \u2022 upper chest armor, deep stretch",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1},
  {name:"Flat DB Bench Press",target:"3 sets \u2022 8-10 reps \u2022 dense mid/lower chest mass",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1},
  {name:"DB Lateral Raise",target:"3 sets \u2022 8-10 reps \u2022 strict form, lead with elbows \u2022 V-taper shelf",rest:60,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3},
@@ -566,15 +569,25 @@ const workouts={
 };
 
 function today(){
-  const d = new Date();
-  return new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+  return new Intl.DateTimeFormat("en-CA",{timeZone:"America/New_York",year:"numeric",month:"2-digit",day:"2-digit"}).format(new Date());
 }
+let lastKnownToday=null;
+function midnightWatch(){
+  const t=today();
+  if(lastKnownToday && t!==lastKnownToday){
+    ["workDate","bodyDate","nutDate"].forEach(id=>{const el=document.getElementById(id);if(el.value===lastKnownToday)el.value=t;});
+    renderWorkout(); if(typeof loadJournalForDate==="function") loadJournalForDate(); renderAll();
+  }
+  lastKnownToday=t;
+}
+setInterval(midnightWatch,30000);
+document.addEventListener("visibilitychange",()=>{if(!document.hidden)midnightWatch()});
 ["workDate","bodyDate","nutDate"].forEach(id=>document.getElementById(id).value=today());
 const workType=document.getElementById("workType");
 Object.keys(workouts).forEach(k=>{let o=document.createElement("option");o.textContent=k;workType.appendChild(o)});
 
 function data(){
-  const d=JSON.parse(localStorage.getItem("recompCoach")||'{"workouts":[],"body":[],"nutrition":[]}');
+  const d=JSON.parse(localStorage.getItem(STORE_KEY)||'{"workouts":[],"body":[],"nutrition":[]}');
   d.settings=d.settings||{cutStartDate:"2026-08-13",targetEndDate:"2026-11-06",goalWaist:31.25,goalWeight:160.5,plannedRate:0.3,height:68};
   if(!d.settings.targetEndDate || d.settings.targetEndDate === "2027-01-08") d.settings.targetEndDate="2026-11-06";
   if(!d.settings.goalWaist) d.settings.goalWaist=31.25;
@@ -586,7 +599,7 @@ function data(){
   return d;
 }
 function save(d){
-  localStorage.setItem("recompCoach",JSON.stringify(d));
+  localStorage.setItem(STORE_KEY,JSON.stringify(d));
   renderAll();
   triggerAutoSync();
 }
@@ -597,6 +610,40 @@ function showTab(id,btn){
   btn.classList.add("active");
   renderAll();
   if(id==="templates") renderTemplateManager();
+}
+const CHINUP_TEST={name:"Pre-Workout Fresh Chin-Up Test",target:"Monday test \u2022 1 set \u2022 fresh \u2022 max reps",rest:120,defaultTempo:3,defaultUp:1,defaultHold:1,sets:1,defaultWeight:"BW"};
+function isMonday(dateStr){return new Date(dateStr+"T12:00:00").getDay()===1}
+function exercisesFor(type,dateStr){
+  const list=workouts[type]||[];
+  return isMonday(dateStr||today())?[CHINUP_TEST,...list]:list;
+}
+/* Editable progression rules (stored in settings, synced with backup) */
+function progressionRules(){
+  const d=data();
+  const def={repCeiling:10,holds:{"Cable Triceps Pushdown":"Hold weight (elbows). Slower lowering only.","Overhead Cable Triceps Extension":"Hold at 44, 4s lowering. Next step is a 4th set, not more weight."},dbSteps:"5,10,15,20,22.5,25,30,35,40,45,50,52.5",cableSteps:"8,20,32,44,56,68,80,85,90,95,100,105,110,115,120,125,130,135,140"};
+  return Object.assign(def,d.settings.progression||{});
+}
+function nextStep(cur,steps){const arr=String(steps).split(",").map(Number).filter(Number.isFinite).sort((a,b)=>a-b);return arr.find(x=>x>cur)??null}
+function targetText(exName,prevSets){
+  const r=progressionRules(), base=baseExerciseName(exName);
+  if(r.holds[base]) return "\uD83D\uDD12 "+r.holds[base];
+  if(!prevSets.length) return "Target: log a baseline";
+  const reps=prevSets.map(s=>numeric(s.reps??s.r)).filter(x=>x!==null);
+  const w=numeric(prevSets[0].weight??prevSets[0].w);
+  if(reps.length && reps.every(x=>x>=r.repCeiling) && w!==null){
+    const isCable=/Cable|Machine|Pulldown/i.test(base);
+    const perHand=/DB|Romanian/i.test(base)&&!/Goblet|Calf/i.test(base)?w/2:w;
+    const n=nextStep(perHand,isCable?r.cableSteps:r.dbSteps);
+    const nextW=n===null?null:(perHand!==w?n*2:n);
+    return nextW?`\u2B06\uFE0F Target: move up to ${nextW}`:"\u2B06\uFE0F Target: top of available weights, add reps/tempo";
+  }
+  return `\uD83C\uDFAF Target: same weight, beat ${reps.join("/")} (goal ${r.repCeiling} each)`;
+}
+function editProgressionRules(){
+  const d=data(), r=progressionRules();
+  const txt=prompt("Progression rules (JSON). Edit dbSteps/cableSteps when equipment changes:",JSON.stringify(r,null,1));
+  if(!txt)return;
+  try{d.settings.progression=JSON.parse(txt);save(d);renderWorkout();alert("Rules saved.");}catch(e){alert("That wasn't valid JSON, nothing changed.");}
 }
 function setDay(type,el){document.querySelectorAll(".day").forEach(d=>d.classList.remove("active"));el.classList.add("active");workType.value=type;renderWorkout()}
 
@@ -629,8 +676,8 @@ function getExerciseSetCount(ex){
 
 function adjustExerciseSetCount(exIndex, delta){
   const type = workType.value;
-  if (!workouts[type] || !workouts[type][exIndex]) return;
-  const ex = workouts[type][exIndex];
+  const ex = exercisesFor(type,val("workDate")||today())[exIndex];
+  if (!ex) return;
   const key = baseExerciseName(ex.name);
   const curCount = getExerciseSetCount(ex);
   const nextCount = Math.max(1, curCount + delta);
@@ -684,7 +731,7 @@ function renderWorkout(){
  const currentWorkoutEntry = d.workouts.find(w => w.date === curDate && w.type === type);
 
  if(!workouts[type]) return;
- workouts[type].forEach((ex,i)=>{
+ exercisesFor(type,curDate).forEach((ex,i)=>{
   const prevData=previousExerciseSets(type,ex.name,i);
   const prevSets=prevData.sets;
   const h=exerciseHistory(ex.name,data().workouts);
@@ -701,6 +748,7 @@ function renderWorkout(){
     <div>
       <div class="exname">${ex.name} ${supersetTag} <span id="pr_badge_${i}"></span></div>
       <div class="hint">${ex.target}</div>
+      <div class="exstats" style="color:var(--green);font-weight:800">${targetText(ex.name,prevSets)}</div>
       <div class="exstats">${lastSetText?`${sourceLabel}: ${lastSetText}`:"No previous sets for this exercise"}${h.best?` \u2022 Best set: ${h.best.weight} \u00D7${h.best.reps}`:""}</div>
     </div>
     <div class="exhead-actions">
@@ -716,7 +764,8 @@ function renderWorkout(){
     const p=prevSets[idx]||{};
     const activeSet = currentExEntry?.sets?.[idx];
     const pw=activeSet ? (activeSet.weight ?? activeSet.w ?? "") : (p.weight??p.w??(ex.defaultWeight||""));
-    const pr=activeSet ? (activeSet.reps ?? activeSet.r ?? "") : (p.reps??p.r??"");
+    const pr=activeSet ? (activeSet.reps ?? activeSet.r ?? "") : "";
+    const prPh=(p.reps??p.r??"")!==""?`last ${p.reps??p.r}`:"reps";
     const pt=activeSet ? activeSet.tempo : (p.tempo!==undefined&&p.tempo!==""?p.tempo:(ex.defaultTempo!==undefined?ex.defaultTempo:3));
     const pu=activeSet ? activeSet.up : (p.up!==undefined&&p.up!==""?p.up:(ex.defaultUp!==undefined?ex.defaultUp:1));
     const ph=activeSet ? activeSet.hold : (p.hold!==undefined&&p.hold!==""?p.hold:(ex.defaultHold!==undefined?ex.defaultHold:1));
@@ -726,7 +775,7 @@ function renderWorkout(){
     return `<div class="setrow">
       <input value="${setLabel}" disabled style="text-align:center;padding:10px 2px;font-size:10px">
       <input id="w_${i}_${n}" type="text" value="${pw}" placeholder="lb/BW" oninput="checkPR(${i},'${ex.name}'); autoSaveWorkoutDraft()">
-      <input id="r_${i}_${n}" type="number" value="${pr}" placeholder="reps" oninput="checkPR(${i},'${ex.name}'); autoSaveWorkoutDraft()">
+      <input id="r_${i}_${n}" type="number" value="${pr}" placeholder="${prPh}" oninput="checkPR(${i},'${ex.name}'); autoSaveWorkoutDraft()">
       <input id="t_${i}_${n}" type="number" step="1" value="${pt}" placeholder="down" style="text-align:center" oninput="autoSaveWorkoutDraft()">
       <input id="u_${i}_${n}" type="number" step="1" value="${pu}" placeholder="up" style="text-align:center" oninput="autoSaveWorkoutDraft()">
       <input id="h_${i}_${n}" type="number" step="1" value="${ph}" placeholder="hold" style="text-align:center" oninput="autoSaveWorkoutDraft()">
@@ -744,7 +793,7 @@ function checkPR(exIndex, exName) {
   const badge = document.getElementById(`pr_badge_${exIndex}`);
   if (!badge) return;
   let currentBestScore = 0;
-  const ex = (workouts[workType.value] && workouts[workType.value][exIndex]);
+  const ex = exercisesFor(workType.value,val("workDate")||today())[exIndex];
   const numSets = ex ? getExerciseSetCount(ex) : 3;
   for (let n = 1; n <= numSets; n++) {
     const wVal = val(`w_${exIndex}_${n}`);
@@ -834,7 +883,7 @@ function updateWaistAverage(){
 function autoSaveWorkoutDraft(){
   const d=data(), type=workType.value, curDate=val("workDate")||today();
   let totalTonnage = 0;
-  const ex=(workouts[type]||[]).map((e,i)=>{
+  const ex=exercisesFor(type,curDate).map((e,i)=>{
     const setCount = getExerciseSetCount(e);
     const sets = [];
     for(let idx=0; idx < setCount; idx++){
@@ -848,9 +897,11 @@ function autoSaveWorkoutDraft(){
       }
     }
     return {name:e.name, sets};
-  });
+  }).filter(e=>e.sets.length);
   const existingIdx = d.workouts.findIndex(w=>w.date===curDate && w.type===type);
-  const wEntry = {date:curDate, type, ex, notes:val("workNotes")};
+  const notes=val("workNotes");
+  if(!ex.length && !notes){ if(existingIdx!==-1){d.workouts.splice(existingIdx,1);save(d);} return; }
+  const wEntry = {date:curDate, type, ex, notes};
   if(existingIdx !== -1) d.workouts[existingIdx] = wEntry;
   else d.workouts.push(wEntry);
   save(d);
@@ -1014,7 +1065,7 @@ function addFoodToJournal(foodObj){
   d.foodLogs = d.foodLogs || {};
   d.foodLogs[curDate] = d.foodLogs[curDate] || {items:[]};
   d.foodLogs[curDate].items.push(foodObj);
-  localStorage.setItem("recompCoach", JSON.stringify(d));
+  localStorage.setItem(STORE_KEY, JSON.stringify(d));
   loadJournalForDate();
   autoSyncNutritionRollup();
 }
@@ -1053,7 +1104,7 @@ function editJournalItemQuantity(slot, slotIndex){
   item.fib = +((numeric(item.fib) || 0) * ratio).toFixed(1);
   item.f = +((numeric(item.f) || 0) * ratio).toFixed(1);
 
-  localStorage.setItem("recompCoach", JSON.stringify(d));
+  localStorage.setItem(STORE_KEY, JSON.stringify(d));
   loadJournalForDate();
   autoSyncNutritionRollup();
 }
@@ -1071,7 +1122,7 @@ function deleteJournalItem(slot, slotIndex){
     const item = items[globalIndex];
     if(confirm(`Remove "${item.name}"?`)){
       items.splice(globalIndex, 1);
-      localStorage.setItem("recompCoach", JSON.stringify(d));
+      localStorage.setItem(STORE_KEY, JSON.stringify(d));
       loadJournalForDate();
       autoSyncNutritionRollup();
     }
@@ -1094,7 +1145,7 @@ function copyPreviousDayFood(){
   if(confirm(`Copy all ${prevItems.length} items from ${prevDate} into ${curDate}?`)){
     d.foodLogs[curDate] = d.foodLogs[curDate] || {items:[]};
     d.foodLogs[curDate].items = JSON.parse(JSON.stringify(prevItems));
-    localStorage.setItem("recompCoach", JSON.stringify(d));
+    localStorage.setItem(STORE_KEY, JSON.stringify(d));
     loadJournalForDate();
     autoSyncNutritionRollup();
   }
@@ -1149,7 +1200,7 @@ function applyTemplateByName(name){
   const curDate = val("nutDate") || today();
   if(confirm(`Apply template "${name}" to ${curDate}? (This will replace existing items for today)`)){
     d.foodLogs[curDate] = {items: JSON.parse(JSON.stringify(templateItems))};
-    localStorage.setItem("recompCoach", JSON.stringify(d));
+    localStorage.setItem(STORE_KEY, JSON.stringify(d));
     loadJournalForDate();
     autoSyncNutritionRollup();
     alert(`\u2705 Template "${name}" applied to ${curDate}!`);
@@ -1592,13 +1643,14 @@ function workoutDetails(workoutsForDate){
      }).filter(Boolean).join(", ");
      return `${ex.name}: ${sets}`;
    }).join("<br>");
-   return `<b>${w.type}</b><br>${details}`;
+   return `<b>${w.type}</b> <button class="secondary" style="width:auto;padding:2px 8px;font-size:11px" onclick="editWorkout('${w.date}','${w.type}')">Edit</button> <button class="secondary" style="width:auto;padding:2px 8px;font-size:11px;color:var(--red)" onclick="deleteWorkout('${w.date}','${w.type}')">Delete</button><br>${details}`;
  }).join("<hr style='border:0;border-top:1px solid var(--line)'>");
 }
 
 function renderHistory(){
  const d=data(), tb=document.querySelector("#histTable tbody"); tb.innerHTML="";
- const dates=[...new Set([...d.workouts.map(x=>x.date),...d.body.map(x=>x.date),...d.nutrition.map(x=>x.date)])].sort().reverse().slice(0,30);
+ const dates=[...new Set([...d.workouts.map(x=>x.date),...d.body.map(x=>x.date),...d.nutrition.map(x=>x.date)])].sort().reverse();
+ const hc=document.getElementById("histCounts"); if(hc) hc.textContent=`${d.workouts.length} workouts \u2022 ${d.body.length} body entries \u2022 ${d.nutrition.length} nutrition days \u2022 ${dates.at(-1)||"--"} to ${dates[0]||"--"}`;
  dates.forEach(date=>{
    const workoutsForDate=d.workouts.filter(x=>x.date===date);
    const w=workoutDetails(workoutsForDate);
@@ -1607,10 +1659,50 @@ function renderHistory(){
    const macroText=n.calories?`${n.calories} cal<br>P ${n.protein||""} / C ${n.carbs||""} / F ${n.fat||""}`:"";
    const notes=[...workoutsForDate.map(x=>x.notes),n.notes].filter(Boolean).join(" | ");
    const bfText = b.bodyfat ? `${b.bodyfat}%` : "";
-   tb.innerHTML+=`<tr><td>${date}</td><td>${w}</td><td>${b.weight||""}</td><td>${b.waist||""}</td><td>${bfText}</td><td>${macroText}</td><td>${n.steps?Number(n.steps).toLocaleString():""}</td><td>${notes}</td></tr>`;
+   tb.innerHTML+=`<tr><td>${date}</td><td>${w}</td><td>${b.weight||""}</td><td>${b.waist||""}</td><td>${bfText}</td><td>${macroText}</td><td>${(()=>{const z=(d.zeppSteps||{})[date];const v=z?z.official:n.steps;return v?Number(v).toLocaleString()+(z?`<br><span class="hint">W ${z.watch??"--"} / P ${z.phone??"--"}</span>`:""):""})()}</td><td>${notes}</td></tr>`;
  });
 }
 
+function deleteWorkout(date,type){
+  if(!confirm(`Delete the ${type} session on ${date}? This can't be undone (export a backup first if unsure).`))return;
+  const d=data(); d.workouts=d.workouts.filter(w=>!(w.date===date&&w.type===type)); save(d); renderWorkout();
+}
+function editWorkout(date,type){
+  document.getElementById("workDate").value=date; workType.value=type;
+  showTab("train",[...document.querySelectorAll(".tab")].find(t=>t.textContent.includes("Training")));
+  renderWorkout();
+}
+
+/* ZEPP STEPS: official = highest single row for the day (never summed) */
+function zeppUrl(){return data().settings.zeppStepsUrl||"https://script.google.com/macros/s/AKfycbyyQfTJ9KLvGyM4QBd8652UBI3-QUjKqSpi5M56lPN5q8K_qfSKUB0PLYpyR84S8awF/exec"}
+function pullZeppSteps(silent){
+  let url=zeppUrl();
+  if(!url){ if(silent)return; url=prompt("Paste your Zepp steps web app URL (ends in /exec):"); if(!url)return; const d=data(); d.settings.zeppStepsUrl=url.trim(); save(d); }
+  const old=document.getElementById("zepp_jsonp"); if(old) old.remove();
+  window.handleZeppSteps=function(rows){
+    const d=data(); d.zeppSteps=d.zeppSteps||{}; let n=0;
+    Object.entries(rows||{}).forEach(([date,r])=>{
+      const watch=r.watch.length?Math.max(...r.watch):null, phone=r.phone.length?Math.max(...r.phone):null;
+      const official=Math.max(...[...r.watch,...r.phone]);
+      d.zeppSteps[date]={official,watch,phone,phoneRows:r.phone};
+      const ne=d.nutrition.find(x=>x.date===date); if(ne){ne.steps=String(official);} n++;
+    });
+    save(d); showZeppInfo(); if(!silent) alert(`Pulled Zepp steps for ${n} day(s).`);
+    delete window.handleZeppSteps;
+  };
+  const s=document.createElement("script"); s.id="zepp_jsonp";
+  s.src=`${url}?callback=handleZeppSteps&t=${Date.now()}`;
+  s.onerror=()=>{ if(!silent) alert("Couldn't reach the Zepp steps feed. Check the URL and that it's deployed with access: Anyone."); };
+  document.body.appendChild(s);
+}
+function showZeppInfo(){
+  const el=document.getElementById("zeppStepsInfo"); if(!el)return;
+  const date=val("nutDate")||today(), z=(data().zeppSteps||{})[date];
+  if(!z){el.textContent="";return;}
+  el.textContent=`Zepp: ${z.official.toLocaleString()} official \u2022 watch ${z.watch!==null?z.watch.toLocaleString():"--"} \u2022 phone ${z.phone!==null?z.phone.toLocaleString():"--"}`;
+  const st=document.getElementById("steps"); if(st && !st.value) st.value=z.official;
+}
+const _ljfd=loadJournalForDate; loadJournalForDate=function(){_ljfd();showZeppInfo();};
 let fileHandle=null;
 function downloadBackup(){
   const blob=new Blob([JSON.stringify(data(),null,2)],{type:"application/json"});
@@ -1629,7 +1721,7 @@ function importDataFromFile(){
       const text=await file.text();
       const parsed=JSON.parse(text);
       if(!parsed.workouts||!parsed.body||!parsed.nutrition){alert("Invalid backup file.");return;}
-      localStorage.setItem("recompCoach",JSON.stringify(parsed));
+      localStorage.setItem(STORE_KEY,JSON.stringify(parsed));
       renderAll(); loadJournalForDate(); renderTemplateManager();
       alert("Backup loaded into the app.");
     }catch(e){alert("Could not load that file.");}
@@ -1637,7 +1729,7 @@ function importDataFromFile(){
   input.click();
 }
 function quickDownloadBackup(){downloadBackup()}
-function clearAll(){if(confirm("Clear all saved data? Make sure you exported a backup first.")){localStorage.removeItem("recompCoach");renderAll()}}
+function clearAll(){if(confirm("Clear all saved data? Make sure you exported a backup first.")){localStorage.removeItem(STORE_KEY);renderAll()}}
 
 function renderAll(){
   loadCutSettings();
@@ -1668,21 +1760,22 @@ function seedChinUpTestSession(){
       ex: [chinUpExerciseData],
       notes: "Fresh test: 8 chin-ups."
     });
-    localStorage.setItem("recompCoach", JSON.stringify(d));
+    localStorage.setItem(STORE_KEY, JSON.stringify(d));
   } else {
     const existingTest = workout.ex.find(e => baseExerciseName(e.name) === "Pre-Workout Fresh Chin-Up Test");
     if(!existingTest){
       workout.ex.unshift(chinUpExerciseData);
-      localStorage.setItem("recompCoach", JSON.stringify(d));
+      localStorage.setItem(STORE_KEY, JSON.stringify(d));
     } else if(!existingTest.sets || !existingTest.sets.length || !existingTest.sets[0].reps){
       existingTest.sets = [{ weight: "BW", reps: 8, tempo: 3, up: 1, hold: 1 }];
-      localStorage.setItem("recompCoach", JSON.stringify(d));
+      localStorage.setItem(STORE_KEY, JSON.stringify(d));
     }
   }
 }
 
 initTheme();
-seedChinUpTestSession();
+lastKnownToday=today();
+setTimeout(()=>{pullZeppSteps(true);showZeppInfo();},800);
 renderWorkout();
 renderPantryGrid();
 loadJournalForDate();
