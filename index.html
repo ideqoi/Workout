@@ -752,6 +752,14 @@ function setDisplay(set){
  return "";
 }
 
+function recoveryFlags(date){
+  const d=data(), sl=(d.zeppSleep||{})[date], vt=(d.zeppVitals||{})[date], out=[];
+  if(sl && sl.asleep<360) out.push(`Short sleep: ${fmtMin(sl.asleep)} (under 6h)`);
+  const hist=Object.entries(d.zeppVitals||{}).filter(([k,v])=>k<date&&v.restingHR).sort().slice(-14).map(([k,v])=>v.restingHR);
+  const base=hist.length>=3?hist.reduce((a,b)=>a+b,0)/hist.length:55;
+  if(vt && vt.restingHR && vt.restingHR>=base+5) out.push(`Resting HR ${vt.restingHR} is ${Math.round(vt.restingHR-base)} above your normal (~${Math.round(base)})`);
+  return out;
+}
 function renderWorkout(){
  const box=document.getElementById("workoutBox"); box.innerHTML="";
  const type=workType.value;
@@ -759,6 +767,8 @@ function renderWorkout(){
  const d = data();
  const currentWorkoutEntry = d.workouts.find(w => w.date === curDate && w.type === type);
 
+ const rf=recoveryFlags(curDate);
+ if(rf.length){const fb=document.createElement("div");fb.className="card";fb.style.borderColor="var(--orange)";fb.innerHTML=`<b style="color:var(--orange)">\u26A0\uFE0F Recovery flag</b><br>${rf.join("<br>")}<br><span class="hint">Skip extra sets today.</span>`;box.appendChild(fb);}
  if(!workouts[type]) return;
  exercisesFor(type,curDate).forEach((ex,i)=>{
   const prevData=previousExerciseSets(type,ex.name,i);
@@ -1688,7 +1698,7 @@ function renderHistory(){
    const macroText=n.calories?`${n.calories} cal<br>P ${n.protein||""} / C ${n.carbs||""} / F ${n.fat||""}`:"";
    const notes=[...workoutsForDate.map(x=>x.notes),n.notes].filter(Boolean).join(" | ");
    const bfText = b.bodyfat ? `${b.bodyfat}%` : "";
-   tb.innerHTML+=`<tr><td>${date}</td><td>${w}</td><td>${b.weight||""}</td><td>${b.waist||""}</td><td>${bfText}</td><td>${macroText}</td><td>${(()=>{const z=(d.zeppSteps||{})[date];const v=z?z.official:n.steps;return v?Number(v).toLocaleString()+(z?`<br><span class="hint">W ${z.watch??"--"} / P ${z.phone??"--"}</span>`:""):""})()}</td><td>${notes}</td></tr>`;
+   tb.innerHTML+=`<tr><td>${date}</td><td>${w}</td><td>${b.weight||""}</td><td>${b.waist||""}</td><td>${bfText}</td><td>${macroText}</td><td>${(()=>{const z=(d.zeppSteps||{})[date];const v=z?z.official:n.steps;const sl=(d.zeppSleep||{})[date], vt=(d.zeppVitals||{})[date];return (v?Number(v).toLocaleString()+(z?`<br><span class="hint">W ${z.watch??"--"} / P ${z.phone??"--"}</span>`:""):"")+(sl?`<br><span class="hint">\uD83D\uDE34 ${fmtMin(sl.asleep)}</span>`:"")+(vt?`<br><span class="hint">RHR ${vt.restingHR||"pending"} \u2022 HRV ${vt.hrv?Math.round(vt.hrv):"pending"}</span>`:"")})()}</td><td>${notes}</td></tr>`;
  });
 }
 
@@ -1708,8 +1718,14 @@ function pullZeppSteps(silent){
   let url=zeppUrl();
   if(!url){ if(silent)return; url=prompt("Paste your Zepp steps web app URL (ends in /exec):"); if(!url)return; const d=data(); d.settings.zeppStepsUrl=url.trim(); save(d); }
   const old=document.getElementById("zepp_jsonp"); if(old) old.remove();
-  window.handleZeppSteps=function(rows){
+  window.handleZeppSteps=function(resp){
     const d=data(); d.zeppSteps=d.zeppSteps||{}; let n=0;
+    const rows=(resp&&resp.v===2)?resp.steps:resp;
+    if(resp&&resp.v===2){
+      d.zeppSleep=d.zeppSleep||{}; d.zeppVitals=d.zeppVitals||{};
+      Object.entries(resp.sleep||{}).forEach(([date,z])=>{d.zeppSleep[date]={start:z.start,end:z.end,asleep:z.light+z.deep+z.rem,light:z.light,deep:z.deep,rem:z.rem,awake:z.awake};});
+      Object.entries(resp.vitals||{}).forEach(([date,z])=>{d.zeppVitals[date]=z;});
+    }
     Object.entries(rows||{}).forEach(([date,r])=>{
       const watch=r.watch.length?Math.max(...r.watch):null, phone=r.phone.length?Math.max(...r.phone):null;
       const official=Math.max(...[...r.watch,...r.phone]);
@@ -1724,11 +1740,16 @@ function pullZeppSteps(silent){
   s.onerror=()=>{ if(!silent) alert("Couldn't reach the Zepp steps feed. Check the URL and that it's deployed with access: Anyone."); };
   document.body.appendChild(s);
 }
+function fmtMin(m){return `${Math.floor(m/60)}h ${String(m%60).padStart(2,"0")}m`}
 function showZeppInfo(){
   const el=document.getElementById("zeppStepsInfo"); if(!el)return;
-  const date=val("nutDate")||today(), z=(data().zeppSteps||{})[date];
-  if(!z){el.textContent="";return;}
-  el.textContent=`Zepp: ${z.official.toLocaleString()} official \u2022 watch ${z.watch!==null?z.watch.toLocaleString():"--"} \u2022 phone ${z.phone!==null?z.phone.toLocaleString():"--"}`;
+  const dd=data(), date=val("nutDate")||today(), z=(dd.zeppSteps||{})[date], sl=(dd.zeppSleep||{})[date], vt=(dd.zeppVitals||{})[date];
+  const parts=[];
+  if(z) parts.push(`Zepp: ${z.official.toLocaleString()} official \u2022 watch ${z.watch!==null?z.watch.toLocaleString():"--"} \u2022 phone ${z.phone!==null?z.phone.toLocaleString():"--"}`);
+  if(sl) parts.push(`Sleep: ${fmtMin(sl.asleep)} asleep (${sl.start.slice(11)}\u2013${sl.end.slice(11)}) \u2022 deep ${sl.deep}m \u2022 REM ${sl.rem}m \u2022 awake ${sl.awake}m`);
+  if(vt) parts.push(`Resting HR ${vt.restingHR?vt.restingHR:"pending"} \u2022 HRV ${vt.hrv?Math.round(vt.hrv)+" ms":"pending"}`);
+  el.innerHTML=parts.join("<br>");
+  if(!z) return;
   const st=document.getElementById("steps"); if(st && !st.value) st.value=z.official;
 }
 const _ljfd=loadJournalForDate; loadJournalForDate=function(){_ljfd();showZeppInfo();};
