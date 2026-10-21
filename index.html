@@ -121,6 +121,7 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
     <button class="tab" onclick="showTab('body',this)">&#x1F4CF; Body</button>
     <button class="tab" onclick="showTab('nutrition',this)">&#x1F957; Nutrition</button>
     <button class="tab" onclick="showTab('templates',this)">&#x1F4CB; Templates</button>
+    <button class="tab" onclick="showTab('recovery',this)">&#x1F634; Recovery</button>
     <button class="tab" onclick="showTab('history',this)">&#x1F4CA; History</button>
   </div>
 </header>
@@ -317,7 +318,7 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
     <div id="mealSlotsContainer"></div>
 
     <div class="row" style="margin-top:12px">
-      <div><label>Daily Steps</label><input id="steps" type="number" placeholder="10000" oninput="autoSyncNutritionFields()"><div class="hint" id="zeppStepsInfo"></div><button class="secondary" style="margin-top:6px" onclick="pullZeppSteps(false)">Pull Zepp Steps</button></div>
+      <div><label>Daily Steps</label><input id="steps" type="number" placeholder="from Zepp" readonly title="Pulled automatically from Zepp"><div class="hint" id="zeppStepsInfo"></div><button class="secondary" style="margin-top:6px" onclick="pullZeppSteps(false)">Pull Zepp Steps</button></div>
       <div><label>Nutrition Notes</label><input id="nutNotes" type="text" placeholder="Hydration, sodium, pumps..." oninput="autoSyncNutritionFields()"></div>
     </div>
     <p class="tiny" style="color:var(--muted);text-align:center;margin-top:8px">&#x2601;&#xFE0F; All changes automatically roll up and sync live in background.</p>
@@ -390,6 +391,20 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
   </div>
 </section>
 
+<section id="recovery" class="screen hidden">
+  <div class="card"><h2>Last Night &amp; Today</h2>
+    <div><label>Date</label><input id="recDate" type="date" onchange="renderRecovery()"></div>
+    <div id="recFlag" style="margin-top:10px"></div>
+    <div class="grid" id="recToday" style="margin-top:10px"></div>
+    <div style="margin-top:10px"><label>Correct sleep (hours asleep, e.g. 6.5) &mdash; overrides the watch</label>
+      <div style="display:flex;gap:8px"><input id="recSleepFix" type="number" step="0.25" placeholder="watch value"><button class="secondary" style="width:auto" onclick="saveSleepFix()">Save</button><button class="secondary" style="width:auto" onclick="clearSleepFix()">Clear</button></div></div>
+    <button class="secondary" style="margin-top:10px" onclick="pullZeppSteps(false)">Pull Zepp Now</button>
+  </div>
+  <div class="card"><h2>7-Day Trend</h2><div class="grid" id="recTrend"></div></div>
+  <div class="card"><h2>Sleep (hours)</h2><canvas id="recSleepChart" width="800" height="260" style="width:100%"></canvas></div>
+  <div class="card"><h2>Resting HR &amp; HRV</h2><canvas id="recRhrChart" width="800" height="260" style="width:100%"></canvas><canvas id="recHrvChart" width="800" height="260" style="width:100%"></canvas></div>
+  <div class="card"><h2>Steps by Day</h2><div style="overflow-x:auto"><table id="recTable"><thead><tr><th>Date</th><th>Asleep</th><th>Deep</th><th>REM</th><th>Awake</th><th>RHR</th><th>HRV</th><th>Watch</th><th>Phone</th><th>Official</th></tr></thead><tbody></tbody></table></div></div>
+</section>
 <section id="history" class="screen hidden">
   <div class="card">
     <h2>Google Drive Cloud Sync</h2>
@@ -639,6 +654,7 @@ function showTab(id,btn){
   btn.classList.add("active");
   renderAll();
   if(id==="templates") renderTemplateManager();
+  if(id==="recovery") renderRecovery();
 }
 const CHINUP_TEST={name:"Pre-Workout Fresh Chin-Up Test",target:"Monday test \u2022 1 set \u2022 fresh \u2022 max reps",rest:120,defaultTempo:3,defaultUp:1,defaultHold:1,sets:1,defaultWeight:"BW"};
 function isMonday(dateStr){return new Date(dateStr+"T12:00:00").getDay()===1}
@@ -754,7 +770,7 @@ function setDisplay(set){
 
 function recoveryFlags(date){
   const d=data(), sl=(d.zeppSleep||{})[date], vt=(d.zeppVitals||{})[date], out=[];
-  if(sl && sl.asleep<360) out.push(`Short sleep: ${fmtMin(sl.asleep)} (under 6h)`);
+  const sa=sleepAsleep(d,date); if(sa && sa.min<360) out.push(`Short sleep: ${fmtMin(sa.min)} (under 6h)${sa.fixed?' (your correction)':''}`);
   const hist=Object.entries(d.zeppVitals||{}).filter(([k,v])=>k<date&&v.restingHR).sort().slice(-14).map(([k,v])=>v.restingHR);
   const base=hist.length>=3?hist.reduce((a,b)=>a+b,0)/hist.length:55;
   if(vt && vt.restingHR && vt.restingHR>=base+5) out.push(`Resting HR ${vt.restingHR} is ${Math.round(vt.restingHR-base)} above your normal (~${Math.round(base)})`);
@@ -1730,9 +1746,9 @@ function pullZeppSteps(silent){
       const watch=r.watch.length?Math.max(...r.watch):null, phone=r.phone.length?Math.max(...r.phone):null;
       const official=Math.max(...[...r.watch,...r.phone]);
       d.zeppSteps[date]={official,watch,phone,phoneRows:r.phone};
-      const ne=d.nutrition.find(x=>x.date===date); if(ne){ne.steps=String(official);} n++;
+      const ne=d.nutrition.find(x=>x.date===date); if(ne && official>(Number(ne.steps)||0)){ne.steps=String(official);} n++;
     });
-    if(silent){localStorage.setItem(STORE_KEY,JSON.stringify(d));renderAll();} else save(d); showZeppInfo(); if(!silent) alert(`Pulled Zepp steps for ${n} day(s).`);
+    if(silent){localStorage.setItem(STORE_KEY,JSON.stringify(d));renderAll();} else save(d); showZeppInfo(); renderRecovery(); if(!silent) alert(`Pulled Zepp steps for ${n} day(s).`);
     delete window.handleZeppSteps;
   };
   const s=document.createElement("script"); s.id="zepp_jsonp";
@@ -1750,9 +1766,42 @@ function showZeppInfo(){
   if(vt) parts.push(`Resting HR ${vt.restingHR?vt.restingHR:"pending"} \u2022 HRV ${vt.hrv?Math.round(vt.hrv)+" ms":"pending"}`);
   el.innerHTML=parts.join("<br>");
   if(!z) return;
-  const st=document.getElementById("steps"); if(st && !st.value) st.value=z.official;
+  const st=document.getElementById("steps"); if(st) st.value=Math.max(Number(st.value)||0,z.official);
 }
 const _ljfd=loadJournalForDate; loadJournalForDate=function(){_ljfd();showZeppInfo();};
+
+/* RECOVERY TAB */
+function sleepAsleep(d,date){const fix=(d.sleepFixes||{})[date];if(fix)return {min:Math.round(fix*60),fixed:true};const z=(d.zeppSleep||{})[date];return z?{min:z.asleep,fixed:false}:null}
+function saveSleepFix(){const h=parseFloat(val("recSleepFix"));if(!(h>0&&h<16)){alert("Enter hours asleep, like 6.5");return}const d=data(),date=val("recDate")||today();d.sleepFixes=d.sleepFixes||{};d.sleepFixes[date]=h;save(d);renderRecovery();renderWorkout()}
+function clearSleepFix(){const d=data(),date=val("recDate")||today();if(d.sleepFixes)delete d.sleepFixes[date];save(d);renderRecovery();renderWorkout()}
+function rhrNormal(d,date){const h=Object.entries(d.zeppVitals||{}).filter(([k,v])=>k<date&&v.restingHR).sort().slice(-14).map(([k,v])=>v.restingHR);return h.length>=3?h.reduce((a,b)=>a+b,0)/h.length:55}
+function renderRecovery(){
+  const el=document.getElementById("recDate"); if(!el)return; if(!el.value)el.value=today();
+  const d=data(), date=el.value, z=(d.zeppSleep||{})[date], a=sleepAsleep(d,date), vt=(d.zeppVitals||{})[date], st=(d.zeppSteps||{})[date];
+  const stat=(l,v,t="")=>`<div class="stat"><div class="label">${l}</div><div class="value">${v}</div><div class="tiny">${t}</div></div>`;
+  document.getElementById("recToday").innerHTML=
+    stat("Asleep",a?fmtMin(a.min):"--",a?(a.fixed?"corrected by you":(z?`${z.start.slice(11,16)}\u2013${z.end.slice(11,16)}`:"")):"")+
+    stat("Deep / REM",z?`${z.deep}m / ${z.rem}m`:"--",z?`light ${z.light}m`:"")+
+    stat("Awake",z?`${z.awake}m`:"--")+
+    stat("Resting HR",vt&&vt.restingHR?vt.restingHR:"pending",`normal ~${Math.round(rhrNormal(d,date))}`)+
+    stat("HRV",vt&&vt.hrv?Math.round(vt.hrv)+" ms":"pending")+
+    stat("Steps",st?st.official.toLocaleString():"--",st?`watch ${st.watch??"--"} \u2022 phone ${st.phone??"--"}`:"");
+  const rf=recoveryFlags(date);
+  document.getElementById("recFlag").innerHTML=rf.length?`<div class="stat" style="border-color:var(--orange)"><b style="color:var(--orange)">\u26A0\uFE0F Recovery flag</b><br>${rf.join("<br>")}<br>No extra sets and no grinding reps today.</div>`:`<div class="stat" style="border-color:var(--green)"><b style="color:var(--green)">\u2705 Recovered</b> \u2022 train as planned</div>`;
+  const dates=[...new Set([...Object.keys(d.zeppSleep||{}),...Object.keys(d.zeppVitals||{}),...Object.keys(d.zeppSteps||{}),...Object.keys(d.sleepFixes||{})])].filter(x=>x<=date).sort();
+  const last7=dates.slice(-7), sl=last7.map(x=>sleepAsleep(d,x)).filter(Boolean).map(x=>x.min);
+  const rh=last7.map(x=>(d.zeppVitals||{})[x]?.restingHR).filter(Boolean), hv=last7.map(x=>(d.zeppVitals||{})[x]?.hrv).filter(Boolean);
+  const av=a=>a.length?a.reduce((p,c)=>p+c,0)/a.length:null, norm=rhrNormal(d,date);
+  document.getElementById("recTrend").innerHTML=stat("Avg sleep",av(sl)?fmtMin(Math.round(av(sl))):"--",`${sl.length} nights`)+
+    stat("Avg resting HR",av(rh)?av(rh).toFixed(1):"--",av(rh)?`${(av(rh)-norm>=0?"+":"")}${(av(rh)-norm).toFixed(1)} vs normal (usual 52\u201358)`:"")+
+    stat("Avg HRV",av(hv)?Math.round(av(hv))+" ms":"--");
+  drawChart("recSleepChart",dates.map(x=>({v:(sleepAsleep(d,x)||{}).min/60})),"v","Hours asleep");
+  drawChart("recRhrChart",dates.map(x=>({v:(d.zeppVitals||{})[x]?.restingHR||NaN})),"v","Resting HR");
+  drawChart("recHrvChart",dates.map(x=>({v:(d.zeppVitals||{})[x]?.hrv||NaN})),"v","HRV (ms)");
+  document.querySelector("#recTable tbody").innerHTML=[...dates].reverse().map(x=>{const s=(d.zeppSleep||{})[x],aa=sleepAsleep(d,x),v=(d.zeppVitals||{})[x]||{},t=(d.zeppSteps||{})[x];
+    const w=t?.watch,p=t?.phone,o=t?.official,b=(n)=>n!=null&&n===o?`<b>${n.toLocaleString()} \u2605</b>`:(n!=null?n.toLocaleString():"--");
+    return `<tr><td>${x}</td><td>${aa?fmtMin(aa.min)+(aa.fixed?"*":""):"--"}</td><td>${s?s.deep:"--"}</td><td>${s?s.rem:"--"}</td><td>${s?s.awake:"--"}</td><td>${v.restingHR||"pending"}</td><td>${v.hrv?Math.round(v.hrv):"pending"}</td><td>${b(w)}</td><td>${b(p)}</td><td>${o!=null?o.toLocaleString():"--"}</td></tr>`}).join("");
+}
 let fileHandle=null;
 function downloadBackup(){
   const blob=new Blob([JSON.stringify(data(),null,2)],{type:"application/json"});
