@@ -228,7 +228,7 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
       <div><label>Date</label><input id="workDate" type="date" onchange="renderWorkout()"></div>
       <div><label>Workout</label><select id="workType" onchange="renderWorkout()"></select></div>
     </div>
-    <div id="workoutBox"></div><div class="notice goodnotice">Training Note: Aesthetic V-Taper Split (10-Rep Cap Protocol &bull; 15 Reps Calf Focus &bull; Superset Calves & Floor Crunches \u2022 All-Dumbbell 4-Week Trial). Tempo is recorded as 3 phases: Tempo (Down/Eccentric), Up (Concentric speed), and Hold (Peak pause). Every logged set auto-syncs live.</div>
+    <div id="workoutBox"></div><div class="notice goodnotice">Training Note: Aesthetic V-Taper Split (10-Rep Cap Protocol &bull; 15 Reps Calf Focus &bull; All-Dumbbell 4-Week Trial). Tempo is recorded as 3 phases: Tempo (Down/Eccentric), Up (Concentric speed), and Hold (Peak pause). Every logged set auto-syncs live.</div>
     <label>Notes</label><textarea id="workNotes" placeholder="Energy, pump, soreness, performance..." oninput="autoSaveWorkoutDraft()"></textarea>
     <button onclick="saveWorkout()">Finish Session & Force Sync</button>
     <button class="secondary" onclick="editProgressionRules()">Edit Progression Rules</button>
@@ -588,7 +588,6 @@ const workouts={
 "Pull":[
  {name:"Wide-Grip Lat Pulldown",target:"3 sets \u2022 10 reps \u2022 1s up / 3s down \u2022 outer lat width",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3},
  {name:"Chest-Supported DB Row",target:"3 sets \u2022 10 reps \u2022 1s up / 3s down \u2022 chest on incline bench, drive elbows back",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3},
- {name:"One-Arm DB Row (Bench-Braced)",target:"3 sets \u2022 10 reps \u2022 1s up / 3s down \u2022 hand and knee on bench, row to hip",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3},
  {name:"DB Rear Delt Fly",target:"3 sets \u2022 12 reps \u2022 1s up / 3s down \u2022 light, lead with elbows",rest:60,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3},
  {name:"Incline DB Curl \u2022 Bench Position 3",target:"3 sets \u2022 10 reps \u2022 1s up / 3s down \u2022 deep biceps stretch",rest:60,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3},
  {name:"Slow DB Wrist Curl",target:"2 sets \u2022 15 reps \u2022 1s up / 4s down \u2022 forearm on bench, elbow-friendly",rest:45,defaultTempo:4,defaultUp:1,defaultHold:1,sets:2}
@@ -597,8 +596,8 @@ const workouts={
  {name:"Goblet Squat",target:"4 sets \u2022 10 reps \u2022 1s up / 3s down \u2022 upright torso",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1,sets:4},
  {name:"Romanian Deadlift",target:"4 sets \u2022 10 reps \u2022 1s up / 4s down \u2022 hamstring stretch, 4s lowering",rest:90,defaultTempo:4,defaultUp:1,defaultHold:1,sets:4},
  {name:"DB Hip Thrust",target:"3 sets \u2022 10 reps \u2022 1s up / 3s down \u2022 hard glute lockout pause",rest:90,defaultTempo:3,defaultUp:1,defaultHold:2,sets:3},
- {name:"Standing DB Calf Raise",target:"3 sets \u2022 15 reps \u2022 1s up / 3s down \u2022 two-leg, DB in each hand (log total), pause at top \u2022 pair with Floor Crunch",rest:0,defaultTempo:3,defaultUp:1,defaultHold:2,sets:3,isSuperset:true},
- {name:"DB-on-Chest Floor Crunch",target:"3 sets \u2022 10-15 reps \u2022 1s up / 3s down \u2022 DB held on chest \u2022 rest after this move",rest:75,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3,isSuperset:true}
+ {name:"Standing DB Calf Raise",target:"3 sets \u2022 15 reps \u2022 1s up / 3s down \u2022 two-leg, DB in each hand (log total), pause at top",rest:60,defaultTempo:3,defaultUp:1,defaultHold:2,sets:3},
+ {name:"DB-on-Chest Floor Crunch",target:"3 sets \u2022 10-15 reps \u2022 1s up / 3s down \u2022 DB held on chest",rest:75,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3}
 ],
 "Upper A":[
  {name:"Seated DB Shoulder Press \u2022 Bench Position 5",target:"3 sets \u2022 10 reps \u2022 1s up / 3s down \u2022 75-80\u00B0 scapular plane",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3},
@@ -609,11 +608,9 @@ const workouts={
 ],
 "Upper B":[
  {name:"Incline DB Bench Press \u2022 Bench Position 3",target:"3 sets \u2022 10 reps \u2022 1s up / 3s down \u2022 upper chest, deep stretch",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3},
- {name:"DB Chest Fly",target:"3 sets \u2022 10 reps \u2022 1s up / 3s down \u2022 deep stretch, squeeze at top",rest:75,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3},
  {name:"DB Lateral Raise",target:"3 sets \u2022 10 reps \u2022 1s up / 3s down \u2022 lead with elbows",rest:60,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3},
  {name:"Chest-Supported DB Row",target:"3 sets \u2022 10 reps \u2022 1s up / 3s down \u2022 chest on incline bench",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3},
- {name:"Incline DB Curl \u2022 Bench Position 3",target:"3 sets \u2022 10 reps \u2022 1s up / 3s down \u2022 pair with Kickback",rest:0,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3,isSuperset:true},
- {name:"DB Kickback",target:"3 sets \u2022 10 reps \u2022 1s up / 3s down \u2022 rest after this move",rest:75,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3,isSuperset:true},
+ {name:"Incline DB Curl \u2022 Bench Position 3",target:"3 sets \u2022 10 reps \u2022 1s up / 3s down",rest:60,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3},
  {name:"Slow DB Wrist Curl",target:"2 sets \u2022 15 reps \u2022 1s up / 4s down \u2022 forearm on bench, elbow-friendly",rest:45,defaultTempo:4,defaultUp:1,defaultHold:1,sets:2}
 ]
 };
