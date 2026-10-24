@@ -240,9 +240,10 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
     <h2>Daily Body Check-In</h2>
     <div class="row">
       <div><label>Date</label><input id="bodyDate" type="date"></div>
-      <div><label>Weight (lb)</label><input id="weight" type="number" step="0.1" placeholder="163.4" onchange="autoSaveBodyOnChange()"></div>
+      <div><label>Weight (lb)</label><input id="weight" type="number" step="0.1" placeholder="163.4" onchange="autoSaveBodyOnChange()"><div class="hint" id="weight7">7-day avg: --</div></div>
     </div>
-    <label>Friday Morning Check-In &mdash; Neck & 3 Relaxed Waist Measurements</label>
+    <div id="monthlyPrompt" class="notice goodnotice hidden" style="margin-top:10px"></div>
+    <details id="waistBox" style="margin-top:8px"><summary class="tiny" style="cursor:pointer">Monthly Check-In (first Friday, optional) &mdash; Neck & 3 Waist Measurements at Navel</summary>
     <div class="row4">
       <div><input id="neck" type="number" step="0.01" placeholder="Neck (in)" oninput="updateWaistAverage(); autoSaveBodyOnChange()"></div>
       <div><input id="waist1" type="number" step="0.01" placeholder="Waist 1" oninput="updateWaistAverage(); autoSaveBodyOnChange()"></div>
@@ -255,6 +256,7 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
       <span class="tiny">Navy BF: <strong id="bfCalculated" class="green" style="font-size:17px">--</strong></span>
     </div>
     <div id="waistWarning" class="notice hidden"></div>
+    </details>
     <button style="margin-top:12px" onclick="saveBody()">Save Body Check-In</button>
   </div>
   <div class="card"><h2>Weight Trend</h2><canvas id="weightChart" width="800" height="260"></canvas></div>
@@ -1474,7 +1476,7 @@ function calculatePacing(d){
   const s = d.settings || {cutStartDate:"2026-08-13", targetEndDate:"2026-11-06", goalWaist:31.25};
   const waists = [...d.body].filter(x => x.date >= s.cutStartDate && numeric(x.waist) !== null).sort((a,b) => a.date.localeCompare(b.date));
   
-  if(!waists.length) return { status: "Awaiting Logs", sub: "Log Friday waist to calculate pacing", color: "blue" };
+  if(!waists.length) return { status: "Awaiting Logs", sub: "Log first-Friday waist to calculate pacing", color: "blue" };
 
   const startWaist = numeric(waists[0].waist);
   const curWaistEntry = waists.at(-1);
@@ -1571,7 +1573,7 @@ function renderDash(){
 function makeRead(){
   const d=data(),b=[...d.body].sort((a,b)=>a.date.localeCompare(b.date));
   const pace = calculatePacing(d);
-  if(b.length<2)return `Phase active: Recomp & Deficit (2650 kcal) toward Milestone 1 (13.4% BF / 31.25" waist) on Nov 6, 2026. Log weekly Friday waist to calculate exact pacing.`;
+  if(b.length<2)return `Phase active: Recomp & Deficit (2650 kcal) toward Milestone 1 (13.4% BF / 31.25" waist) on Nov 6, 2026. Log the first-Friday monthly waist to calculate pacing.`;
   const last=b.at(-1),av=avg(seven(b,"weight")),cal=avg(seven(d.nutrition,"calories")),pro=avg(seven(d.nutrition,"protein"));
   
   return `Current phase: RECOMP / DEFICIT (MILESTONE 1 SPRINT)
@@ -1838,7 +1840,7 @@ function importDataFromFile(){
 function quickDownloadBackup(){downloadBackup()}
 function clearAll(){if(confirm("Clear all saved data? Make sure you exported a backup first.")){localStorage.removeItem(STORE_KEY);renderAll()}}
 
-function renderAll(){
+function renderAll(){try{setTimeout(updateWeight7,0);}catch(e){}
   loadCutSettings();
   renderDash();
   renderHistory();
@@ -1888,6 +1890,22 @@ renderPantryGrid();
 loadJournalForDate();
 renderTemplateManager();
 renderAll();
+
+function isFirstFriday(ds){const [y,m,d]=String(ds).split("-").map(Number);if(!y)return false;const dt=new Date(y,m-1,d);return dt.getDay()===5&&d<=7;}
+function updateWeight7(){
+  const el=document.getElementById("weight7"); if(!el) return;
+  const d=data(), end=(document.getElementById("bodyDate")&&document.getElementById("bodyDate").value)||today();
+  const [y,m,dd]=end.split("-").map(Number); const e=new Date(y,m-1,dd); const st=new Date(e); st.setDate(e.getDate()-6);
+  const iso=x=>x.getFullYear()+"-"+String(x.getMonth()+1).padStart(2,"0")+"-"+String(x.getDate()).padStart(2,"0");
+  const a=iso(st), b=iso(e);
+  const typed=numeric(val("weight"));
+  const ws=(d.body||[]).filter(x=>x.date>=a&&x.date<=b&&x.date!==end).map(x=>numeric(x.weight)).filter(v=>v!==null);
+  if(typed!==null) ws.push(typed); else { const t=(d.body||[]).find(x=>x.date===end); const tv=t&&numeric(t.weight); if(tv!==null&&tv!==undefined) ws.push(tv); }
+  el.textContent=ws.length?`7-day avg: ${(ws.reduce((p,c)=>p+c,0)/ws.length).toFixed(1)} lb (${ws.length} day${ws.length>1?"s":""})`:"7-day avg: --";
+  const mp=document.getElementById("monthlyPrompt"), box=document.getElementById("waistBox");
+  if(mp){ if(isFirstFriday(end)){ mp.classList.remove("hidden"); mp.innerHTML="\uD83D\uDCC5 <b>Monthly check-in today:</b> progress photos (front + side), waist at the navel (below) and Hume body scan, after peeing and before eating, drinking or training."; if(box) box.open=true; } else mp.classList.add("hidden"); }
+}
+document.addEventListener("DOMContentLoaded",()=>{["weight","bodyDate"].forEach(id=>{const x=document.getElementById(id);if(x){x.addEventListener("input",updateWeight7);x.addEventListener("change",updateWeight7);}});setTimeout(updateWeight7,300);});
 </script>
 </body>
 </html>
