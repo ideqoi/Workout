@@ -221,8 +221,8 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
       <div class="day active blue" onclick="setDay('Push',this)">Mon<small>Push</small></div>
       <div class="day green" onclick="setDay('Pull',this)">Tue<small>Pull</small></div>
       <div class="day purple" onclick="setDay('Legs',this)">Wed<small>Legs</small></div>
-      <div class="day red" onclick="setDay('Upper A',this)">Thu<small>Upper A</small></div>
-      <div class="day orange" onclick="setDay('Upper B',this)">Fri<small>Upper B</small></div>
+      <div class="day red" onclick="setDay('Upper',this)">Thu<small>Upper</small></div>
+      <div class="day orange" onclick="setDay('Lower',this)">Fri<small>Lower</small></div>
     </div>
     <div class="row">
       <div><label>Date</label><input id="workDate" type="date" onchange="renderWorkout()"></div>
@@ -579,41 +579,40 @@ const pantryItems = [
 ];
 
 // WORKOUTS: ALL-DUMBBELL 4-WEEK TRIAL (Oct 22, 2026). Removed machine/cable moves keep their history in the backup.
+// WORKOUTS: WEEKLY SPLIT (Oct 27, 2026). Removed exercises keep their history in the backup.
 const workouts={
 "Push":[
- {name:"Flat DB Bench Press",target:"3 sets \u2022 10 reps \u2022 1s up / 3s down \u2022 dense mid/lower chest",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3},
- {name:"Incline DB Bench Press \u2022 Bench Position 3",target:"3 sets \u2022 10 reps \u2022 1s up / 3s down \u2022 upper chest, deep stretch",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3},
- {name:"DB Lateral Raise",target:"3 sets \u2022 10 reps \u2022 1s up / 3s down \u2022 lead with elbows",rest:60,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3},
- {name:"DB Overhead Triceps Extension (Two-Hand)",target:"3 sets \u2022 10 reps \u2022 1s up / 3s down \u2022 one DB held in both hands, deep long-head stretch",rest:60,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3},
- {name:"DB Kickback",target:"2 sets \u2022 12 reps \u2022 1s up / 3s down \u2022 upper arm pinned, squeeze at lockout",rest:60,defaultTempo:3,defaultUp:1,defaultHold:1,sets:2}
+ {name:"Flat DB Bench Press",target:"3 sets \u2022 10 reps \u2022 1s up / 3s down \u2022 dense mid/lower chest",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3,defaultWeight:"100"},
+ {name:"Incline DB Bench Press \u2022 Bench Position 3",target:"3 sets \u2022 10 reps \u2022 1s up / 3s down \u2022 upper chest, deep stretch",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3,defaultWeight:"100"},
+ {name:"DB Lateral Raise",target:"3 sets \u2022 10 reps \u2022 1s up / 3s down \u2022 lead with elbows",rest:60,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3,defaultWeight:"45"},
+ {name:"DB Overhead Triceps Extension (Two-Hand)",target:"3 sets \u2022 10 reps \u2022 1s up / 3s down \u2022 one DB held in both hands, deep long-head stretch",rest:60,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3,defaultWeight:"30"},
+ {name:"DB Kickback",target:"3 sets \u2022 10 reps \u2022 1s up / 3s down \u2022 upper arm pinned, squeeze at lockout",rest:60,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3,defaultWeight:"10"}
 ],
 "Pull":[
- {name:"Wide-Grip Lat Pulldown",target:"3 sets \u2022 10 reps \u2022 1s up / 3s down \u2022 outer lat width",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3},
- {name:"Chest-Supported DB Row",target:"3 sets \u2022 10 reps \u2022 1s up / 3s down \u2022 chest on incline bench, drive elbows back",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3},
- {name:"DB Rear Delt Fly",target:"3 sets \u2022 12 reps \u2022 1s up / 3s down \u2022 light, lead with elbows",rest:60,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3},
- {name:"Incline DB Curl \u2022 Bench Position 3",target:"3 sets \u2022 10 reps \u2022 1s up / 3s down \u2022 deep biceps stretch",rest:60,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3},
- {name:"Slow DB Wrist Curl",target:"2 sets \u2022 15 reps \u2022 1s up / 4s down \u2022 forearm on bench, elbow-friendly",rest:45,defaultTempo:4,defaultUp:1,defaultHold:1,sets:2}
+ {name:"Wide-Grip Lat Pulldown",target:"3 sets \u2022 10 reps \u2022 1s up / 3s down \u2022 outer lat width",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3,defaultWeight:"120"},
+ {name:"Chest-Supported DB Row",target:"3 sets \u2022 10 reps \u2022 1s up / 3s down \u2022 chest on incline bench, drive elbows back",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3,defaultWeight:"70"},
+ {name:"DB Rear Delt Fly",target:"3 sets \u2022 10 reps \u2022 1s up / 3s down \u2022 light, lead with elbows",rest:60,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3,defaultWeight:"20"},
+ {name:"DB Hammer Curl",target:"3 sets \u2022 10 reps \u2022 1s up / 3s down \u2022 neutral grip",rest:60,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3,defaultWeight:"60"},
+ {name:"Slow DB Wrist Curl",target:"2 sets \u2022 15 reps \u2022 1s up / 4s down \u2022 forearm on bench, elbow-friendly",rest:45,defaultTempo:4,defaultUp:1,defaultHold:1,sets:2,defaultWeight:"20"}
 ],
 "Legs":[
- {name:"Goblet Squat",target:"4 sets \u2022 10 reps \u2022 1s up / 3s down \u2022 upright torso",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1,sets:4},
- {name:"Romanian Deadlift",target:"4 sets \u2022 10 reps \u2022 1s up / 4s down \u2022 hamstring stretch, 4s lowering",rest:90,defaultTempo:4,defaultUp:1,defaultHold:1,sets:4},
- {name:"DB Hip Thrust",target:"3 sets \u2022 10 reps \u2022 1s up / 3s down \u2022 hard glute lockout pause",rest:90,defaultTempo:3,defaultUp:1,defaultHold:2,sets:3},
- {name:"Standing DB Calf Raise",target:"3 sets \u2022 15 reps \u2022 1s up / 3s down \u2022 two-leg, DB in each hand (log total), pause at top",rest:60,defaultTempo:3,defaultUp:1,defaultHold:2,sets:3},
- {name:"DB-on-Chest Floor Crunch",target:"3 sets \u2022 10-15 reps \u2022 1s up / 3s down \u2022 DB held on chest",rest:75,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3}
+ {name:"Goblet Squat",target:"4 sets \u2022 10 reps \u2022 1s up / 3s down \u2022 upright torso",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1,sets:4,defaultWeight:"50"},
+ {name:"DB Bulgarian Split Squat",target:"3 sets \u2022 10 reps \u2022 1s up / 3s down \u2022 per leg, rear foot on bench, DB in each hand (log total)",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3,defaultWeight:"30"},
+ {name:"Standing DB Calf Raise",target:"3 sets \u2022 15 reps \u2022 1s up / 3s down \u2022 two-leg, DB in each hand (log total), pause at top",rest:60,defaultTempo:3,defaultUp:1,defaultHold:2,sets:3,defaultWeight:"50"},
+ {name:"DB-on-Chest Floor Crunch",target:"3 sets \u2022 10-15 reps \u2022 1s up / 3s down \u2022 DB held on chest",rest:75,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3,defaultWeight:""}
 ],
-"Upper A":[
- {name:"Seated DB Shoulder Press \u2022 Bench Position 5",target:"3 sets \u2022 10 reps \u2022 1s up / 3s down \u2022 75-80\u00B0 scapular plane",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3},
- {name:"Underhand Lat Pulldown",target:"3 sets \u2022 10 reps \u2022 1s up / 3s down \u2022 lower lats & biceps",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3},
- {name:"One-Arm DB Row (Bench-Braced)",target:"3 sets \u2022 10 reps \u2022 1s up / 3s down \u2022 hand and knee on bench, row to hip",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3},
- {name:"DB Overhead Triceps Extension (Two-Hand)",target:"3 sets \u2022 10 reps \u2022 1s up / 3s down \u2022 one DB held in both hands",rest:60,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3},
- {name:"DB Hammer Curl",target:"3 sets \u2022 10 reps \u2022 1s up / 3s down \u2022 neutral grip",rest:60,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3}
+"Upper":[
+ {name:"Seated DB Shoulder Press \u2022 Bench Position 5",target:"3 sets \u2022 10 reps \u2022 1s up / 3s down \u2022 75-80\u00B0 scapular plane",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3,defaultWeight:"90"},
+ {name:"Close-Grip Overhand Lat Pulldown",target:"3 sets \u2022 10 reps \u2022 1s up / 3s down \u2022 palms down, hands shoulder-width",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3,defaultWeight:"110"},
+ {name:"Incline DB Bench Press \u2022 Bench Position 3",target:"3 sets \u2022 10 reps \u2022 1s up / 3s down \u2022 upper chest, deep stretch",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3,defaultWeight:"100"},
+ {name:"DB Chest Fly",target:"3 sets \u2022 10 reps \u2022 1s up / 3s down \u2022 soft elbows, deep stretch",rest:60,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3,defaultWeight:"50"},
+ {name:"Slow DB Wrist Curl",target:"2 sets \u2022 15 reps \u2022 1s up / 4s down \u2022 forearm on bench, elbow-friendly",rest:45,defaultTempo:4,defaultUp:1,defaultHold:1,sets:2,defaultWeight:"20"}
 ],
-"Upper B":[
- {name:"Incline DB Bench Press \u2022 Bench Position 3",target:"3 sets \u2022 10 reps \u2022 1s up / 3s down \u2022 upper chest, deep stretch",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3},
- {name:"DB Lateral Raise",target:"3 sets \u2022 10 reps \u2022 1s up / 3s down \u2022 lead with elbows",rest:60,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3},
- {name:"Chest-Supported DB Row",target:"3 sets \u2022 10 reps \u2022 1s up / 3s down \u2022 chest on incline bench",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3},
- {name:"Incline DB Curl \u2022 Bench Position 3",target:"3 sets \u2022 10 reps \u2022 1s up / 3s down",rest:60,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3},
- {name:"Slow DB Wrist Curl",target:"2 sets \u2022 15 reps \u2022 1s up / 4s down \u2022 forearm on bench, elbow-friendly",rest:45,defaultTempo:4,defaultUp:1,defaultHold:1,sets:2}
+"Lower":[
+ {name:"Romanian Deadlift",target:"4 sets \u2022 10 reps \u2022 1s up / 4s down \u2022 hamstring stretch, 4s lowering",rest:90,defaultTempo:4,defaultUp:1,defaultHold:1,sets:4,defaultWeight:"105"},
+ {name:"DB Hip Thrust",target:"3 sets \u2022 10 reps \u2022 1s up / 3s down \u2022 one dumbbell, hard glute lockout pause",rest:90,defaultTempo:3,defaultUp:1,defaultHold:2,sets:3,defaultWeight:"52.5"},
+ {name:"DB Reverse Lunge",target:"3 sets \u2022 10 reps \u2022 1s up / 3s down \u2022 per leg, DB in each hand (log total)",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3,defaultWeight:"30"},
+ {name:"Standing DB Calf Raise",target:"3 sets \u2022 15 reps \u2022 1s up / 3s down \u2022 two-leg, DB in each hand (log total), pause at top",rest:60,defaultTempo:3,defaultUp:1,defaultHold:2,sets:3,defaultWeight:"50"}
 ]
 };
 
@@ -665,7 +664,8 @@ function showTab(id,btn){
 const CHINUP_TEST={name:"Pre-Workout Fresh Chin-Up Test",target:"Monday test \u2022 1 set \u2022 fresh \u2022 max reps",rest:120,defaultTempo:3,defaultUp:1,defaultHold:1,sets:1,defaultWeight:"BW"};
 function isMonday(dateStr){return new Date(dateStr+"T12:00:00").getDay()===1}
 function exercisesFor(type,dateStr){
-  const list=workouts[type]||[];
+  const ds=dateStr||today(); const sw=((data().swaps||{})[ds+"|"+type])||{};
+  const list=(workouts[type]||[]).map((e,k)=>sw[k]?Object.assign({},e,{name:sw[k],target:e.target.replace(/ \u2022 [^\u2022]*$/,"")+" \u2022 swapped in for "+e.name,swappedFrom:e.name}):e);
   return isMonday(dateStr||today())?[CHINUP_TEST,...list]:list;
 }
 /* Editable progression rules (stored in settings, synced with backup) */
@@ -816,6 +816,7 @@ function renderWorkout(){
     <div class="exhead-actions">
       <button class="secondary set-adj-btn" onclick="adjustExerciseSetCount(${i}, -1)" title="Remove set">– Set</button>
       <button class="secondary set-adj-btn" onclick="adjustExerciseSetCount(${i}, 1)" title="Add set">+ Set</button>
+      <button class="secondary set-adj-btn" onclick="swapExercise(${i})" title="Swap for an alternative">\u21C4 Swap</button>
       <button class="secondary" style="width:70px" onclick="startRest(${ex.rest})">${ex.rest}s</button>
     </div>
   </div>
@@ -1906,6 +1907,25 @@ function updateWeight7(){
   if(mp){ if(isFirstFriday(end)){ mp.classList.remove("hidden"); mp.innerHTML="\uD83D\uDCC5 <b>Monthly check-in today:</b> progress photos (front + side), waist at the navel (below) and Hume body scan, after peeing and before eating, drinking or training."; if(box) box.open=true; } else mp.classList.add("hidden"); }
 }
 document.addEventListener("DOMContentLoaded",()=>{["weight","bodyDate"].forEach(id=>{const x=document.getElementById(id);if(x){x.addEventListener("input",updateWeight7);x.addEventListener("change",updateWeight7);}});setTimeout(updateWeight7,300);});
+
+function swapExercise(i){
+  const type=workType.value, ds=val("workDate")||today();
+  const list=exercisesFor(type,ds); const ex=list[i]; if(!ex) return;
+  const off=isMonday(ds)?1:0, k=i-off; if(k<0){alert("The chin-up test can't be swapped.");return;}
+  const orig=(workouts[type]||[])[k];
+  const names=[...new Set(Object.values(workouts).flat().map(e=>e.name))].filter(n=>n!==ex.name);
+  const pick=prompt("Swap \""+ex.name+"\" for which exercise?\nEnter a number, or type any exercise name.\nType 0 to go back to "+orig.name+".\n\n"+names.map((n,j)=>(j+1)+". "+n).join("\n"));
+  if(pick===null||!String(pick).trim()) return;
+  const t=String(pick).trim(), num=Number(t);
+  const d=data(); d.swaps=d.swaps||{}; const key=ds+"|"+type; d.swaps[key]=d.swaps[key]||{};
+  if(num===0) delete d.swaps[key][k];
+  else { const name=(Number.isInteger(num)&&num>=1&&num<=names.length)?names[num-1]:t; if(name===orig.name) delete d.swaps[key][k]; else d.swaps[key][k]=name; }
+  // move any sets already logged under the old name to the new one so nothing is double counted
+  const w=(d.workouts||[]).find(x=>x.date===ds&&x.type===type);
+  const newName=d.swaps[key][k]||orig.name;
+  if(w&&Array.isArray(w.ex)){ const e=w.ex.find(x=>x.name===ex.name); if(e) e.name=newName; }
+  localStorage.setItem(STORE_KEY,JSON.stringify(d)); renderWorkout();
+}
 </script>
 </body>
 </html>
