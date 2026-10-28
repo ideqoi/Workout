@@ -138,7 +138,7 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
       </div>
     </div>
     <div>
-      <span class="badge">Calories 2650</span><span class="badge">Protein 160g</span><span class="badge">Fat 70g</span><span class="badge">Carbs 345g</span><span class="badge">Fiber 35g+</span>
+      <span class="badge">Calories 2650</span><span class="badge">Protein 180g</span><span class="badge">Fat 80g</span><span class="badge">Carbs 300g</span><span class="badge">Fiber 35g+</span>
     </div>
     <div class="grid" style="margin-top:10px">
       <div class="stat"><div class="label">Latest Weight</div><div class="value" id="dWeight">--</div></div>
@@ -282,12 +282,12 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
       <div class="macroCard">
         <div class="mLabel">Protein</div>
         <div class="mVal" id="jPro" style="color:var(--blue)">0g</div>
-        <div class="mSub" id="jProSub">/ 160g</div>
+        <div class="mSub" id="jProSub">/ 180g</div>
       </div>
       <div class="macroCard">
         <div class="mLabel">Carbs</div>
         <div class="mVal" id="jCarb" style="color:var(--cyan)">0g</div>
-        <div class="mSub" id="jCarbSub">/ 345g</div>
+        <div class="mSub" id="jCarbSub">/ 300g</div>
       </div>
       <div class="macroCard">
         <div class="mLabel">Fiber</div>
@@ -297,7 +297,7 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
       <div class="macroCard">
         <div class="mLabel">Fat</div>
         <div class="mVal" id="jFat" style="color:var(--orange)">0g</div>
-        <div class="mSub" id="jFatSub">/ 70g</div>
+        <div class="mSub" id="jFatSub">/ 80g</div>
       </div>
     </div>
 
@@ -558,8 +558,8 @@ function restoreFromGoogleDrive() {
   document.body.appendChild(script);
 }
 
-// TARGETS: 160g Protein, 345g Carbs, 70g Fat (2,650 kcal Total)
-const targets={calories:2650, protein:160, fat:70, carbs:345, fiber:35};
+// TARGETS (Oct 28, 2026): 180g Protein, 300g Carbs, ~80g Fat (2,650 kcal Total)
+const targets={calories:2650, protein:180, fat:80, carbs:300, fiber:35};
 
 // CUSTOMIZED PANTRY STAPLES
 const pantryItems = [
