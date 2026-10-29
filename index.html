@@ -144,7 +144,7 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
       <div class="stat"><div class="label">Latest Weight</div><div class="value" id="dWeight">--</div></div>
       <div class="stat"><div class="label">7-Day Avg Weight</div><div class="value" id="dAvg">--</div><div class="tiny" id="dWeightTrend"></div></div>
       <div class="stat"><div class="label">Average Belly-Button Waist</div><div class="value" id="dWaist">--</div><div class="tiny" id="dWaistTrend"></div></div>
-      <div class="stat"><div class="label">Body Fat % (Navy Est.)</div><div class="value" id="dBodyFat">--</div><div class="tiny" id="dBodyFatTrend">Height: 5'8"</div></div>
+      <div class="stat"><div class="label">Hume Body Pod BF%</div><div class="value" id="dBodyFat">--</div><div class="tiny" id="dBodyFatTrend">Visual est: --</div></div>
       <div class="stat"><div class="label">Workouts Logged</div><div class="value" id="dWorkouts">--</div><div class="tiny" id="dLastWorkout"></div></div>
       <div class="stat"><div class="label">7-Day Avg Calories</div><div class="value" id="dCalories">--</div></div>
       <div class="stat"><div class="label">Workout Streak</div><div class="value" id="dStreak">--</div><div class="tiny">consecutive logged sessions</div></div>
@@ -204,8 +204,8 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
       <div class="miniStat"><div class="label">Starting Waist</div><div class="value" id="pWaistStart">--</div></div>
       <div class="miniStat"><div class="label">Latest Waist Avg</div><div class="value" id="pWaistCurrent">--</div></div>
       <div class="miniStat"><div class="label">Total Waist Lost</div><div class="value" id="pWaistLost">--</div></div>
-      <div class="miniStat"><div class="label">Starting BF %</div><div class="value" id="pBfStart">--</div></div>
-      <div class="miniStat"><div class="label">Current BF %</div><div class="value" id="pBfCurrent">--</div></div>
+      <div class="miniStat"><div class="label">Starting Hume BF%</div><div class="value" id="pBfStart">--</div></div>
+      <div class="miniStat"><div class="label">Current Hume BF%</div><div class="value" id="pBfCurrent">--</div></div>
       <div class="miniStat"><div class="label">Total BF Change</div><div class="value" id="pBfChange">--</div></div>
     </div>
     <canvas id="progressWaistChart" class="progressCanvas" width="900" height="340"></canvas>
@@ -243,17 +243,20 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
       <div><label>Weight (lb)</label><input id="weight" type="number" step="0.1" placeholder="163.4" onchange="autoSaveBodyOnChange()"><div class="hint" id="weight7">7-day avg: --</div></div>
     </div>
     <div id="monthlyPrompt" class="notice goodnotice hidden" style="margin-top:10px"></div>
-    <details id="waistBox" style="margin-top:8px"><summary class="tiny" style="cursor:pointer">Monthly Check-In (first Friday, optional) &mdash; Neck & 3 Waist Measurements at Navel</summary>
+    <details id="waistBox" style="margin-top:8px"><summary class="tiny" style="cursor:pointer">Monthly Check-In (first Friday, optional) &mdash; Waist + BF% (Hume &amp; Visual)</summary>
     <div class="row4">
-      <div><input id="neck" type="number" step="0.01" placeholder="Neck (in)" oninput="updateWaistAverage(); autoSaveBodyOnChange()"></div>
-      <div><input id="waist1" type="number" step="0.01" placeholder="Waist 1" oninput="updateWaistAverage(); autoSaveBodyOnChange()"></div>
+      <div><input id="waist1" type="number" step="0.01" placeholder="Waist 1 (navel)" oninput="updateWaistAverage(); autoSaveBodyOnChange()"></div>
       <div><input id="waist2" type="number" step="0.01" placeholder="Waist 2" oninput="updateWaistAverage(); autoSaveBodyOnChange()"></div>
       <div><input id="waist3" type="number" step="0.01" placeholder="Waist 3" oninput="updateWaistAverage(); autoSaveBodyOnChange()"></div>
+      <div><input id="neck" type="number" step="0.01" placeholder="Neck (optional)" oninput="autoSaveBodyOnChange()"></div>
     </div>
-
+    <div class="row" style="margin-top:10px">
+      <div><label>Hume Body Pod BF%</label><input id="humeBf" type="number" step="0.1" min="0" max="50" placeholder="e.g. 18.2" onchange="autoSaveBodyOnChange()"></div>
+      <div><label>Trainer Visual Est. BF%</label><input id="visualBf" type="number" step="0.1" min="0" max="50" placeholder="from photo check-in" onchange="autoSaveBodyOnChange()"></div>
+    </div>
     <div class="metricline" style="margin-top:12px">
       <span class="tiny">Waist Avg: <strong id="waistAverage" style="font-size:15px">--</strong></span>
-      <span class="tiny">Navy BF: <strong id="bfCalculated" class="green" style="font-size:17px">--</strong></span>
+      <span class="tiny" style="opacity:.7">BF% is entered above (not from waist)</span>
     </div>
     <div id="waistWarning" class="notice hidden"></div>
     </details>
@@ -261,7 +264,7 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
   </div>
   <div class="card"><h2>Weight Trend</h2><canvas id="weightChart" width="800" height="260"></canvas></div>
   <div class="card"><h2>Waist Trend</h2><canvas id="waistChart" width="800" height="260"></canvas></div>
-  <div class="card"><h2>Body Fat % Trend (Navy)</h2><canvas id="bodyFatChart" width="800" height="260"></canvas></div>
+  <div class="card"><h2>Body Fat % Trend (Hume / Visual)</h2><canvas id="bodyFatChart" width="800" height="260"></canvas></div>
 </section>
 
 <!-- ENHANCED DAILY FOOD JOURNAL WITH EDITABLE QUANTITIES -->
@@ -922,6 +925,7 @@ function exerciseHistory(name,allWorkouts){
  return {last:sets.at(-1)||null, best:sets.length?[...sets].sort((a,b)=>b.score-a.score||b.weight-a.weight)[0]:null};
 }
 
+// Legacy Navy formula kept but unused for live BF% (waist no longer drives BF).
 function calcNavyBodyFat(waistInches, neckInches, heightInches=68){
   if(!waistInches || !neckInches || waistInches <= neckInches) return null;
   const bf = 86.010 * Math.log10(waistInches - neckInches) - 70.041 * Math.log10(heightInches) + 36.76;
@@ -932,9 +936,6 @@ function updateWaistAverage(){
   const values=["waist1","waist2","waist3"].map(id=>numeric(val(id))).filter(v=>v!==null);
   const avgValue=values.length===3?avg(values):null;
   document.getElementById("waistAverage").textContent=avgValue?avgValue.toFixed(2)+'"':"--";
-  const neckVal = numeric(val("neck")), hVal = numeric(val("userHeight")) || 68;
-  const bf = (avgValue && neckVal) ? calcNavyBodyFat(avgValue, neckVal, hVal) : null;
-  document.getElementById("bfCalculated").textContent = bf ? bf.toFixed(1) + "%" : "--";
   const warning=document.getElementById("waistWarning");
   warning.classList.add("hidden","goodnotice");
   if(values.length===3){
@@ -985,19 +986,22 @@ function autoSaveBodyOnChange(){
   const waistValues=["waist1","waist2","waist3"].map(id=>numeric(val(id)));
   const completeWaist=waistValues.every(v=>v!==null);
   const waistAvg=completeWaist?avg(waistValues):null;
-  const neckVal=numeric(val("neck")), hVal = numeric(d.settings?.height) || 68;
-  const bfVal = (waistAvg && neckVal) ? calcNavyBodyFat(waistAvg, neckVal, hVal) : null;
-
+  const neckVal=numeric(val("neck"));
+  const humeVal=numeric(val("humeBf"));
+  const visualVal=numeric(val("visualBf"));
   const existingIdx = d.body.findIndex(b=>b.date === curDate);
+  const prev = existingIdx !== -1 ? d.body[existingIdx] : {};
   const bEntry = {
     date: curDate,
     weight: weightVal,
-    waist: waistAvg!==null?waistAvg.toFixed(2):"",
-    waist1: completeWaist?waistValues[0]:"",
-    waist2: completeWaist?waistValues[1]:"",
-    waist3: completeWaist?waistValues[2]:"",
-    neck: neckVal!==null?neckVal:"",
-    bodyfat: bfVal!==null?bfVal.toFixed(1):""
+    waist: waistAvg!==null?waistAvg.toFixed(2):(prev.waist||""),
+    waist1: completeWaist?waistValues[0]:(prev.waist1||""),
+    waist2: completeWaist?waistValues[1]:(prev.waist2||""),
+    waist3: completeWaist?waistValues[2]:(prev.waist3||""),
+    neck: neckVal!==null?neckVal:(prev.neck||""),
+    humeBf: humeVal!==null?humeVal.toFixed(1):(prev.humeBf||""),
+    visualBf: visualVal!==null?visualVal.toFixed(1):(prev.visualBf||""),
+    bodyfat: prev.bodyfat||""
   };
   if(existingIdx !== -1) d.body[existingIdx] = bEntry;
   else d.body.push(bEntry);
@@ -1007,7 +1011,7 @@ function autoSaveBodyOnChange(){
 function saveBody(){
   autoSaveBodyOnChange();
   alert("\u2705 Body check-in saved and synced live!");
-  ["weight","neck","waist1","waist2","waist3"].forEach(id=>document.getElementById(id).value="");
+  ["weight","neck","waist1","waist2","waist3","humeBf","visualBf"].forEach(id=>{const el=document.getElementById(id); if(el) el.value="";});
   updateWaistAverage();
 }
 
@@ -1543,8 +1547,11 @@ function renderDash(){
   const lastWorkout=latestByDate(d.workouts),since=daysSince(lastWorkout.date),cm=cutMetrics(d);
   dWeight.textContent=lb.weight?lb.weight+" lb":"--";
   dWaist.textContent=lb.waist?Number(lb.waist).toFixed(2)+'"':"--";
-  const bfEntries = d.body.filter(x => numeric(x.bodyfat) !== null);
-  dBodyFat.textContent = bfEntries.length ? numeric(bfEntries.at(-1).bodyfat).toFixed(1) + "%" : "--";
+  const humeEntries = d.body.filter(x => numeric(x.humeBf) !== null).sort((a,b)=>a.date.localeCompare(b.date));
+  const visualEntries = d.body.filter(x => numeric(x.visualBf) !== null).sort((a,b)=>a.date.localeCompare(b.date));
+  dBodyFat.textContent = humeEntries.length ? numeric(humeEntries.at(-1).humeBf).toFixed(1) + "%" : "--";
+  const visLatest = visualEntries.length ? numeric(visualEntries.at(-1).visualBf).toFixed(1) + "%" : "--";
+  document.getElementById("dBodyFatTrend").textContent = "Visual est: " + visLatest;
   dAvg.textContent=av?av.toFixed(1)+" lb":"--";
   dWorkouts.textContent=d.workouts.length;
   dWeightTrend.textContent=trendText(wt.current,wt.previous," lb");
@@ -1680,9 +1687,9 @@ function renderProgress(){
  document.getElementById("pWaistCurrent").textContent=wc?Number(wc.waist).toFixed(2)+'"':"--";
  document.getElementById("pWaistLost").textContent=(ws&&wc)?`${(Number(wc.waist)-Number(ws.waist)).toFixed(2)}"`:"--";
 
- const bfEntries = cut.filter(x => numeric(x.bodyfat) !== null);
- const startBf = bfEntries.length ? numeric(bfEntries[0].bodyfat) : null;
- const currentBf = bfEntries.length ? numeric(bfEntries.at(-1).bodyfat) : null;
+ const bfEntries = cut.filter(x => numeric(x.humeBf) !== null);
+ const startBf = bfEntries.length ? numeric(bfEntries[0].humeBf) : null;
+ const currentBf = bfEntries.length ? numeric(bfEntries.at(-1).humeBf) : null;
  document.getElementById("pBfStart").textContent = startBf !== null ? `${startBf.toFixed(1)}%` : "--";
  document.getElementById("pBfCurrent").textContent = currentBf !== null ? `${currentBf.toFixed(1)}%` : "--";
  if (startBf !== null && currentBf !== null) {
@@ -1724,7 +1731,7 @@ function renderHistory(){
    const n=d.nutrition.filter(x=>x.date===date).at(-1)||{};
    const macroText=n.calories?`${n.calories} cal<br>P ${n.protein||""} / C ${n.carbs||""} / F ${n.fat||""}`:"";
    const notes=[...workoutsForDate.map(x=>x.notes),n.notes].filter(Boolean).join(" | ");
-   const bfText = b.bodyfat ? `${b.bodyfat}%` : "";
+   const bfText = b.humeBf ? `Hume ${b.humeBf}%` : (b.visualBf ? `Vis ${b.visualBf}%` : (b.bodyfat ? `Navy ${b.bodyfat}%` : ""));
    tb.innerHTML+=`<tr><td>${date}</td><td>${w}</td><td>${b.weight||""}</td><td>${b.waist||""}</td><td>${bfText}</td><td>${macroText}</td><td>${(()=>{const z=(d.zeppSteps||{})[date];const v=z?z.official:n.steps;const sl=(d.zeppSleep||{})[date], vt=(d.zeppVitals||{})[date];return (v?Number(v).toLocaleString()+(z?`<br><span class="hint">W ${z.watch??"--"} / P ${z.phone??"--"}</span>`:""):"")+(sl?`<br><span class="hint">\uD83D\uDE34 ${fmtMin(sl.asleep)}</span>`:"")+(vt?`<br><span class="hint">RHR ${vt.restingHR||"pending"} \u2022 HRV ${vt.hrv?Math.round(vt.hrv):"pending"}</span>`:"")})()}</td><td>${notes}</td></tr>`;
  });
 }
@@ -1849,7 +1856,8 @@ function renderAll(){try{setTimeout(updateWeight7,0);}catch(e){}
   const b=[...data().body].sort((a,b)=>a.date.localeCompare(b.date));
   drawChart("weightChart",b,"weight","Weight");
   drawChart("waistChart",b,"waist","Belly Button Waist");
-  drawChart("bodyFatChart",b,"bodyfat","Body Fat %");
+  const bfSeries=b.filter(x=>numeric(x.humeBf)!==null||numeric(x.visualBf)!==null).map(x=>({date:x.date,bodyfat:numeric(x.humeBf)!==null?numeric(x.humeBf):numeric(x.visualBf)}));
+  drawChart("bodyFatChart",bfSeries,"bodyfat","Body Fat %");
 }
 
 /* Auto-seed the 2026-10-19 Monday session with 8 fresh chin-ups */
