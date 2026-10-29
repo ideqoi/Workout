@@ -239,7 +239,7 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
   <div class="card">
     <h2>Daily Body Check-In</h2>
     <div class="row">
-      <div><label>Date</label><input id="bodyDate" type="date"></div>
+      <div><label>Date</label><input id="bodyDate" type="date" onchange="loadBodyForDate()"></div>
       <div><label>Weight (lb)</label><input id="weight" type="number" step="0.1" placeholder="163.4" onchange="autoSaveBodyOnChange()"><div class="hint" id="weight7">7-day avg: --</div></div>
     </div>
     <div id="monthlyPrompt" class="notice goodnotice hidden" style="margin-top:10px"></div>
@@ -251,8 +251,8 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
       <div><input id="neck" type="number" step="0.01" placeholder="Neck (optional)" oninput="autoSaveBodyOnChange()"></div>
     </div>
     <div class="row" style="margin-top:10px">
-      <div><label>Hume Body Pod BF%</label><input id="humeBf" type="number" step="0.1" min="0" max="50" placeholder="e.g. 18.2" onchange="autoSaveBodyOnChange()"></div>
-      <div><label>Trainer Visual Est. BF%</label><input id="visualBf" type="number" step="0.1" min="0" max="50" placeholder="from photo check-in" onchange="autoSaveBodyOnChange()"></div>
+      <div><label>Hume Body Pod BF%</label><input id="humeBf" type="number" step="0.1" min="0" max="50" placeholder="e.g. 18.2" oninput="autoSaveBodyOnChange()" onchange="autoSaveBodyOnChange()"></div>
+      <div><label>Trainer Visual Est. BF%</label><input id="visualBf" type="number" step="0.1" min="0" max="50" placeholder="from photo check-in" oninput="autoSaveBodyOnChange()" onchange="autoSaveBodyOnChange()"></div>
     </div>
     <div class="metricline" style="margin-top:12px">
       <span class="tiny">Waist Avg: <strong id="waistAverage" style="font-size:15px">--</strong></span>
@@ -979,30 +979,52 @@ function saveWorkout(){
   alert("\u2705 Workout saved and synced live to Google Drive!");
 }
 
-function autoSaveBodyOnChange(){
-  const weightVal = val("weight");
-  if(!weightVal) return;
+function loadBodyForDate(){
   const d=data(), curDate=val("bodyDate")||today();
+  const b=(d.body||[]).find(x=>x.date===curDate);
+  const set=(id,v)=>{const el=document.getElementById(id); if(el) el.value=(v!==undefined&&v!==null&&v!=="")?v:"";};
+  if(!b){
+    ["weight","neck","waist1","waist2","waist3","humeBf","visualBf"].forEach(id=>set(id,""));
+    updateWaistAverage(); updateWeight7(); return;
+  }
+  set("weight", b.weight);
+  set("neck", b.neck);
+  set("waist1", b.waist1);
+  set("waist2", b.waist2);
+  set("waist3", b.waist3);
+  set("humeBf", b.humeBf);
+  set("visualBf", b.visualBf);
+  updateWaistAverage(); updateWeight7();
+}
+
+function autoSaveBodyOnChange(){
+  const d=data(), curDate=val("bodyDate")||today();
+  const existingIdx = d.body.findIndex(b=>b.date === curDate);
+  const prev = existingIdx !== -1 ? d.body[existingIdx] : {};
+  const weightVal = val("weight") || prev.weight || "";
+  if(!weightVal) return; // need a weight on this date (typed or already logged)
   const waistValues=["waist1","waist2","waist3"].map(id=>numeric(val(id)));
+  const anyWaist=waistValues.some(v=>v!==null);
   const completeWaist=waistValues.every(v=>v!==null);
   const waistAvg=completeWaist?avg(waistValues):null;
   const neckVal=numeric(val("neck"));
   const humeVal=numeric(val("humeBf"));
   const visualVal=numeric(val("visualBf"));
-  const existingIdx = d.body.findIndex(b=>b.date === curDate);
-  const prev = existingIdx !== -1 ? d.body[existingIdx] : {};
   const bEntry = {
     date: curDate,
     weight: weightVal,
     waist: waistAvg!==null?waistAvg.toFixed(2):(prev.waist||""),
-    waist1: completeWaist?waistValues[0]:(prev.waist1||""),
-    waist2: completeWaist?waistValues[1]:(prev.waist2||""),
-    waist3: completeWaist?waistValues[2]:(prev.waist3||""),
+    waist1: completeWaist?waistValues[0]:(anyWaist&&waistValues[0]!==null?waistValues[0]:(prev.waist1||"")),
+    waist2: completeWaist?waistValues[1]:(anyWaist&&waistValues[1]!==null?waistValues[1]:(prev.waist2||"")),
+    waist3: completeWaist?waistValues[2]:(anyWaist&&waistValues[2]!==null?waistValues[2]:(prev.waist3||"")),
     neck: neckVal!==null?neckVal:(prev.neck||""),
-    humeBf: humeVal!==null?humeVal.toFixed(1):(prev.humeBf||""),
-    visualBf: visualVal!==null?visualVal.toFixed(1):(prev.visualBf||""),
+    humeBf: humeVal!==null?humeVal.toFixed(1):(document.getElementById("humeBf")&&val("humeBf")===""?"":(prev.humeBf||"")),
+    visualBf: visualVal!==null?visualVal.toFixed(1):(document.getElementById("visualBf")&&val("visualBf")===""?"":(prev.visualBf||"")),
     bodyfat: prev.bodyfat||""
   };
+  // If inputs are loaded empty on purpose after loadBodyForDate of a day with no BF, keep prev when fields untouched is hard; prefer explicit values when present
+  if(humeVal!==null) bEntry.humeBf=humeVal.toFixed(1);
+  if(visualVal!==null) bEntry.visualBf=visualVal.toFixed(1);
   if(existingIdx !== -1) d.body[existingIdx] = bEntry;
   else d.body.push(bEntry);
   save(d);
@@ -1010,9 +1032,11 @@ function autoSaveBodyOnChange(){
 
 function saveBody(){
   autoSaveBodyOnChange();
+  const d=data(), curDate=val("bodyDate")||today();
+  const b=(d.body||[]).find(x=>x.date===curDate);
+  if(!b || !b.weight){ alert("Add that day\u2019s weight first, then enter Hume / visual BF% and save."); return; }
   alert("\u2705 Body check-in saved and synced live!");
-  ["weight","neck","waist1","waist2","waist3","humeBf","visualBf"].forEach(id=>{const el=document.getElementById(id); if(el) el.value="";});
-  updateWaistAverage();
+  loadBodyForDate();
 }
 
 /* --- FOOD JOURNAL & AUTO-ROLLUP ENGINE --- */
@@ -1914,7 +1938,7 @@ function updateWeight7(){
   const mp=document.getElementById("monthlyPrompt"), box=document.getElementById("waistBox");
   if(mp){ if(isFirstFriday(end)){ mp.classList.remove("hidden"); mp.innerHTML="\uD83D\uDCC5 <b>Monthly check-in today:</b> progress photos (front + side), waist at the navel (below) and Hume body scan, after peeing and before eating, drinking or training."; if(box) box.open=true; } else mp.classList.add("hidden"); }
 }
-document.addEventListener("DOMContentLoaded",()=>{["weight","bodyDate"].forEach(id=>{const x=document.getElementById(id);if(x){x.addEventListener("input",updateWeight7);x.addEventListener("change",updateWeight7);}});setTimeout(updateWeight7,300);});
+document.addEventListener("DOMContentLoaded",()=>{["weight","bodyDate"].forEach(id=>{const x=document.getElementById(id);if(x){x.addEventListener("input",updateWeight7);x.addEventListener("change",updateWeight7);}});setTimeout(()=>{updateWeight7();loadBodyForDate();},300);});
 
 function swapExercise(i){
   const type=workType.value, ds=val("workDate")||today();
