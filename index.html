@@ -278,6 +278,11 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
     <div id="waistWarning" class="notice hidden"></div>
     </details>
     <button style="margin-top:12px" onclick="saveBody()">Save Body Check-In</button>
+    <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border,#334155)">
+      <label class="tiny">Import Monthly Check-In JSON (from trainer)</label>
+      <textarea id="bodyJsonImportBox" rows="4" placeholder='{"date":"2026-11-06","weight":162.4,"waist":32.1,"humeBf":17.8,"visualBf":17.5,"humeFatMass":28.9,"humeLeanMass":124.1,"humeSmm":81.0,"humeVisceral":6,"humeWater":60.1,"humeRhr":67,"humeBmr":1690,"humeCreatine":"on","humeFasted":true,"humePeed":true}' style="width:100%;margin-top:6px;font-family:ui-monospace,monospace;font-size:12px"></textarea>
+      <button class="secondary" style="margin-top:8px" onclick="importBodyJson()">Import Check-In JSON</button>
+    </div>
   </div>
   <div class="card"><h2>Weight Trend</h2><canvas id="weightChart" width="800" height="260"></canvas></div>
   <div class="card"><h2>Waist Trend</h2><canvas id="waistChart" width="800" height="260"></canvas></div>
@@ -1990,6 +1995,57 @@ function swapExercise(i){
   const newName=d.swaps[key][k]||orig.name;
   if(w&&Array.isArray(w.ex)){ const e=w.ex.find(x=>x.name===ex.name); if(e) e.name=newName; }
   localStorage.setItem(STORE_KEY,JSON.stringify(d)); renderWorkout();
+}
+
+function importBodyJson(){
+  const raw=(document.getElementById("bodyJsonImportBox")||{}).value;
+  if(!raw || !String(raw).trim()){ alert("Paste the trainer JSON first."); return; }
+  let obj;
+  try{ obj=JSON.parse(String(raw).trim()); }catch(e){ alert("Invalid JSON. Check brackets and commas."); return; }
+  if(Array.isArray(obj)) obj=obj[0];
+  if(!obj || typeof obj!=="object"){ alert("JSON must be one check-in object."); return; }
+  const date=String(obj.date||"").trim();
+  if(!/^\d{4}-\d{2}-\d{2}$/.test(date)){ alert("JSON needs a date like 2026-11-06."); return; }
+  const d=data();
+  const idx=(d.body||[]).findIndex(b=>b.date===date);
+  const prev=idx!==-1?d.body[idx]:{};
+  const num=(v)=>{ const n=numeric(v); return n!==null?n:null; };
+  const strNum=(v,fallback="")=>{ const n=num(v); return n!==null?String(n):fallback; };
+  const waist1=num(obj.waist1), waist2=num(obj.waist2), waist3=num(obj.waist3);
+  let waistAvg=num(obj.waist);
+  if(waistAvg===null && waist1!==null && waist2!==null && waist3!==null) waistAvg=avg([waist1,waist2,waist3]);
+  const weight=obj.weight!==undefined&&obj.weight!==""?strNum(obj.weight, prev.weight||""):(prev.weight||"");
+  if(!weight){ alert("JSON needs a weight for that day (or an existing weight already logged)."); return; }
+  const creatine=String(obj.humeCreatine||obj.creatine||"").toLowerCase();
+  const bEntry={
+    date,
+    weight,
+    waist: waistAvg!==null?waistAvg.toFixed(2):(prev.waist||""),
+    waist1: waist1!==null?waist1:(prev.waist1||""),
+    waist2: waist2!==null?waist2:(prev.waist2||""),
+    waist3: waist3!==null?waist3:(prev.waist3||""),
+    neck: num(obj.neck)!==null?num(obj.neck):(prev.neck||""),
+    bodyfat: prev.bodyfat||"",
+    humeBf: strNum(obj.humeBf??obj.bf??obj.bodyFat, prev.humeBf||""),
+    visualBf: strNum(obj.visualBf??obj.visual, prev.visualBf||""),
+    humeFatMass: strNum(obj.humeFatMass??obj.fatMass, prev.humeFatMass||""),
+    humeLeanMass: strNum(obj.humeLeanMass??obj.leanMass, prev.humeLeanMass||""),
+    humeSmm: strNum(obj.humeSmm??obj.skeletalMuscle??obj.smm, prev.humeSmm||""),
+    humeVisceral: strNum(obj.humeVisceral??obj.visceral, prev.humeVisceral||""),
+    humeWater: strNum(obj.humeWater??obj.bodyWater, prev.humeWater||""),
+    humeRhr: strNum(obj.humeRhr??obj.rhr, prev.humeRhr||""),
+    humeBmr: strNum(obj.humeBmr??obj.bmr, prev.humeBmr||""),
+    humeCreatine: (creatine==="on"||creatine==="off")?creatine:(prev.humeCreatine||""),
+    humeFasted: obj.humeFasted!==undefined?!!obj.humeFasted:!!obj.fasted,
+    humePeed: obj.humePeed!==undefined?!!obj.humePeed:!!obj.peed
+  };
+  if(idx!==-1) d.body[idx]=Object.assign({}, prev, bEntry);
+  else { d.body=d.body||[]; d.body.push(bEntry); }
+  save(d);
+  document.getElementById("bodyDate").value=date;
+  loadBodyForDate();
+  document.getElementById("bodyJsonImportBox").value="";
+  alert("Imported monthly check-in for "+date+".");
 }
 </script>
 </body>
