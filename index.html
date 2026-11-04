@@ -609,6 +609,7 @@ const pantryItems = [
 
 // WORKOUTS: ALL-DUMBBELL 4-WEEK TRIAL (Oct 22, 2026). Removed machine/cable moves keep their history in the backup.
 // WORKOUTS: WEEKLY SPLIT (Oct 27, 2026). Removed exercises keep their history in the backup.
+const EXTRA_EXERCISES=[{name:"One-Arm DB Row (Neutral)",target:"3 sets \u2022 10 reps each arm \u2022 1s up / 3s down \u2022 stand-in until V-handle arrives",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3,defaultWeight:"35",perArm:true}];
 const workouts={
 "Push":[
  {name:"Flat DB Bench Press",target:"3 sets \u2022 10 reps \u2022 1s up / 3s down \u2022 dense mid/lower chest",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3,defaultWeight:"100"},
@@ -618,30 +619,30 @@ const workouts={
  {name:"DB Kickback",target:"3 sets \u2022 10 reps \u2022 1s up / 3s down \u2022 upper arm pinned, squeeze at lockout",rest:60,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3,defaultWeight:"10"}
 ],
 "Pull":[
- {name:"Wide-Grip Lat Pulldown",target:"3 sets \u2022 10 reps \u2022 1s up / 3s down \u2022 outer lat width",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3,defaultWeight:"120"},
+ {name:"Neutral-Grip V-Handle Pulldown",target:"3 sets \u2022 10 reps \u2022 1s up / 3s down \u2022 straps, V-handle, 3s lowering",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3,defaultWeight:"100"},
  {name:"Chest-Supported DB Row",target:"3 sets \u2022 10 reps \u2022 1s up / 3s down \u2022 chest on incline bench, drive elbows back",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3,defaultWeight:"70"},
  {name:"DB Rear Delt Fly",target:"3 sets \u2022 10 reps \u2022 1s up / 3s down \u2022 light, lead with elbows",rest:60,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3,defaultWeight:"20"},
  {name:"DB Hammer Curl",target:"3 sets \u2022 10 reps \u2022 1s up / 3s down \u2022 neutral grip",rest:60,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3,defaultWeight:"60"},
- {name:"Slow DB Wrist Curl",target:"2 sets \u2022 15 reps \u2022 1s up / 4s down \u2022 forearm on bench, elbow-friendly",rest:45,defaultTempo:4,defaultUp:1,defaultHold:1,sets:2,defaultWeight:"20"}
+ {name:"Slow DB Wrist Curl",target:"2 sets \u2022 15 reps each arm \u2022 1s up / 4s down \u2022 forearm on bench, elbow-friendly",rest:45,defaultTempo:4,defaultUp:1,defaultHold:1,sets:2,defaultWeight:"10",perArm:true}
 ],
 "Legs":[
  {name:"Goblet Squat",target:"4 sets \u2022 10 reps \u2022 1s up / 3s down \u2022 upright torso",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1,sets:4,defaultWeight:"50"},
  {name:"DB Bulgarian Split Squat",target:"3 sets \u2022 10 reps \u2022 1s up / 3s down \u2022 per leg, rear foot on bench, DB in each hand (log total)",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3,defaultWeight:"30"},
- {name:"Standing DB Calf Raise",target:"3 sets \u2022 15 reps \u2022 1s up / 3s down \u2022 two-leg, DB in each hand (log total), pause at top",rest:60,defaultTempo:3,defaultUp:1,defaultHold:2,sets:3,defaultWeight:"50"},
+ {name:"Standing DB Calf Raise",target:"2 sets \u2022 20 reps \u2022 up 1 / hold 2 / down 2 / hold 2 \u2022 single 30 lb DB, set 1 left hand, set 2 right hand",rest:60,defaultTempo:2,defaultUp:1,defaultHold:2,sets:2,defaultWeight:"30"},
  {name:"DB-on-Chest Floor Crunch",target:"3 sets \u2022 10-15 reps \u2022 1s up / 3s down \u2022 DB held on chest",rest:75,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3,defaultWeight:""}
 ],
 "Upper":[
  {name:"Seated DB Shoulder Press \u2022 Bench Position 5",target:"3 sets \u2022 10 reps \u2022 1s up / 3s down \u2022 75-80\u00B0 scapular plane",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3,defaultWeight:"90"},
- {name:"Close-Grip Overhand Lat Pulldown",target:"3 sets \u2022 10 reps \u2022 1s up / 3s down \u2022 palms down, hands shoulder-width",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3,defaultWeight:"110"},
+ {name:"Neutral-Grip V-Handle Pulldown",target:"3 sets \u2022 10 reps \u2022 1s up / 3s down \u2022 straps, V-handle, 3s lowering",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3,defaultWeight:"100"},
  {name:"Incline DB Bench Press \u2022 Bench Position 3",target:"3 sets \u2022 10 reps \u2022 1s up / 3s down \u2022 upper chest, deep stretch",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3,defaultWeight:"100"},
  {name:"DB Chest Fly",target:"3 sets \u2022 10 reps \u2022 1s up / 3s down \u2022 soft elbows, deep stretch",rest:60,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3,defaultWeight:"50"},
- {name:"Slow DB Wrist Curl",target:"2 sets \u2022 15 reps \u2022 1s up / 4s down \u2022 forearm on bench, elbow-friendly",rest:45,defaultTempo:4,defaultUp:1,defaultHold:1,sets:2,defaultWeight:"20"}
+ {name:"Slow DB Wrist Curl",target:"2 sets \u2022 15 reps each arm \u2022 1s up / 4s down \u2022 forearm on bench, elbow-friendly",rest:45,defaultTempo:4,defaultUp:1,defaultHold:1,sets:2,defaultWeight:"10",perArm:true}
 ],
 "Lower":[
  {name:"Romanian Deadlift",target:"4 sets \u2022 10 reps \u2022 1s up / 4s down \u2022 hamstring stretch, 4s lowering",rest:90,defaultTempo:4,defaultUp:1,defaultHold:1,sets:4,defaultWeight:"105"},
  {name:"DB Hip Thrust",target:"3 sets \u2022 10 reps \u2022 1s up / 3s down \u2022 one dumbbell, hard glute lockout pause",rest:90,defaultTempo:3,defaultUp:1,defaultHold:2,sets:3,defaultWeight:"52.5"},
  {name:"DB Reverse Lunge",target:"3 sets \u2022 10 reps \u2022 1s up / 3s down \u2022 per leg, DB in each hand (log total)",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3,defaultWeight:"30"},
- {name:"Standing DB Calf Raise",target:"3 sets \u2022 15 reps \u2022 1s up / 3s down \u2022 two-leg, DB in each hand (log total), pause at top",rest:60,defaultTempo:3,defaultUp:1,defaultHold:2,sets:3,defaultWeight:"50"}
+ {name:"Standing DB Calf Raise",target:"2 sets \u2022 20 reps \u2022 up 1 / hold 2 / down 2 / hold 2 \u2022 single 30 lb DB, set 1 left hand, set 2 right hand",rest:60,defaultTempo:2,defaultUp:1,defaultHold:2,sets:2,defaultWeight:"30"}
 ]
 };
 
@@ -694,7 +695,7 @@ const CHINUP_TEST={name:"Pre-Workout Fresh Chin-Up Test",target:"Monday test \u2
 function isMonday(dateStr){return new Date(dateStr+"T12:00:00").getDay()===1}
 function exercisesFor(type,dateStr){
   const ds=dateStr||today(); const sw=((data().swaps||{})[ds+"|"+type])||{};
-  const list=(workouts[type]||[]).map((e,k)=>sw[k]?Object.assign({},e,{name:sw[k],target:e.target.replace(/ \u2022 [^\u2022]*$/,"")+" \u2022 swapped in for "+e.name,swappedFrom:e.name}):e);
+  const list=(workouts[type]||[]).map((e,k)=>sw[k]?Object.assign({},e,(EXTRA_EXERCISES.find(x=>x.name===sw[k])||{}),{name:sw[k],target:e.target.replace(/ \u2022 [^\u2022]*$/,"")+" \u2022 swapped in for "+e.name,swappedFrom:e.name}):e);
   return isMonday(dateStr||today())?[CHINUP_TEST,...list]:list;
 }
 /* Editable progression rules (stored in settings, synced with backup) */
@@ -837,7 +838,7 @@ function renderWorkout(){
   const div=document.createElement("div");div.className="exercise";
   div.innerHTML=`<div class="exhead">
     <div>
-      <div class="exname">${ex.name} ${supersetTag} <span id="pr_badge_${i}"></span></div>
+      <div class="exname">${ex.name} ${(ex.perArm||/One-Arm/i.test(ex.name))?'<span class="hint">(weight per arm)</span>':''} ${supersetTag} <span id="pr_badge_${i}"></span></div>
       <div class="hint">${ex.target}</div>
       <div class="exstats" style="color:var(--green);font-weight:800">${targetText(ex.name,prevSets)}</div>
       <div class="exstats">${lastSetText?`${sourceLabel}: ${lastSetText}`:"No previous sets for this exercise"}${h.best?` \u2022 Best set: ${h.best.weight} \u00D7${h.best.reps}`:""}</div>
@@ -867,7 +868,7 @@ function renderWorkout(){
     const specificRest=(ex.setRests&&ex.setRests[idx]!==undefined)?ex.setRests[idx]:ex.rest;
     return `<div class="setrow">
       <input value="${setLabel}" disabled style="text-align:center;padding:10px 2px;font-size:10px">
-      <input id="w_${i}_${n}" type="text" value="${pw}" placeholder="lb/BW" oninput="checkPR(${i},'${ex.name}'); autoSaveWorkoutDraft()">
+      <input id="w_${i}_${n}" type="text" value="${pw}" placeholder="${(ex.perArm||/One-Arm/i.test(ex.name))?'lb per arm':'lb total/BW'}" oninput="checkPR(${i},'${ex.name}'); autoSaveWorkoutDraft()">
       <input id="r_${i}_${n}" type="number" value="${pr}" placeholder="${prPh}" data-pre="${preR}" class="${preR?'prefill':''}" oninput="this.dataset.pre='';this.classList.remove('prefill');checkPR(${i},'${ex.name}'); autoSaveWorkoutDraft()">
       <input id="t_${i}_${n}" type="number" step="1" value="${pt}" placeholder="down" style="text-align:center" oninput="autoSaveWorkoutDraft()">
       <input id="u_${i}_${n}" type="number" step="1" value="${pu}" placeholder="up" style="text-align:center" oninput="autoSaveWorkoutDraft()">
@@ -1983,7 +1984,7 @@ function swapExercise(i){
   const list=exercisesFor(type,ds); const ex=list[i]; if(!ex) return;
   const off=isMonday(ds)?1:0, k=i-off; if(k<0){alert("The chin-up test can't be swapped.");return;}
   const orig=(workouts[type]||[])[k];
-  const names=[...new Set(Object.values(workouts).flat().map(e=>e.name))].filter(n=>n!==ex.name);
+  const names=[...new Set([...EXTRA_EXERCISES,...Object.values(workouts).flat()].map(e=>e.name))].filter(n=>n!==ex.name);
   const pick=prompt("Swap \""+ex.name+"\" for which exercise?\nEnter a number, or type any exercise name.\nType 0 to go back to "+orig.name+".\n\n"+names.map((n,j)=>(j+1)+". "+n).join("\n"));
   if(pick===null||!String(pick).trim()) return;
   const t=String(pick).trim(), num=Number(t);
