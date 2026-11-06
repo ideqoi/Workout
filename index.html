@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <meta name="apple-mobile-web-app-title" content="Bob's Tracker"/>
 <meta name="theme-color" content="#070b12"/>
-<title>Bob's Corner v3.16</title>
+<title>Bob's Corner v3.17</title>
 <style>
 :root{
   --bg:#070b12;--panel:#111827;--panel2:#0b1220;--soft:#1f2937;--line:#2f3a4c;
@@ -113,6 +113,19 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
 .onerm-group{font-size:13px;font-weight:900;color:var(--blue);text-transform:uppercase;letter-spacing:.4px;margin:16px 0 8px}
 .unit-badge{display:inline-flex;border-radius:999px;padding:2px 7px;font-size:10px;font-weight:900;border:1px solid var(--line);background:rgba(59,130,246,0.12);color:var(--blue);margin-left:6px;vertical-align:middle}
 
+
+.seg-table{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:8px}
+.seg-table th,.seg-table td{padding:8px 6px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+.seg-table th{color:var(--blue);font-size:11px;text-transform:uppercase;letter-spacing:.3px}
+.seg-diff-up{color:var(--orange);font-weight:900}
+.seg-diff-down{color:var(--green);font-weight:900}
+.seg-diff-flat{color:var(--muted);font-weight:800}
+.seg-badges{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.seg-badges .badge{margin:0}
+.seg-extra{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin-top:10px}
+.seg-extra .miniStat{padding:8px}
+.seg-extra .miniStat .value{font-size:16px}
+
 /* Template Manager Specific Styles */
 .templateCard{background:var(--panel2);border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:14px}
 .templateHeader{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;padding-bottom:10px;border-bottom:1px solid var(--line)}
@@ -129,7 +142,7 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
   <div class="header-top">
     <div>
       <h1>Bob's Corner &#x1F9EA;</h1>
-      <div class="phase">Goal: Fast Aesthetic Hypertrophy &bull; Milestone 1: Nov 6, 2026 &bull; v3.16</div>
+      <div class="phase">Goal: Fast Aesthetic Hypertrophy &bull; Milestone 1: Nov 6, 2026 &bull; v3.17</div>
     </div>
     <div style="display:flex;align-items:center;gap:8px">
       <span id="syncStatusBadge" class="sync-indicator synced">&#x2601;&#xFE0F; Synced</span>
@@ -299,10 +312,38 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
       <div><label>Creatine</label><select id="humeCreatine" onchange="autoSaveBodyOnChange()"><option value="">--</option><option value="on">On</option><option value="off">Off</option></select></div>
     </div>
     <div class="row" style="margin-top:10px;gap:16px;align-items:center">
-      <label class="tiny" style="display:flex;gap:6px;align-items:center"><input id="humeFasted" type="checkbox" onchange="autoSaveBodyOnChange()"> Fasted</label>
-      <label class="tiny" style="display:flex;gap:6px;align-items:center"><input id="humePeed" type="checkbox" onchange="autoSaveBodyOnChange()"> Peed</label>
+      <label class="tiny" style="display:flex;gap:6px;align-items:center"><input id="humeFasted" type="checkbox" onchange="markBodyDirty(this); autoSaveBodyOnChange()"> Fasted</label>
+      <label class="tiny" style="display:flex;gap:6px;align-items:center"><input id="humePeed" type="checkbox" onchange="markBodyDirty(this); autoSaveBodyOnChange()"> Peed</label>
       <span class="tiny" style="opacity:.7">Protocol flags (Sep 27 was off creatine)</span>
     </div>
+    <details style="margin-top:10px"><summary class="tiny" style="cursor:pointer;font-weight:700;color:var(--blue)">Segmental Lean / Fat &amp; Extra Hume Metrics (optional)</summary>
+      <div class="row3" style="margin-top:10px">
+        <div><label>Health Score</label><input id="humeHealthScore" type="number" step="1" placeholder="652" oninput="markBodyDirty(this); autoSaveBodyOnChange()"></div>
+        <div><label>SubQ Fat (lb)</label><input id="humeSubqFat" type="number" step="0.1" placeholder="26.5" oninput="markBodyDirty(this); autoSaveBodyOnChange()"></div>
+        <div><label>A/G Ratio %</label><input id="humeAgRatio" type="number" step="0.1" placeholder="106.3" oninput="markBodyDirty(this); autoSaveBodyOnChange()"></div>
+      </div>
+      <div class="row3" style="margin-top:8px">
+        <div><label>Metabolic Age</label><input id="humeMetAge" type="number" step="1" placeholder="33" oninput="markBodyDirty(this); autoSaveBodyOnChange()"></div>
+        <div><label>Body Cell Mass (lb)</label><input id="humeCellMass" type="number" step="0.1" placeholder="88.4" oninput="markBodyDirty(this); autoSaveBodyOnChange()"></div>
+        <div><label>Bone / Skeletal Mass (lb)</label><input id="humeSkeletalMass" type="number" step="0.1" placeholder="23.2" oninput="markBodyDirty(this); autoSaveBodyOnChange()"></div>
+      </div>
+      <p class="tiny" style="margin:12px 0 4px;font-weight:800;color:var(--muted)">Segmental Lean Mass (lb)</p>
+      <div class="row" style="grid-template-columns:repeat(auto-fit,minmax(110px,1fr));display:grid;gap:8px">
+        <div><label>Right Arm</label><input id="segArmRLean" type="number" step="0.1" placeholder="7.2" oninput="markBodyDirty(this); autoSaveBodyOnChange()"></div>
+        <div><label>Left Arm</label><input id="segArmLLean" type="number" step="0.1" placeholder="7.5" oninput="markBodyDirty(this); autoSaveBodyOnChange()"></div>
+        <div><label>Torso / Trunk</label><input id="segTrunkLean" type="number" step="0.1" placeholder="62.5" oninput="markBodyDirty(this); autoSaveBodyOnChange()"></div>
+        <div><label>Right Leg</label><input id="segLegRLean" type="number" step="0.1" placeholder="22.9" oninput="markBodyDirty(this); autoSaveBodyOnChange()"></div>
+        <div><label>Left Leg</label><input id="segLegLLean" type="number" step="0.1" placeholder="22.9" oninput="markBodyDirty(this); autoSaveBodyOnChange()"></div>
+      </div>
+      <p class="tiny" style="margin:12px 0 4px;font-weight:800;color:var(--muted)">Segmental Fat (%)</p>
+      <div class="row" style="grid-template-columns:repeat(auto-fit,minmax(110px,1fr));display:grid;gap:8px">
+        <div><label>Right Arm</label><input id="segArmRFat" type="number" step="0.1" placeholder="18.7" oninput="markBodyDirty(this); autoSaveBodyOnChange()"></div>
+        <div><label>Left Arm</label><input id="segArmLFat" type="number" step="0.1" placeholder="18.3" oninput="markBodyDirty(this); autoSaveBodyOnChange()"></div>
+        <div><label>Torso / Trunk</label><input id="segTrunkFat" type="number" step="0.1" placeholder="18.2" oninput="markBodyDirty(this); autoSaveBodyOnChange()"></div>
+        <div><label>Right Leg</label><input id="segLegRFat" type="number" step="0.1" placeholder="13.0" oninput="markBodyDirty(this); autoSaveBodyOnChange()"></div>
+        <div><label>Left Leg</label><input id="segLegLFat" type="number" step="0.1" placeholder="13.6" oninput="markBodyDirty(this); autoSaveBodyOnChange()"></div>
+      </div>
+    </details>
     <div class="metricline" style="margin-top:12px">
       <span class="tiny">Waist Avg: <strong id="waistAverage" style="font-size:15px">--</strong></span>
       <span class="tiny" style="opacity:.7">BF% and Hume metrics are entered above (not from waist)</span>
@@ -312,9 +353,17 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
     <button style="margin-top:12px" onclick="saveBody()">Save Body Check-In</button>
     <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border,#334155)">
       <label class="tiny">Import Monthly Check-In JSON (from trainer)</label>
-      <textarea id="bodyJsonImportBox" rows="4" placeholder='{"date":"2026-11-06","weight":162.4,"waist":32.1,"humeBf":17.8,"visualBf":17.5,"humeFatMass":28.9,"humeLeanMass":124.1,"humeSmm":81.0,"humeVisceral":6,"humeWater":60.1,"humeRhr":67,"humeBmr":1690,"humeCreatine":"on","humeFasted":true,"humePeed":true}' style="width:100%;margin-top:6px;font-family:ui-monospace,monospace;font-size:12px"></textarea>
+      <textarea id="bodyJsonImportBox" rows="4" placeholder='[{"date":"2026-08-01","humeMetAge":32,"segArmRLean":6.9,"segArmLLean":7.6,"segTrunkLean":62.3,"segLegRLean":22.8,"segLegLLean":22.3,"segArmRFat":19.1,"segArmLFat":17.2,"segTrunkFat":19.3,"segLegRFat":13.0,"segLegLFat":13.7},{"date":"2026-11-06","weight":165.3,"waist":32.29,"humeBf":18.5,"visualBf":17.2,"humeHealthScore":652,"humeSubqFat":26.5,"segmental":{"lean":{"rightArm":7.2,"leftArm":7.5,"trunk":62.5,"rightLeg":22.9,"leftLeg":22.9},"fat":{"rightArm":18.7,"leftArm":18.3,"trunk":18.2,"rightLeg":13.0,"leftLeg":13.6}}}]' style="width:100%;margin-top:6px;font-family:ui-monospace,monospace;font-size:12px"></textarea>
       <button class="secondary" style="margin-top:8px" onclick="importBodyJson()">Import Check-In JSON</button>
     </div>
+  </div>
+  <div class="card" id="humeSegmentalCard">
+    <h2>Hume Segmental Breakdown</h2>
+    <p class="tiny" id="segCardSub">Start vs latest segmental scan — lean mass (lb) and fat (%).</p>
+    <div class="seg-badges" id="segBadges"></div>
+    <div style="overflow-x:auto"><table class="seg-table" id="segTable"><thead><tr><th>Region</th><th>Lean (lb)</th><th>Fat (%)</th></tr></thead><tbody></tbody></table></div>
+    <h3 style="font-size:14px;margin:14px 0 6px">Latest Extra Hume Metrics</h3>
+    <div class="seg-extra" id="segExtra"></div>
   </div>
   <div class="card"><h2>Weight Trend</h2><canvas id="weightChart" width="800" height="260"></canvas></div>
   <div class="card"><h2>Waist Trend</h2><canvas id="waistChart" width="800" height="260"></canvas></div>
@@ -493,8 +542,8 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
     <div id="histCounts" class="hint" style="font-weight:800;margin-bottom:8px"></div><table id="histTable"><thead><tr><th>Date</th><th>Workout</th><th>Weight</th><th>Waist</th><th>Body Fat</th><th>Nutrition</th><th>Steps</th><th>Notes</th></tr></thead><tbody></tbody></table>
   </div>
   <div class="card">
-    <h2>Version 3.16 Changelog <span class="versionchip">Bob's Corner</span></h2>
-    <div class="tiny">&bull; <b>Nov 6, 2026 — Progression:</b> Target now requires 2 consecutive clean full sessions (all prescribed sets at the same weight hitting the rep ceiling) before suggesting a weight increase; mid-session logging no longer counts as a prior session.<br>&bull; <b>Nov 6, 2026 — Est. 1RM:</b> Epley projected 1RM on every Training card plus a dedicated &#x1F3C6; 1RM tab (all-time PR + latest session, date stamped, per-arm vs total).<br>&bull; <b>Nov 6, 2026 — Body charts:</b> Every Body/Recovery chart shows Start, Current, and signed Diff (with dates). Hume Body Pod BF% and Trainer Visual Est. BF% each get their own chart (never mixed).<br>&bull; <b>Nov 6, 2026 — DB cap:</b> Progression never suggests past 52.5 lb per dumbbell / 105 lb total; at the cap after 2 clean sessions it says add reps or slower tempo.<br>&bull; Calf Raise set-count migration: stale 4-set override cleared so Standing DB Calf Raise defaults to the new 2&times;20 prescription.<br>&bull; Templates "+ Save Current Day" no longer depends on a fragile tab index.<br>&bull; Prior: Monday Pre-Workout Fresh Chin-Up Test; Light Cream 1 Tbsp; DB Chest Fly history aliases; Stable Waist Pacing.</div>
+    <h2>Version 3.17 Changelog <span class="versionchip">Bob's Corner</span></h2>
+    <div class="tiny">&bull; <b>Nov 6, 2026 — Hume Segmental:</b> Segmental lean/fat + extra Hume metrics on Body check-in, dedicated Hume Segmental Breakdown card (Start→Current + Diff, arms/legs symmetry, 5-region total lean), idempotent seed for 2026-08-01 &amp; 2026-11-06, and one-paste JSON import for arrays / nested segmental / no-weight entries.<br>&bull; <b>Nov 6, 2026 — Body save safety:</b> Untouched blank inputs never wipe existing Hume/segmental fields; Dashboard/Progress ignore empty-weight body rows.<br>&bull; <b>Nov 6, 2026 — Progression:</b> Target now requires 2 consecutive clean full sessions (all prescribed sets at the same weight hitting the rep ceiling) before suggesting a weight increase; mid-session logging no longer counts as a prior session.<br>&bull; <b>Nov 6, 2026 — Est. 1RM:</b> Epley projected 1RM on every Training card plus a dedicated &#x1F3C6; 1RM tab (all-time PR + latest session, date stamped, per-arm vs total).<br>&bull; <b>Nov 6, 2026 — Body charts:</b> Every Body/Recovery chart shows Start, Current, and signed Diff (with dates). Hume Body Pod BF% and Trainer Visual Est. BF% each get their own chart (never mixed).<br>&bull; <b>Nov 6, 2026 — DB cap:</b> Progression never suggests past 52.5 lb per dumbbell / 105 lb total; at the cap after 2 clean sessions it says add reps or slower tempo.<br>&bull; Calf Raise set-count migration: stale 4-set override cleared so Standing DB Calf Raise defaults to the new 2&times;20 prescription.<br>&bull; Templates "+ Save Current Day" no longer depends on a fragile tab index.<br>&bull; Prior: Monday Pre-Workout Fresh Chin-Up Test; Light Cream 1 Tbsp; DB Chest Fly history aliases; Stable Waist Pacing.</div>
   </div>
 </section>
 </main>
@@ -599,6 +648,9 @@ function restoreFromGoogleDrive() {
   window.handleDriveRestore = function(remoteData) {
     if (remoteData && (remoteData.workouts || remoteData.body || remoteData.nutrition || remoteData.foodLogs)) {
       localStorage.setItem(STORE_KEY, JSON.stringify(remoteData));
+      seedCheckInBaselines();
+      seedChinUpTestSession();
+      loadBodyForDate();
       renderAll();
       loadJournalForDate();
       renderTemplateManager();
@@ -1313,19 +1365,53 @@ function saveWorkout(){
 }
 
 const HUME_NUM_FIELDS=["humeBf","visualBf","humeFatMass","humeLeanMass","humeSmm","humeVisceral","humeWater","humeRhr","humeBmr"];
+const HUME_EXTRA_FIELDS=["humeHealthScore","humeSubqFat","humeAgRatio","humeMetAge","humeCellMass","humeSkeletalMass"];
+const SEG_LEAN_FIELDS=["segArmRLean","segArmLLean","segTrunkLean","segLegRLean","segLegLLean"];
+const SEG_FAT_FIELDS=["segArmRFat","segArmLFat","segTrunkFat","segLegRFat","segLegLFat"];
+const SEG_ALL_FIELDS=[...SEG_LEAN_FIELDS,...SEG_FAT_FIELDS];
+const BODY_NUM_INPUT_IDS=["weight","neck","waist1","waist2","waist3",...HUME_NUM_FIELDS,...HUME_EXTRA_FIELDS,...SEG_ALL_FIELDS];
+const SEG_REGIONS=[
+  {name:"Right Arm", lean:"segArmRLean", fat:"segArmRFat"},
+  {name:"Left Arm", lean:"segArmLLean", fat:"segArmLFat"},
+  {name:"Torso / Trunk", lean:"segTrunkLean", fat:"segTrunkFat"},
+  {name:"Right Leg", lean:"segLegRLean", fat:"segLegRFat"},
+  {name:"Left Leg", lean:"segLegLLean", fat:"segLegLFat"}
+];
+
+function markBodyDirty(el){ if(el) el.dataset.dirty="1"; }
+function clearBodyDirtyFlags(){
+  BODY_NUM_INPUT_IDS.concat(["humeCreatine","humeFasted","humePeed"]).forEach(id=>{
+    const el=document.getElementById(id); if(el) delete el.dataset.dirty;
+  });
+}
 function pickNumField(id, prev){
-  const el=document.getElementById(id); if(!el) return prev[id]||"";
+  const el=document.getElementById(id); if(!el) return prev[id]??"";
   const raw=val(id);
-  if(raw==="") return "";
-  const n=numeric(raw); return n!==null?String(n): (prev[id]||"");
+  if(raw===""){
+    if(el.dataset.dirty==="1") return "";
+    return prev[id]??"";
+  }
+  const n=numeric(raw); return n!==null?String(n):(prev[id]??"");
+}
+function pickSelectField(id, prev){
+  const el=document.getElementById(id); if(!el) return prev[id]??"";
+  const raw=val(id);
+  if(raw==="" && el.dataset.dirty!=="1") return prev[id]??"";
+  return raw;
+}
+function pickCheckField(id, prev){
+  const el=document.getElementById(id); if(!el) return !!prev[id];
+  if(el.dataset.dirty!=="1" && prev[id]!==undefined) return !!prev[id];
+  return !!el.checked;
 }
 function loadBodyForDate(){
   const d=data(), curDate=val("bodyDate")||today();
   const b=(d.body||[]).find(x=>x.date===curDate);
-  const set=(id,v)=>{const el=document.getElementById(id); if(el) el.value=(v!==undefined&&v!==null&&v!=="")?v:"";};
-  const setCheck=(id,v)=>{const el=document.getElementById(id); if(el) el.checked=!!v;};
+  const set=(id,v)=>{const el=document.getElementById(id); if(el){ el.value=(v!==undefined&&v!==null&&v!=="")?v:""; delete el.dataset.dirty; }};
+  const setCheck=(id,v)=>{const el=document.getElementById(id); if(el){ el.checked=!!v; delete el.dataset.dirty; }};
+  clearBodyDirtyFlags();
   if(!b){
-    ["weight","neck","waist1","waist2","waist3"].concat(HUME_NUM_FIELDS).forEach(id=>set(id,""));
+    BODY_NUM_INPUT_IDS.forEach(id=>set(id,""));
     set("humeCreatine",""); setCheck("humeFasted",false); setCheck("humePeed",false);
     updateWaistAverage(); updateWeight7(); return;
   }
@@ -1335,6 +1421,8 @@ function loadBodyForDate(){
   set("waist2", b.waist2);
   set("waist3", b.waist3);
   HUME_NUM_FIELDS.forEach(k=>set(k, b[k]));
+  HUME_EXTRA_FIELDS.forEach(k=>set(k, b[k]));
+  SEG_ALL_FIELDS.forEach(k=>set(k, b[k]));
   set("humeCreatine", b.humeCreatine||"");
   setCheck("humeFasted", !!b.humeFasted);
   setCheck("humePeed", !!b.humePeed);
@@ -1345,8 +1433,16 @@ function autoSaveBodyOnChange(){
   const d=data(), curDate=val("bodyDate")||today();
   const existingIdx = d.body.findIndex(b=>b.date === curDate);
   const prev = existingIdx !== -1 ? d.body[existingIdx] : {};
-  const weightVal = val("weight") || prev.weight || "";
-  if(!weightVal) return;
+  const weightRaw = val("weight");
+  const weightEl = document.getElementById("weight");
+  let weightVal;
+  if(weightRaw===""){
+    weightVal = (weightEl && weightEl.dataset.dirty==="1") ? "" : (prev.weight || "");
+  } else {
+    weightVal = weightRaw;
+  }
+  // New rows need a weight; existing rows (e.g. segmental-only) may update without one
+  if(!weightVal && existingIdx===-1) return;
   const waistValues=["waist1","waist2","waist3"].map(id=>numeric(val(id)));
   const anyWaist=waistValues.some(v=>v!==null);
   const completeWaist=waistValues.every(v=>v!==null);
@@ -1361,13 +1457,17 @@ function autoSaveBodyOnChange(){
     waist3: completeWaist?waistValues[2]:(anyWaist&&waistValues[2]!==null?waistValues[2]:(prev.waist3||"")),
     neck: neckVal!==null?neckVal:(prev.neck||""),
     bodyfat: prev.bodyfat||"",
-    humeCreatine: (document.getElementById("humeCreatine")?val("humeCreatine"):"") || "",
-    humeFasted: !!(document.getElementById("humeFasted")&&document.getElementById("humeFasted").checked),
-    humePeed: !!(document.getElementById("humePeed")&&document.getElementById("humePeed").checked)
+    humeCreatine: pickSelectField("humeCreatine", prev),
+    humeFasted: pickCheckField("humeFasted", prev),
+    humePeed: pickCheckField("humePeed", prev)
   };
   HUME_NUM_FIELDS.forEach(k=>{ bEntry[k]=pickNumField(k, prev); });
-  if(existingIdx !== -1) d.body[existingIdx] = bEntry;
-  else d.body.push(bEntry);
+  HUME_EXTRA_FIELDS.forEach(k=>{ bEntry[k]=pickNumField(k, prev); });
+  SEG_ALL_FIELDS.forEach(k=>{ bEntry[k]=pickNumField(k, prev); });
+  // Preserve any other prior keys we don't manage in the form
+  const merged = Object.assign({}, prev, bEntry);
+  if(existingIdx !== -1) d.body[existingIdx] = merged;
+  else d.body.push(merged);
   save(d);
 }
 
@@ -1375,9 +1475,118 @@ function saveBody(){
   autoSaveBodyOnChange();
   const d=data(), curDate=val("bodyDate")||today();
   const b=(d.body||[]).find(x=>x.date===curDate);
-  if(!b || !b.weight){ alert("Add that day\u2019s weight first, then enter Hume / visual BF% and save."); return; }
+  const hasSeg = b && SEG_ALL_FIELDS.some(k=>numeric(b[k])!==null);
+  if(!b || (!b.weight && !hasSeg)){ alert("Add that day\u2019s weight first (or import / enter segmental Hume data), then save."); return; }
   alert("\u2705 Body check-in saved and synced live!");
   loadBodyForDate();
+}
+
+function fmtSigned(diff, dec, unit){
+  if(diff===null||diff===undefined||!Number.isFinite(diff)) return "--";
+  const v = Number(diff);
+  const s = (v>0?"+":"") + (dec===0?String(Math.round(v)):v.toFixed(dec)) + (unit||"");
+  return s;
+}
+function diffClass(diff, invert){
+  if(diff===null||!Number.isFinite(diff) || Math.abs(diff)<1e-9) return "seg-diff-flat";
+  const up = diff > 0;
+  if(invert) return up ? "seg-diff-up" : "seg-diff-down"; // fat: up is bad (orange)
+  return up ? "seg-diff-down" : "seg-diff-up"; // lean: up is good (green)
+}
+function bodyHasSegmental(entry){
+  return !!entry && SEG_ALL_FIELDS.some(k=>numeric(entry[k])!==null);
+}
+function renderSegmentalCard(){
+  const card=document.getElementById("humeSegmentalCard"); if(!card) return;
+  const tbody=document.querySelector("#segTable tbody");
+  const badges=document.getElementById("segBadges");
+  const extra=document.getElementById("segExtra");
+  const sub=document.getElementById("segCardSub");
+  const d=data();
+  const segEntries=[...d.body].filter(bodyHasSegmental).sort((a,b)=>a.date.localeCompare(b.date));
+  if(!segEntries.length){
+    if(sub) sub.textContent="No segmental Hume scans logged yet — import a monthly check-in JSON or enter values under Monthly Check-In.";
+    if(tbody) tbody.innerHTML="";
+    if(badges) badges.innerHTML="";
+    if(extra) extra.innerHTML="";
+    return;
+  }
+  const startEntry=segEntries[0];
+  const currEntry=segEntries[segEntries.length-1];
+  const single = segEntries.length===1;
+  if(sub) sub.textContent = single
+    ? `Current segmental scan: ${currEntry.date}`
+    : `Start ${startEntry.date} → Current ${currEntry.date}`;
+
+  const rowHtml = SEG_REGIONS.map(r=>{
+    const sL=numeric(startEntry[r.lean]), cL=numeric(currEntry[r.lean]);
+    const sF=numeric(startEntry[r.fat]), cF=numeric(currEntry[r.fat]);
+    const dL=(sL!==null&&cL!==null)?(cL-sL):null;
+    const dF=(sF!==null&&cF!==null)?(cF-sF):null;
+    const leanTxt = single
+      ? (cL!==null?`${cL.toFixed(1)} lb`:"--")
+      : `${sL!==null?sL.toFixed(1):"--"} → ${cL!==null?cL.toFixed(1):"--"} lb`;
+    const fatTxt = single
+      ? (cF!==null?`${cF.toFixed(1)}%`:"--")
+      : `${sF!==null?sF.toFixed(1):"--"}% → ${cF!==null?cF.toFixed(1):"--"}%`;
+    return `<tr>
+      <td><b>${r.name}</b></td>
+      <td>${leanTxt}${!single&&dL!==null?` <span class="${diffClass(dL,false)}">(${fmtSigned(dL,1,"")})</span>`:""}</td>
+      <td>${fatTxt}${!single&&dF!==null?` <span class="${diffClass(dF,true)}">(${fmtSigned(dF,1,"%")})</span>`:""}</td>
+    </tr>`;
+  }).join("");
+  if(tbody) tbody.innerHTML=rowHtml;
+
+  const sumLean = (e)=> SEG_LEAN_FIELDS.reduce((a,k)=>{const n=numeric(e[k]); return a+(n!==null?n:0);},0);
+  const startTotal=sumLean(startEntry), currTotal=sumLean(currEntry);
+  const totalDiff=currTotal-startTotal;
+  const armGap = (e)=>{
+    const L=numeric(e.segArmLLean), R=numeric(e.segArmRLean);
+    if(L===null||R===null) return null;
+    return {gap:Math.abs(L-R), L, R};
+  };
+  const legGap = (e)=>{
+    const L=numeric(e.segLegLLean), R=numeric(e.segLegRLean);
+    if(L===null||R===null) return null;
+    return {gap:Math.abs(L-R), L, R};
+  };
+  const a0=armGap(startEntry), a1=armGap(currEntry);
+  const l0=legGap(startEntry), l1=legGap(currEntry);
+  const armTxt = single
+    ? (a1?`${a1.gap.toFixed(1)} lb gap (L ${a1.L.toFixed(1)} vs R ${a1.R.toFixed(1)})`:"--")
+    : (a0&&a1?`${a0.gap.toFixed(1)} lb gap (${startEntry.date}) → ${a1.gap.toFixed(1)} lb gap (${currEntry.date}) · L ${a1.L.toFixed(1)} vs R ${a1.R.toFixed(1)}`:"--");
+  const legTxt = single
+    ? (l1?(l1.gap<1e-9?`0.0 lb even (${l1.L.toFixed(1)} vs ${l1.R.toFixed(1)})`:`${l1.gap.toFixed(1)} lb gap (L ${l1.L.toFixed(1)} vs R ${l1.R.toFixed(1)})`):"--")
+    : (l0&&l1?`${l0.gap.toFixed(1)} lb gap (${startEntry.date}) → ${l1.gap<1e-9?`0.0 lb even (${l1.L.toFixed(1)} vs ${l1.R.toFixed(1)})`:`${l1.gap.toFixed(1)} lb gap`} (${currEntry.date})`:"--");
+
+  if(badges){
+    badges.innerHTML = `
+      <span class="badge">5-Region Total Lean: ${single?currTotal.toFixed(1)+' lb':`${startTotal.toFixed(1)} → ${currTotal.toFixed(1)} lb`} <span class="${diffClass(totalDiff,false)}">${single?'':`(${fmtSigned(totalDiff,1,' lb')})`}</span></span>
+      <span class="badge">Arms L/R: ${armTxt}</span>
+      <span class="badge">Legs L/R: ${legTxt}</span>`;
+  }
+
+  // Latest extra metrics — prefer latest entry that has any extra/hume summary fields
+  const extraKeys=["humeHealthScore","humeSubqFat","humeSmm","humeCellMass","humeSkeletalMass","humeAgRatio","humeMetAge","humeBmr","humeRhr"];
+  const extraEntries=[...d.body].filter(e=>extraKeys.some(k=>e[k]!==undefined&&e[k]!==null&&e[k]!=="")).sort((a,b)=>a.date.localeCompare(b.date));
+  const ex = extraEntries.at(-1) || currEntry;
+  const metStart = [...d.body].filter(e=>numeric(e.humeMetAge)!==null).sort((a,b)=>a.date.localeCompare(b.date));
+  const metTxt = metStart.length>=2
+    ? `${numeric(metStart[0].humeMetAge)} → ${numeric(metStart.at(-1).humeMetAge)}`
+    : (numeric(ex.humeMetAge)!==null?String(numeric(ex.humeMetAge)):"--");
+  const cell=(label,value)=>`<div class="miniStat"><div class="label">${label}</div><div class="value">${value}</div></div>`;
+  if(extra){
+    extra.innerHTML =
+      cell("Health Score", ex.humeHealthScore||"--") +
+      cell("SubQ Fat", numeric(ex.humeSubqFat)!==null?numeric(ex.humeSubqFat).toFixed(1)+" lb":"--") +
+      cell("Skeletal Muscle", numeric(ex.humeSmm)!==null?numeric(ex.humeSmm).toFixed(1)+" lb":"--") +
+      cell("Body Cell Mass", numeric(ex.humeCellMass)!==null?numeric(ex.humeCellMass).toFixed(1)+" lb":"--") +
+      cell("Bone / Skeletal Mass", numeric(ex.humeSkeletalMass)!==null?numeric(ex.humeSkeletalMass).toFixed(1)+" lb":"--") +
+      cell("A/G Ratio", numeric(ex.humeAgRatio)!==null?numeric(ex.humeAgRatio).toFixed(1)+"%":"--") +
+      cell("Metabolic Age", metTxt) +
+      cell("BMR", numeric(ex.humeBmr)!==null?Math.round(numeric(ex.humeBmr))+" kcal":"--") +
+      cell("RHR", numeric(ex.humeRhr)!==null?Math.round(numeric(ex.humeRhr))+" bpm":"--");
+  }
 }
 
 /* --- FOOD JOURNAL & AUTO-ROLLUP ENGINE --- */
@@ -1809,8 +2018,9 @@ function addPantryItem(index){
 function val(id){return document.getElementById(id).value}
 function avg(arr){let n=arr.map(Number).filter(x=>!isNaN(x)&&x>0);return n.length?n.reduce((a,b)=>a+b,0)/n.length:null}
 function latestByDate(arr){return [...arr].sort((a,b)=>a.date.localeCompare(b.date)).at(-1)||{}}
-function seven(arr,key){return [...arr].sort((a,b)=>a.date.localeCompare(b.date)).slice(-7).map(x=>x[key])}
-function splitWeekAverages(arr,key){const sorted=[...arr].sort((a,b)=>a.date.localeCompare(b.date));return {current:avg(sorted.slice(-7).map(x=>x[key])),previous:avg(sorted.slice(-14,-7).map(x=>x[key]))}}
+function latestWithField(arr,key){return [...arr].filter(x=>numeric(x[key])!==null).sort((a,b)=>a.date.localeCompare(b.date)).at(-1)||{}}
+function seven(arr,key){return [...arr].filter(x=>numeric(x[key])!==null).sort((a,b)=>a.date.localeCompare(b.date)).slice(-7).map(x=>x[key])}
+function splitWeekAverages(arr,key){const sorted=[...arr].filter(x=>numeric(x[key])!==null).sort((a,b)=>a.date.localeCompare(b.date));return {current:avg(sorted.slice(-7).map(x=>x[key])),previous:avg(sorted.slice(-14,-7).map(x=>x[key]))}}
 function trendText(current,previous,unit){if(current===null||previous===null)return "Need another week";const diff=current-previous,eps=unit==='"'?0.05:0.15;if(Math.abs(diff)<eps)return "\u27A1\uFE0F stable";return `${diff>0?"\u2B06\uFE0F":"\u2B07\uFE0F"} ${Math.abs(diff).toFixed(unit==='"'?2:1)}${unit} vs prior 7 logs`}
 function daysSince(dateStr){if(!dateStr)return null;return Math.max(0,Math.floor((new Date(today()+"T12:00:00")-new Date(dateStr+"T12:00:00"))/86400000))}
 function workoutStreak(workouts){const dates=[...new Set(workouts.map(w=>w.date))].sort().reverse();if(!dates.length)return 0;let streak=1;for(let i=1;i<dates.length;i++){if((new Date(dates[i-1]+"T12:00:00")-new Date(dates[i]+"T12:00:00"))/86400000<=3)streak++;else break}return streak}
@@ -1907,32 +2117,32 @@ function cutMetrics(d){
 }
 
 function renderDash(){
-  const d=data(),lb=latestByDate(d.body),av=avg(seven(d.body,"weight"));
+  const d=data(),lbW=latestWithField(d.body,"weight"),lbWaist=latestWithField(d.body,"waist"),av=avg(seven(d.body,"weight"));
   const wt=splitWeekAverages(d.body,"weight"),wa=splitWeekAverages(d.body,"waist"),cal=avg(seven(d.nutrition,"calories")),pro=avg(seven(d.nutrition,"protein")),carb=avg(seven(d.nutrition,"carbs")),fatAvg=avg(seven(d.nutrition,"fat")),stepsAvg=avg(seven(d.nutrition,"steps"));
   const lastWorkout=latestByDate(d.workouts),since=daysSince(lastWorkout.date),cm=cutMetrics(d);
-  dWeight.textContent=lb.weight?lb.weight+" lb":"--";
-  dWaist.textContent=lb.waist?Number(lb.waist).toFixed(2)+'"':"--";
+  document.getElementById("dWeight").textContent=lbW.weight?lbW.weight+" lb":"--";
+  document.getElementById("dWaist").textContent=lbWaist.waist?Number(lbWaist.waist).toFixed(2)+'"':"--";
   const humeEntries = d.body.filter(x => numeric(x.humeBf) !== null).sort((a,b)=>a.date.localeCompare(b.date));
   const visualEntries = d.body.filter(x => numeric(x.visualBf) !== null).sort((a,b)=>a.date.localeCompare(b.date));
-  dBodyFat.textContent = humeEntries.length ? numeric(humeEntries.at(-1).humeBf).toFixed(1) + "%" : "--";
+  document.getElementById("dBodyFat").textContent = humeEntries.length ? numeric(humeEntries.at(-1).humeBf).toFixed(1) + "%" : "--";
   const visLatest = visualEntries.length ? numeric(visualEntries.at(-1).visualBf).toFixed(1) + "%" : "--";
   document.getElementById("dBodyFatTrend").textContent = "Visual est: " + visLatest;
-  dAvg.textContent=av?av.toFixed(1)+" lb":"--";
-  dWorkouts.textContent=d.workouts.length;
-  dWeightTrend.textContent=trendText(wt.current,wt.previous," lb");
-  dWaistTrend.textContent=trendText(wa.current,wa.previous,'"');
-  dCalories.textContent=cal?Math.round(cal):"--";
-  dStreak.textContent=workoutStreak(d.workouts);
-  dLastWorkout.textContent=lastWorkout.date?(since===0?"trained today":since===1?"last workout yesterday":`last workout ${since} days ago`):"no workouts yet";
-  dProtein.textContent=pro?Math.round(pro)+"g":"--";
-  dCarbs.textContent=carb?Math.round(carb)+"g":"--";
-  dFat.textContent=fatAvg?Math.round(fatAvg)+"g":"--";
-  dSteps.textContent=stepsAvg?Math.round(stepsAvg).toLocaleString():"--";
-  dCutDay.textContent=cm.day?`Day ${cm.day}`:"Recomp Active";
-  dCutDates.textContent=`Target: 2650 kcal baseline`;
+  document.getElementById("dAvg").textContent=av?av.toFixed(1)+" lb":"--";
+  document.getElementById("dWorkouts").textContent=d.workouts.length;
+  document.getElementById("dWeightTrend").textContent=trendText(wt.current,wt.previous," lb");
+  document.getElementById("dWaistTrend").textContent=trendText(wa.current,wa.previous,'"');
+  document.getElementById("dCalories").textContent=cal?Math.round(cal):"--";
+  document.getElementById("dStreak").textContent=workoutStreak(d.workouts);
+  document.getElementById("dLastWorkout").textContent=lastWorkout.date?(since===0?"trained today":since===1?"last workout yesterday":`last workout ${since} days ago`):"no workouts yet";
+  document.getElementById("dProtein").textContent=pro?Math.round(pro)+"g":"--";
+  document.getElementById("dCarbs").textContent=carb?Math.round(carb)+"g":"--";
+  document.getElementById("dFat").textContent=fatAvg?Math.round(fatAvg)+"g":"--";
+  document.getElementById("dSteps").textContent=stepsAvg?Math.round(stepsAvg).toLocaleString():"--";
+  document.getElementById("dCutDay").textContent=cm.day?`Day ${cm.day}`:"Recomp Active";
+  document.getElementById("dCutDates").textContent=`Target: 2650 kcal baseline`;
   
-  dFinish.textContent = "13.4% BF \u2022 Nov 6, 2026";
-  dRate.textContent = `Milestone 1 Waist: 31.25"`;
+  document.getElementById("dFinish").textContent = "13.4% BF \u2022 Nov 6, 2026";
+  document.getElementById("dRate").textContent = `Milestone 1 Waist: 31.25"`;
 
   const pace = calculatePacing(d);
   const pacingEl = document.getElementById("dPacing");
@@ -1940,22 +2150,22 @@ function renderDash(){
   pacingEl.className = `value ${pace.color}`;
   document.getElementById("dPacingSub").innerHTML = pace.sub;
 
-  coachRead.textContent=makeRead();
+  document.getElementById("coachRead").textContent=makeRead();
 }
 
 function makeRead(){
   const d=data(),b=[...d.body].sort((a,b)=>a.date.localeCompare(b.date));
   const pace = calculatePacing(d);
   if(b.length<2)return `Phase active: Recomp & Deficit (2650 kcal) toward Milestone 1 (13.4% BF / 31.25" waist) on Nov 6, 2026. Log the first-Friday monthly waist to calculate pacing.`;
-  const last=b.at(-1),av=avg(seven(b,"weight")),cal=avg(seven(d.nutrition,"calories")),pro=avg(seven(d.nutrition,"protein"));
+  const lastW=latestWithField(b,"weight"), lastWaist=latestWithField(b,"waist"),av=avg(seven(b,"weight")),cal=avg(seven(d.nutrition,"calories")),pro=avg(seven(d.nutrition,"protein"));
   
   return `Current phase: RECOMP / DEFICIT (MILESTONE 1 SPRINT)
 Daily targets: ${targets.calories} calories \u2022 ${targets.protein}g protein \u2022 ${targets.fat}g fat \u2022 ${targets.carbs}g carbs \u2022 35g+ fiber
 Target Milestone 1: 13.4% Body Fat (31.25" Waist) by November 6, 2026
 
-Latest weight: ${last.weight||"--"}
+Latest weight: ${lastW.weight||"--"}
 7-log average weight: ${av?av.toFixed(1):"--"}
-Latest averaged waist: ${last.waist?Number(last.waist).toFixed(2)+'"':"--"}
+Latest averaged waist: ${lastWaist.waist?Number(lastWaist.waist).toFixed(2)+'"':"--"}
 7-log calorie average: ${cal?Math.round(cal):"--"}
 7-log protein average: ${pro?Math.round(pro):"--"}g
 
@@ -2303,6 +2513,9 @@ function importDataFromFile(){
       const parsed=JSON.parse(text);
       if(!parsed.workouts||!parsed.body||!parsed.nutrition){alert("Invalid backup file.");return;}
       localStorage.setItem(STORE_KEY,JSON.stringify(parsed));
+      seedCheckInBaselines();
+      seedChinUpTestSession();
+      loadBodyForDate();
       renderAll(); loadJournalForDate(); renderTemplateManager();
       alert("Backup loaded into the app.");
     }catch(e){alert("Could not load that file.");}
@@ -2335,6 +2548,46 @@ function renderAll(){try{setTimeout(updateWeight7,0);}catch(e){}
   drawChart("humeVisceralChart",b,"humeVisceral","Visceral Index");
   drawChart("humeWaterChart",b,"humeWater","Body Water %");
   try{ if(!document.getElementById("onerm").classList.contains("hidden")) renderOneRM(); }catch(e){}
+  try{ renderSegmentalCard(); }catch(e){}
+}
+
+/* Idempotent fill-missing-only seeds for segmental baselines + chin-up test */
+function seedCheckInBaselines(){
+  const d=data();
+  d.body=d.body||[];
+  let changed=false;
+  const fillMissing=(entry, vals)=>{
+    Object.keys(vals).forEach(k=>{
+      const v=vals[k];
+      if(typeof v==="boolean"){
+        if(entry[k]===undefined){ entry[k]=v; changed=true; }
+      } else if(entry[k]===undefined || entry[k]===null || entry[k]===""){
+        entry[k]=v; changed=true;
+      }
+    });
+  };
+  const ensure=(date, vals)=>{
+    let idx=d.body.findIndex(b=>b.date===date);
+    if(idx===-1){ d.body.push({date, weight:""}); idx=d.body.length-1; changed=true; }
+    fillMissing(d.body[idx], vals);
+  };
+  ensure("2026-08-01", {
+    humeMetAge:"32",
+    segArmRLean:"6.9", segArmLLean:"7.6", segTrunkLean:"62.3", segLegRLean:"22.8", segLegLLean:"22.3",
+    segArmRFat:"19.1", segArmLFat:"17.2", segTrunkFat:"19.3", segLegRFat:"13.0", segLegLFat:"13.7"
+  });
+  ensure("2026-11-06", {
+    weight:"165.3", waist:"32.29", waist1:32.15, waist2:32.42, waist3:32.29,
+    humeBf:"18.5", visualBf:"17.2", humeFatMass:"30.5", humeLeanMass:"124.0", humeSmm:"81.0",
+    humeVisceral:"7", humeWater:"59.4", humeRhr:"75", humeBmr:"1689",
+    humeCreatine:"on", humeFasted:true, humePeed:true,
+    humeHealthScore:"652", humeSubqFat:"26.5", humeAgRatio:"106.3", humeMetAge:"33",
+    humeCellMass:"88.4", humeSkeletalMass:"23.2",
+    segArmRLean:"7.2", segArmLLean:"7.5", segTrunkLean:"62.5", segLegRLean:"22.9", segLegLLean:"22.9",
+    segArmRFat:"18.7", segArmLFat:"18.3", segTrunkFat:"18.2", segLegRFat:"13.0", segLegLFat:"13.6"
+  });
+  if(changed) localStorage.setItem(STORE_KEY, JSON.stringify(d));
+  return changed;
 }
 
 /* Auto-seed the 2026-10-19 Monday session with 8 fresh chin-ups */
@@ -2370,6 +2623,9 @@ function seedChinUpTestSession(){
 
 initTheme();
 lastKnownToday=today();
+seedChinUpTestSession();
+seedCheckInBaselines();
+loadBodyForDate();
 setTimeout(()=>{pullZeppSteps(true);showZeppInfo();},800);
 renderWorkout();
 renderPantryGrid();
@@ -2391,7 +2647,13 @@ function updateWeight7(){
   const mp=document.getElementById("monthlyPrompt"), box=document.getElementById("waistBox");
   if(mp){ if(isFirstFriday(end)){ mp.classList.remove("hidden"); mp.innerHTML="\uD83D\uDCC5 <b>Monthly check-in today:</b> progress photos (front + side), waist at the navel (below) and Hume body scan, after peeing and before eating, drinking or training."; if(box) box.open=true; } else mp.classList.add("hidden"); }
 }
-document.addEventListener("DOMContentLoaded",()=>{["weight","bodyDate"].forEach(id=>{const x=document.getElementById(id);if(x){x.addEventListener("input",updateWeight7);x.addEventListener("change",updateWeight7);}});setTimeout(()=>{updateWeight7();loadBodyForDate();},300);});
+document.addEventListener("DOMContentLoaded",()=>{
+  ["weight","bodyDate"].forEach(id=>{const x=document.getElementById(id);if(x){x.addEventListener("input",updateWeight7);x.addEventListener("change",updateWeight7);}});
+  BODY_NUM_INPUT_IDS.forEach(id=>{const el=document.getElementById(id); if(el){ el.addEventListener("input",()=>markBodyDirty(el)); }});
+  ["humeCreatine","humeFasted","humePeed"].forEach(id=>{const el=document.getElementById(id); if(el){ el.addEventListener("change",()=>markBodyDirty(el)); }});
+  updateWeight7();
+  loadBodyForDate();
+});
 
 function swapExercise(i){
   const type=workType.value, ds=val("workDate")||today();
@@ -2412,55 +2674,142 @@ function swapExercise(i){
   localStorage.setItem(STORE_KEY,JSON.stringify(d)); renderWorkout();
 }
 
-function importBodyJson(){
-  const raw=(document.getElementById("bodyJsonImportBox")||{}).value;
-  if(!raw || !String(raw).trim()){ alert("Paste the trainer JSON first."); return; }
-  let obj;
-  try{ obj=JSON.parse(String(raw).trim()); }catch(e){ alert("Invalid JSON. Check brackets and commas."); return; }
-  if(Array.isArray(obj)) obj=obj[0];
-  if(!obj || typeof obj!=="object"){ alert("JSON must be one check-in object."); return; }
+function coerceBodyNum(v){
+  if(v===undefined||v===null||v==="") return null;
+  const n=numeric(v); return n;
+}
+function pickAlias(obj, keys, prevVal){
+  for(const k of keys){
+    if(obj[k]!==undefined && obj[k]!==null && obj[k]!==""){
+      const n=coerceBodyNum(obj[k]);
+      if(n!==null) return String(n);
+      if(typeof obj[k]==="string") return obj[k];
+      return String(obj[k]);
+    }
+  }
+  return prevVal??"";
+}
+function extractSegmental(obj){
+  const out={};
+  const flatLean={segArmRLean:["segArmRLean"], segArmLLean:["segArmLLean"], segTrunkLean:["segTrunkLean"], segLegRLean:["segLegRLean"], segLegLLean:["segLegLLean"]};
+  const flatFat={segArmRFat:["segArmRFat"], segArmLFat:["segArmLFat"], segTrunkFat:["segTrunkFat"], segLegRFat:["segLegRFat"], segLegLFat:["segLegLFat"]};
+  Object.keys(flatLean).forEach(k=>{ if(obj[k]!==undefined) out[k]=obj[k]; });
+  Object.keys(flatFat).forEach(k=>{ if(obj[k]!==undefined) out[k]=obj[k]; });
+  const seg=obj.segmental||obj.segments||null;
+  if(seg && typeof seg==="object"){
+    const lean=seg.lean||{};
+    const fat=seg.fat||{};
+    const mapSide=(sideObj, leanKey, fatKey)=>{
+      if(!sideObj||typeof sideObj!=="object") return;
+      if(sideObj.lean!==undefined) out[leanKey]=sideObj.lean;
+      if(sideObj.fat!==undefined) out[fatKey]=sideObj.fat;
+    };
+    // nested lean/fat maps
+    const L=lean.rightArm??lean.RightArm??lean.armR;
+    const Ll=lean.leftArm??lean.LeftArm??lean.armL;
+    const Lt=lean.trunk??lean.torso??lean.Trunk??lean.Torso;
+    const Lr=lean.rightLeg??lean.RightLeg??lean.legR;
+    const Lll=lean.leftLeg??lean.LeftLeg??lean.legL;
+    if(L!==undefined) out.segArmRLean=L;
+    if(Ll!==undefined) out.segArmLLean=Ll;
+    if(Lt!==undefined) out.segTrunkLean=Lt;
+    if(Lr!==undefined) out.segLegRLean=Lr;
+    if(Lll!==undefined) out.segLegLLean=Lll;
+    const F=fat.rightArm??fat.RightArm??fat.armR;
+    const Fl=fat.leftArm??fat.LeftArm??fat.armL;
+    const Ft=fat.trunk??fat.torso??fat.Trunk??fat.Torso;
+    const Fr=fat.rightLeg??fat.RightLeg??fat.legR;
+    const Fll=fat.leftLeg??fat.LeftLeg??fat.legL;
+    if(F!==undefined) out.segArmRFat=F;
+    if(Fl!==undefined) out.segArmLFat=Fl;
+    if(Ft!==undefined) out.segTrunkFat=Ft;
+    if(Fr!==undefined) out.segLegRFat=Fr;
+    if(Fll!==undefined) out.segLegLFat=Fll;
+    // per-region objects
+    mapSide(seg.rightArm||seg.RightArm, "segArmRLean","segArmRFat");
+    mapSide(seg.leftArm||seg.LeftArm, "segArmLLean","segArmLFat");
+    mapSide(seg.trunk||seg.torso||seg.Trunk||seg.Torso, "segTrunkLean","segTrunkFat");
+    mapSide(seg.rightLeg||seg.RightLeg, "segLegRLean","segLegRFat");
+    mapSide(seg.leftLeg||seg.LeftLeg, "segLegLLean","segLegLFat");
+  }
+  return out;
+}
+function mergeBodyCheckIn(d, obj){
   const date=String(obj.date||"").trim();
-  if(!/^\d{4}-\d{2}-\d{2}$/.test(date)){ alert("JSON needs a date like 2026-11-06."); return; }
-  const d=data();
+  if(!/^\d{4}-\d{2}-\d{2}$/.test(date)) return null;
   const idx=(d.body||[]).findIndex(b=>b.date===date);
   const prev=idx!==-1?d.body[idx]:{};
-  const num=(v)=>{ const n=numeric(v); return n!==null?n:null; };
-  const strNum=(v,fallback="")=>{ const n=num(v); return n!==null?String(n):fallback; };
+  const num=(v)=>coerceBodyNum(v);
   const waist1=num(obj.waist1), waist2=num(obj.waist2), waist3=num(obj.waist3);
   let waistAvg=num(obj.waist);
   if(waistAvg===null && waist1!==null && waist2!==null && waist3!==null) waistAvg=avg([waist1,waist2,waist3]);
-  const weight=obj.weight!==undefined&&obj.weight!==""?strNum(obj.weight, prev.weight||""):(prev.weight||"");
-  if(!weight){ alert("JSON needs a weight for that day (or an existing weight already logged)."); return; }
+  const weightProvided = obj.weight!==undefined && obj.weight!==null && obj.weight!=="";
+  const weight = weightProvided ? String(num(obj.weight)??obj.weight) : (prev.weight||"");
   const creatine=String(obj.humeCreatine||obj.creatine||"").toLowerCase();
-  const bEntry={
+  const seg=extractSegmental(obj);
+  const patch={
     date,
     weight,
-    waist: waistAvg!==null?waistAvg.toFixed(2):(prev.waist||""),
+    waist: waistAvg!==null?Number(waistAvg).toFixed(2):(prev.waist||""),
     waist1: waist1!==null?waist1:(prev.waist1||""),
     waist2: waist2!==null?waist2:(prev.waist2||""),
     waist3: waist3!==null?waist3:(prev.waist3||""),
     neck: num(obj.neck)!==null?num(obj.neck):(prev.neck||""),
     bodyfat: prev.bodyfat||"",
-    humeBf: strNum(obj.humeBf??obj.bf??obj.bodyFat, prev.humeBf||""),
-    visualBf: strNum(obj.visualBf??obj.visual, prev.visualBf||""),
-    humeFatMass: strNum(obj.humeFatMass??obj.fatMass, prev.humeFatMass||""),
-    humeLeanMass: strNum(obj.humeLeanMass??obj.leanMass, prev.humeLeanMass||""),
-    humeSmm: strNum(obj.humeSmm??obj.skeletalMuscle??obj.smm, prev.humeSmm||""),
-    humeVisceral: strNum(obj.humeVisceral??obj.visceral, prev.humeVisceral||""),
-    humeWater: strNum(obj.humeWater??obj.bodyWater, prev.humeWater||""),
-    humeRhr: strNum(obj.humeRhr??obj.rhr, prev.humeRhr||""),
-    humeBmr: strNum(obj.humeBmr??obj.bmr, prev.humeBmr||""),
-    humeCreatine: (creatine==="on"||creatine==="off")?creatine:(prev.humeCreatine||""),
-    humeFasted: obj.humeFasted!==undefined?!!obj.humeFasted:!!obj.fasted,
-    humePeed: obj.humePeed!==undefined?!!obj.humePeed:!!obj.peed
+    humeBf: pickAlias(obj,["humeBf","bf","bodyFat"], prev.humeBf||""),
+    visualBf: pickAlias(obj,["visualBf","visual"], prev.visualBf||""),
+    humeFatMass: pickAlias(obj,["humeFatMass","fatMass"], prev.humeFatMass||""),
+    humeLeanMass: pickAlias(obj,["humeLeanMass","leanMass"], prev.humeLeanMass||""),
+    humeSmm: pickAlias(obj,["humeSmm","skeletalMuscle","smm"], prev.humeSmm||""),
+    humeVisceral: pickAlias(obj,["humeVisceral","visceral","visceralFat"], prev.humeVisceral||""),
+    humeWater: pickAlias(obj,["humeWater","bodyWater","water"], prev.humeWater||""),
+    humeRhr: pickAlias(obj,["humeRhr","rhr","restingHr"], prev.humeRhr||""),
+    humeBmr: pickAlias(obj,["humeBmr","bmr"], prev.humeBmr||""),
+    humeHealthScore: pickAlias(obj,["humeHealthScore","healthScore"], prev.humeHealthScore||""),
+    humeSubqFat: pickAlias(obj,["humeSubqFat","subqFat","subcutaneousFat"], prev.humeSubqFat||""),
+    humeAgRatio: pickAlias(obj,["humeAgRatio","agRatio"], prev.humeAgRatio||""),
+    humeMetAge: pickAlias(obj,["humeMetAge","metAge","metabolicAge"], prev.humeMetAge||""),
+    humeCellMass: pickAlias(obj,["humeCellMass","cellMass","bodyCellMass"], prev.humeCellMass||""),
+    humeSkeletalMass: pickAlias(obj,["humeSkeletalMass","skeletalMass","boneMass"], prev.humeSkeletalMass||""),
+    humeCreatine: (creatine==="on"||creatine==="off")?creatine:(prev.humeCreatine||"")
   };
-  if(idx!==-1) d.body[idx]=Object.assign({}, prev, bEntry);
-  else { d.body=d.body||[]; d.body.push(bEntry); }
+  // booleans: only override when provided
+  if(obj.humeFasted!==undefined || obj.fasted!==undefined) patch.humeFasted=!!(obj.humeFasted!==undefined?obj.humeFasted:obj.fasted);
+  else if(prev.humeFasted!==undefined) patch.humeFasted=!!prev.humeFasted;
+  if(obj.humePeed!==undefined || obj.peed!==undefined) patch.humePeed=!!(obj.humePeed!==undefined?obj.humePeed:obj.peed);
+  else if(prev.humePeed!==undefined) patch.humePeed=!!prev.humePeed;
+  // segmental
+  SEG_ALL_FIELDS.forEach(k=>{
+    if(seg[k]!==undefined && seg[k]!==null && seg[k]!==""){
+      const n=num(seg[k]); patch[k]=n!==null?String(n):String(seg[k]);
+    } else if(prev[k]!==undefined) patch[k]=prev[k];
+  });
+  const merged=Object.assign({}, prev, patch);
+  // Remove undefined
+  Object.keys(merged).forEach(k=>{ if(merged[k]===undefined) delete merged[k]; });
+  if(idx!==-1) d.body[idx]=merged; else { d.body=d.body||[]; d.body.push(merged); }
+  return date;
+}
+function importBodyJson(){
+  const raw=(document.getElementById("bodyJsonImportBox")||{}).value;
+  if(!raw || !String(raw).trim()){ alert("Paste the trainer JSON first."); return; }
+  let obj;
+  try{ obj=JSON.parse(String(raw).trim()); }catch(e){ alert("Invalid JSON. Check brackets and commas."); return; }
+  const items = Array.isArray(obj) ? obj : [obj];
+  if(!items.length || items.some(x=>!x || typeof x!=="object")){ alert("JSON must be one check-in object or an array of them."); return; }
+  const d=data();
+  const imported=[];
+  for(const item of items){
+    const date=mergeBodyCheckIn(d, item);
+    if(!date){ alert("Each check-in needs a date like 2026-11-06."); return; }
+    imported.push(date);
+  }
   save(d);
-  document.getElementById("bodyDate").value=date;
+  const latest=imported.slice().sort().at(-1);
+  document.getElementById("bodyDate").value=latest;
   loadBodyForDate();
   document.getElementById("bodyJsonImportBox").value="";
-  alert("Imported monthly check-in for "+date+".");
+  alert("✅ Imported "+imported.length+" check-in date(s): "+imported.join(", "));
 }
 </script>
 </body>
