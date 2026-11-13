@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <meta name="apple-mobile-web-app-title" content="Bob's Tracker"/>
 <meta name="theme-color" content="#070b12"/>
-<title>Bob's Corner v3.24</title>
+<title>Bob's Corner v3.25</title>
 <style>
 :root{
   --bg:#070b12;--panel:#111827;--panel2:#0b1220;--soft:#1f2937;--line:#2f3a4c;
@@ -168,7 +168,7 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
   <div class="header-top">
     <div>
       <h1>Bob's Corner &#x1F9EA;</h1>
-      <div class="phase">Goal: Fast Aesthetic Hypertrophy &bull; Milestone 1: Nov 6, 2026 &bull; v3.24</div>
+      <div class="phase">Goal: Fast Aesthetic Hypertrophy &bull; Milestone 1: Nov 6, 2026 &bull; v3.25</div>
     </div>
     <div style="display:flex;align-items:center;gap:8px">
       <span id="syncStatusBadge" class="sync-indicator synced">&#x2601;&#xFE0F; Synced</span>
@@ -576,7 +576,7 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
   </div>
   <div class="card">
     <h2>Version 3.17 Changelog <span class="versionchip">Bob's Corner</span></h2>
-    <div class="tiny">&bull; <b>Nov 13, 2026 — Dynamic nutrition targets:</b> Daily calories stay 2,650. Protein floor is that day's morning weigh-in in lb (nearest gram), shown as a range up to 180 g (e.g. 164–180 g). Fat stays 80 g; carbs = round((2650 − protein×4 − 80×9) ÷ 4). If no weigh-in that day, the most recent earlier weight is used; if none exist, 165 lb. History and past journal days use that date's weight, never today's. A note shows which weight and date were used.<br>&bull; <b>Nov 13, 2026 — Creamer 15 g:</b> Creamer serving corrected to 1 tbsp (15 g) = 30 kcal, 0P, 5C, 0 fiber, 1F. Gram scaling is off 15 g (30 g = 2 tbsp = 60 kcal). A saved v3.22 Creamer pantry entry is updated in place; logged food history is not changed.<br>&bull; <b>Nov 13, 2026 — Creamer pantry preset:</b> Added Creamer (1 tbsp / 30 g = 30 kcal, 0P, 5C, 0 fiber, 1F) alongside existing pantry staples, with the same gram scaling as Butter. If a saved pantry list is present, Creamer is added only when missing.<br>&bull; <b>Nov 9, 2026 — Bench positions (v3.21):</b> Robert's bench setups applied on Kickback (Pos 3, chest-supported face-down, both arms), Hip Thrust (flat, upper back), One-Arm DB Row (flat, hand+knee brace), Chest-Supported Row (Pos 3, face down), Wrist Curl (flat, forearm braced), Bulgarian Split Squat (flat, rear foot). Kickback stays <b>per arm</b> with per-arm progression (10→15, 52.5 cap); no weight conversion.<br>&bull; <b>Nov 9, 2026 — Bench &amp; Load labels:</b> Every Training card shows bench setup (position + usage) when a bench is used, and an explicit Load label (<b>per arm</b> or <b>total</b>) on the card, weight column, placeholder, and 1RM tab. Flip any lift via optional <code>loadLabel</code> on the exercise object.<br>&bull; <b>Nov 6, 2026 — Hume Segmental:</b> Segmental lean/fat + extra Hume metrics on Body check-in, dedicated Hume Segmental Breakdown card (Start→Current + Diff, arms/legs symmetry, 5-region total lean), idempotent seed for 2026-08-01 &amp; 2026-11-06, and one-paste JSON import for arrays / nested segmental / no-weight entries.<br>&bull; <b>Nov 6, 2026 — Body save safety:</b> Untouched blank inputs never wipe existing Hume/segmental fields; Dashboard/Progress ignore empty-weight body rows.<br>&bull; <b>Nov 6, 2026 — Progression:</b> Target now requires 2 consecutive clean full sessions (all prescribed sets at the same weight hitting the rep ceiling) before suggesting a weight increase; mid-session logging no longer counts as a prior session.<br>&bull; <b>Nov 6, 2026 — Est. 1RM:</b> Epley projected 1RM on every Training card plus a dedicated &#x1F3C6; 1RM tab (all-time PR + latest session, date stamped, per-arm vs total).<br>&bull; <b>Nov 6, 2026 — Body charts:</b> Every Body/Recovery chart shows Start, Current, and signed Diff (with dates). Hume Body Pod BF% and Trainer Visual Est. BF% each get their own chart (never mixed).<br>&bull; <b>Nov 6, 2026 — DB cap:</b> Progression never suggests past 52.5 lb per dumbbell / 105 lb total; at the cap after 2 clean sessions it says add reps or slower tempo.<br>&bull; Calf Raise set-count migration: stale 4-set override cleared so Standing DB Calf Raise defaults to the new 2&times;20 prescription.<br>&bull; Templates "+ Save Current Day" no longer depends on a fragile tab index.<br>&bull; Prior: Monday Pre-Workout Fresh Chin-Up Test; Light Cream 1 Tbsp; DB Chest Fly history aliases; Stable Waist Pacing.</div>
+    <div class="tiny">&bull; <b>Nov 13, 2026 — Zero Sugar Creamer preset:</b> Added Zero Sugar Creamer after Creamer: 1 tablespoon (15 ml) = 10 kcal, 0P, 1F, 0C, 0 fiber. Scaling is off 15 ml (30 ml = 20 kcal / 2 g fat). If a saved pantry list is present, it is added only when missing; other entries and logged food are unchanged.<br>&bull; <b>Nov 13, 2026 — Dynamic nutrition targets:</b> Daily calories stay 2,650. Protein floor is that day's morning weigh-in in lb (nearest gram), shown as a range up to 180 g (e.g. 164–180 g). Fat stays 80 g; carbs = round((2650 − protein×4 − 80×9) ÷ 4). If no weigh-in that day, the most recent earlier weight is used; if none exist, 165 lb. History and past journal days use that date's weight, never today's. A note shows which weight and date were used.<br>&bull; <b>Nov 13, 2026 — Creamer 15 g:</b> Creamer serving corrected to 1 tbsp (15 g) = 30 kcal, 0P, 5C, 0 fiber, 1F. Gram scaling is off 15 g (30 g = 2 tbsp = 60 kcal). A saved v3.22 Creamer pantry entry is updated in place; logged food history is not changed.<br>&bull; <b>Nov 13, 2026 — Creamer pantry preset:</b> Added Creamer (1 tbsp / 30 g = 30 kcal, 0P, 5C, 0 fiber, 1F) alongside existing pantry staples, with the same gram scaling as Butter. If a saved pantry list is present, Creamer is added only when missing.<br>&bull; <b>Nov 9, 2026 — Bench positions (v3.21):</b> Robert's bench setups applied on Kickback (Pos 3, chest-supported face-down, both arms), Hip Thrust (flat, upper back), One-Arm DB Row (flat, hand+knee brace), Chest-Supported Row (Pos 3, face down), Wrist Curl (flat, forearm braced), Bulgarian Split Squat (flat, rear foot). Kickback stays <b>per arm</b> with per-arm progression (10→15, 52.5 cap); no weight conversion.<br>&bull; <b>Nov 9, 2026 — Bench &amp; Load labels:</b> Every Training card shows bench setup (position + usage) when a bench is used, and an explicit Load label (<b>per arm</b> or <b>total</b>) on the card, weight column, placeholder, and 1RM tab. Flip any lift via optional <code>loadLabel</code> on the exercise object.<br>&bull; <b>Nov 6, 2026 — Hume Segmental:</b> Segmental lean/fat + extra Hume metrics on Body check-in, dedicated Hume Segmental Breakdown card (Start→Current + Diff, arms/legs symmetry, 5-region total lean), idempotent seed for 2026-08-01 &amp; 2026-11-06, and one-paste JSON import for arrays / nested segmental / no-weight entries.<br>&bull; <b>Nov 6, 2026 — Body save safety:</b> Untouched blank inputs never wipe existing Hume/segmental fields; Dashboard/Progress ignore empty-weight body rows.<br>&bull; <b>Nov 6, 2026 — Progression:</b> Target now requires 2 consecutive clean full sessions (all prescribed sets at the same weight hitting the rep ceiling) before suggesting a weight increase; mid-session logging no longer counts as a prior session.<br>&bull; <b>Nov 6, 2026 — Est. 1RM:</b> Epley projected 1RM on every Training card plus a dedicated &#x1F3C6; 1RM tab (all-time PR + latest session, date stamped, per-arm vs total).<br>&bull; <b>Nov 6, 2026 — Body charts:</b> Every Body/Recovery chart shows Start, Current, and signed Diff (with dates). Hume Body Pod BF% and Trainer Visual Est. BF% each get their own chart (never mixed).<br>&bull; <b>Nov 6, 2026 — DB cap:</b> Progression never suggests past 52.5 lb per dumbbell / 105 lb total; at the cap after 2 clean sessions it says add reps or slower tempo.<br>&bull; Calf Raise set-count migration: stale 4-set override cleared so Standing DB Calf Raise defaults to the new 2&times;20 prescription.<br>&bull; Templates "+ Save Current Day" no longer depends on a fragile tab index.<br>&bull; Prior: Monday Pre-Workout Fresh Chin-Up Test; Light Cream 1 Tbsp; DB Chest Fly history aliases; Stable Waist Pacing.</div>
   </div>
 </section>
 </main>
@@ -752,6 +752,7 @@ const pantryItems = [
   {name:"Light Cream", unit:"tbsp", baseQty:1, cal:29, p:0.4, c:0.6, fib:0.0, f:2.9, defSlot:"Breakfast"},
   {name:"Butter", unit:"g", baseQty:7, cal:51, p:0.1, c:0, fib:0, f:5.8, defSlot:"Breakfast"},
   {name:"Creamer", unit:"g", baseQty:15, cal:30, p:0, c:5, fib:0, f:1, defSlot:"Breakfast", servingLabel:"1 tbsp (15 g)"},
+  {name:"Zero Sugar Creamer", unit:"ml", baseQty:15, cal:10, p:0, c:0, fib:0, f:1, defSlot:"Breakfast", servingLabel:"1 tablespoon (15 ml)"},
   {name:"PB2 & Jelly Sandwich", unit:"g", baseQty:100, cal:138, p:15.0, c:24.2, fib:14.2, f:2.5, defSlot:"Snacks"},
   {name:"Baked Sweet Potato", unit:"g", baseQty:100, cal:90, p:2.0, c:20.7, fib:3.3, f:0.1, defSlot:"Dinner"},
   {name:"Greek Yogurt Dip", unit:"g", baseQty:100, cal:60, p:10.0, c:4.0, fib:0.0, f:0.3, defSlot:"Snacks"},
@@ -834,10 +835,14 @@ function data(){
   [d.pantryItems, d.settings && d.settings.pantryItems].forEach(list=>{
     if(!Array.isArray(list)) return;
     const i=list.findIndex(x=>x&&x.name==="Creamer");
-    if(i<0){ list.push(Object.assign({},CREAMER_PRESET)); return; }
-    const cur=list[i];
-    const stale=Number(cur.baseQty)!==15 || cur.servingLabel!==CREAMER_PRESET.servingLabel || Number(cur.cal)!==30 || Number(cur.p)!==0 || Number(cur.c)!==5 || Number(cur.fib)!==0 || Number(cur.f)!==1 || cur.unit!=="g";
-    if(stale) Object.assign(cur, CREAMER_PRESET);
+    if(i<0){ list.push(Object.assign({},CREAMER_PRESET)); }
+    else {
+      const cur=list[i];
+      const stale=Number(cur.baseQty)!==15 || cur.servingLabel!==CREAMER_PRESET.servingLabel || Number(cur.cal)!==30 || Number(cur.p)!==0 || Number(cur.c)!==5 || Number(cur.fib)!==0 || Number(cur.f)!==1 || cur.unit!=="g";
+      if(stale) Object.assign(cur, CREAMER_PRESET);
+    }
+    const ZSC_PRESET={name:"Zero Sugar Creamer", unit:"ml", baseQty:15, cal:10, p:0, c:0, fib:0, f:1, defSlot:"Breakfast", servingLabel:"1 tablespoon (15 ml)"};
+    if(!list.some(x=>x&&x.name==="Zero Sugar Creamer")) list.push(Object.assign({},ZSC_PRESET));
   });
   d.foodLogs=d.foodLogs||{};
   d.dayTemplates=d.dayTemplates||{};
