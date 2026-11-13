@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <meta name="apple-mobile-web-app-title" content="Bob's Tracker"/>
 <meta name="theme-color" content="#070b12"/>
-<title>Bob's Corner v3.25</title>
+<title>Bob's Corner v3.26</title>
 <style>
 :root{
   --bg:#070b12;--panel:#111827;--panel2:#0b1220;--soft:#1f2937;--line:#2f3a4c;
@@ -168,7 +168,7 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
   <div class="header-top">
     <div>
       <h1>Bob's Corner &#x1F9EA;</h1>
-      <div class="phase">Goal: Fast Aesthetic Hypertrophy &bull; Milestone 1: Nov 6, 2026 &bull; v3.25</div>
+      <div class="phase">Goal: Fast Aesthetic Hypertrophy &bull; Milestone 1: Nov 6, 2026 &bull; v3.26</div>
     </div>
     <div style="display:flex;align-items:center;gap:8px">
       <span id="syncStatusBadge" class="sync-indicator synced">&#x2601;&#xFE0F; Synced</span>
@@ -199,7 +199,7 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
       </div>
     </div>
     <div>
-      <div id="dashMacroBadges"><span class="badge">Calories 2650</span><span class="badge">Protein 165–180g</span><span class="badge">Fat 80g</span><span class="badge">Carbs 318g</span><span class="badge">Fiber 35g+</span></div>
+      <div id="dashMacroBadges"><span class="badge">Calories 2650</span><span class="badge">Protein 165g</span><span class="badge">Fat 100g</span><span class="badge">Carbs 273g</span><span class="badge">Fiber 35g+</span></div>
       <p class="tiny" id="dashTargetNote" style="margin:8px 0 0"></p>
     </div>
     <div class="grid" style="margin-top:10px">
@@ -425,12 +425,12 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
       <div class="macroCard">
         <div class="mLabel">Protein</div>
         <div class="mVal" id="jPro" style="color:var(--blue)">0g</div>
-        <div class="mSub" id="jProSub">/ 165–180g</div>
+        <div class="mSub" id="jProSub">/ 165g</div>
       </div>
       <div class="macroCard">
         <div class="mLabel">Carbs</div>
         <div class="mVal" id="jCarb" style="color:var(--cyan)">0g</div>
-        <div class="mSub" id="jCarbSub">/ 318g</div>
+        <div class="mSub" id="jCarbSub">/ 273g</div>
       </div>
       <div class="macroCard">
         <div class="mLabel">Fiber</div>
@@ -440,7 +440,7 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
       <div class="macroCard">
         <div class="mLabel">Fat</div>
         <div class="mVal" id="jFat" style="color:var(--orange)">0g</div>
-        <div class="mSub" id="jFatSub">/ 80g</div>
+        <div class="mSub" id="jFatSub">/ 100g</div>
       </div>
     </div>
     <p class="tiny" id="jTargetNote" style="margin:0 0 12px"></p>
@@ -576,7 +576,7 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
   </div>
   <div class="card">
     <h2>Version 3.17 Changelog <span class="versionchip">Bob's Corner</span></h2>
-    <div class="tiny">&bull; <b>Nov 13, 2026 — Zero Sugar Creamer preset:</b> Added Zero Sugar Creamer after Creamer: 1 tablespoon (15 ml) = 10 kcal, 0P, 1F, 0C, 0 fiber. Scaling is off 15 ml (30 ml = 20 kcal / 2 g fat). If a saved pantry list is present, it is added only when missing; other entries and logged food are unchanged.<br>&bull; <b>Nov 13, 2026 — Dynamic nutrition targets:</b> Daily calories stay 2,650. Protein floor is that day's morning weigh-in in lb (nearest gram), shown as a range up to 180 g (e.g. 164–180 g). Fat stays 80 g; carbs = round((2650 − protein×4 − 80×9) ÷ 4). If no weigh-in that day, the most recent earlier weight is used; if none exist, 165 lb. History and past journal days use that date's weight, never today's. A note shows which weight and date were used.<br>&bull; <b>Nov 13, 2026 — Creamer 15 g:</b> Creamer serving corrected to 1 tbsp (15 g) = 30 kcal, 0P, 5C, 0 fiber, 1F. Gram scaling is off 15 g (30 g = 2 tbsp = 60 kcal). A saved v3.22 Creamer pantry entry is updated in place; logged food history is not changed.<br>&bull; <b>Nov 13, 2026 — Creamer pantry preset:</b> Added Creamer (1 tbsp / 30 g = 30 kcal, 0P, 5C, 0 fiber, 1F) alongside existing pantry staples, with the same gram scaling as Butter. If a saved pantry list is present, Creamer is added only when missing.<br>&bull; <b>Nov 9, 2026 — Bench positions (v3.21):</b> Robert's bench setups applied on Kickback (Pos 3, chest-supported face-down, both arms), Hip Thrust (flat, upper back), One-Arm DB Row (flat, hand+knee brace), Chest-Supported Row (Pos 3, face down), Wrist Curl (flat, forearm braced), Bulgarian Split Squat (flat, rear foot). Kickback stays <b>per arm</b> with per-arm progression (10→15, 52.5 cap); no weight conversion.<br>&bull; <b>Nov 9, 2026 — Bench &amp; Load labels:</b> Every Training card shows bench setup (position + usage) when a bench is used, and an explicit Load label (<b>per arm</b> or <b>total</b>) on the card, weight column, placeholder, and 1RM tab. Flip any lift via optional <code>loadLabel</code> on the exercise object.<br>&bull; <b>Nov 6, 2026 — Hume Segmental:</b> Segmental lean/fat + extra Hume metrics on Body check-in, dedicated Hume Segmental Breakdown card (Start→Current + Diff, arms/legs symmetry, 5-region total lean), idempotent seed for 2026-08-01 &amp; 2026-11-06, and one-paste JSON import for arrays / nested segmental / no-weight entries.<br>&bull; <b>Nov 6, 2026 — Body save safety:</b> Untouched blank inputs never wipe existing Hume/segmental fields; Dashboard/Progress ignore empty-weight body rows.<br>&bull; <b>Nov 6, 2026 — Progression:</b> Target now requires 2 consecutive clean full sessions (all prescribed sets at the same weight hitting the rep ceiling) before suggesting a weight increase; mid-session logging no longer counts as a prior session.<br>&bull; <b>Nov 6, 2026 — Est. 1RM:</b> Epley projected 1RM on every Training card plus a dedicated &#x1F3C6; 1RM tab (all-time PR + latest session, date stamped, per-arm vs total).<br>&bull; <b>Nov 6, 2026 — Body charts:</b> Every Body/Recovery chart shows Start, Current, and signed Diff (with dates). Hume Body Pod BF% and Trainer Visual Est. BF% each get their own chart (never mixed).<br>&bull; <b>Nov 6, 2026 — DB cap:</b> Progression never suggests past 52.5 lb per dumbbell / 105 lb total; at the cap after 2 clean sessions it says add reps or slower tempo.<br>&bull; Calf Raise set-count migration: stale 4-set override cleared so Standing DB Calf Raise defaults to the new 2&times;20 prescription.<br>&bull; Templates "+ Save Current Day" no longer depends on a fragile tab index.<br>&bull; Prior: Monday Pre-Workout Fresh Chin-Up Test; Light Cream 1 Tbsp; DB Chest Fly history aliases; Stable Waist Pacing.</div>
+    <div class="tiny">&bull; <b>Nov 13, 2026 — Macro targets:</b> Protein target is exactly that day's weigh-in in grams (no 180 g range). Fat target is 100 g on every day. Carbs = round((2650 − protein×4 − 100×9) ÷ 4). Calories stay 2,650. Example: 164 lb → 164 P / 100 F / 274 C; fallback 165 lb → 165 / 100 / 273.<br>&bull; <b>Nov 13, 2026 — Zero Sugar Creamer preset:</b> Added Zero Sugar Creamer after Creamer: 1 tablespoon (15 ml) = 10 kcal, 0P, 1F, 0C, 0 fiber. Scaling is off 15 ml (30 ml = 20 kcal / 2 g fat). If a saved pantry list is present, it is added only when missing; other entries and logged food are unchanged.<br>&bull; <b>Nov 13, 2026 — Dynamic nutrition targets:</b> Daily calories stay 2,650. Protein floor is that day's morning weigh-in in lb (nearest gram), shown as a range up to 180 g (e.g. 164–180 g). Fat stays 80 g; carbs = round((2650 − protein×4 − 80×9) ÷ 4). If no weigh-in that day, the most recent earlier weight is used; if none exist, 165 lb. History and past journal days use that date's weight, never today's. A note shows which weight and date were used.<br>&bull; <b>Nov 13, 2026 — Creamer 15 g:</b> Creamer serving corrected to 1 tbsp (15 g) = 30 kcal, 0P, 5C, 0 fiber, 1F. Gram scaling is off 15 g (30 g = 2 tbsp = 60 kcal). A saved v3.22 Creamer pantry entry is updated in place; logged food history is not changed.<br>&bull; <b>Nov 13, 2026 — Creamer pantry preset:</b> Added Creamer (1 tbsp / 30 g = 30 kcal, 0P, 5C, 0 fiber, 1F) alongside existing pantry staples, with the same gram scaling as Butter. If a saved pantry list is present, Creamer is added only when missing.<br>&bull; <b>Nov 9, 2026 — Bench positions (v3.21):</b> Robert's bench setups applied on Kickback (Pos 3, chest-supported face-down, both arms), Hip Thrust (flat, upper back), One-Arm DB Row (flat, hand+knee brace), Chest-Supported Row (Pos 3, face down), Wrist Curl (flat, forearm braced), Bulgarian Split Squat (flat, rear foot). Kickback stays <b>per arm</b> with per-arm progression (10→15, 52.5 cap); no weight conversion.<br>&bull; <b>Nov 9, 2026 — Bench &amp; Load labels:</b> Every Training card shows bench setup (position + usage) when a bench is used, and an explicit Load label (<b>per arm</b> or <b>total</b>) on the card, weight column, placeholder, and 1RM tab. Flip any lift via optional <code>loadLabel</code> on the exercise object.<br>&bull; <b>Nov 6, 2026 — Hume Segmental:</b> Segmental lean/fat + extra Hume metrics on Body check-in, dedicated Hume Segmental Breakdown card (Start→Current + Diff, arms/legs symmetry, 5-region total lean), idempotent seed for 2026-08-01 &amp; 2026-11-06, and one-paste JSON import for arrays / nested segmental / no-weight entries.<br>&bull; <b>Nov 6, 2026 — Body save safety:</b> Untouched blank inputs never wipe existing Hume/segmental fields; Dashboard/Progress ignore empty-weight body rows.<br>&bull; <b>Nov 6, 2026 — Progression:</b> Target now requires 2 consecutive clean full sessions (all prescribed sets at the same weight hitting the rep ceiling) before suggesting a weight increase; mid-session logging no longer counts as a prior session.<br>&bull; <b>Nov 6, 2026 — Est. 1RM:</b> Epley projected 1RM on every Training card plus a dedicated &#x1F3C6; 1RM tab (all-time PR + latest session, date stamped, per-arm vs total).<br>&bull; <b>Nov 6, 2026 — Body charts:</b> Every Body/Recovery chart shows Start, Current, and signed Diff (with dates). Hume Body Pod BF% and Trainer Visual Est. BF% each get their own chart (never mixed).<br>&bull; <b>Nov 6, 2026 — DB cap:</b> Progression never suggests past 52.5 lb per dumbbell / 105 lb total; at the cap after 2 clean sessions it says add reps or slower tempo.<br>&bull; Calf Raise set-count migration: stale 4-set override cleared so Standing DB Calf Raise defaults to the new 2&times;20 prescription.<br>&bull; Templates "+ Save Current Day" no longer depends on a fragile tab index.<br>&bull; Prior: Monday Pre-Workout Fresh Chin-Up Test; Light Cream 1 Tbsp; DB Chest Fly history aliases; Stable Waist Pacing.</div>
   </div>
 </section>
 </main>
@@ -706,7 +706,7 @@ function restoreFromGoogleDrive() {
 }
 
 // Nutrition targets are computed per date from the morning weigh-in via targetsForDate(dateStr).
-const MACRO_CALORIES=2650, MACRO_FAT=80, MACRO_FIBER=35, MACRO_PROTEIN_CEILING=180, MACRO_DEFAULT_WEIGHT=165;
+const MACRO_CALORIES=2650, MACRO_FAT=100, MACRO_FIBER=35, MACRO_DEFAULT_WEIGHT=165;
 function formatTargetWeightDate(dateStr){
   if(!dateStr) return "";
   const dt=new Date(String(dateStr)+"T12:00:00");
@@ -729,11 +729,10 @@ function targetsForDate(dateStr, d){
   const calories=MACRO_CALORIES;
   const carbs=Math.round((calories - protein*4 - fat*9)/4);
   const fiber=MACRO_FIBER;
-  const proteinCeiling=MACRO_PROTEIN_CEILING;
   const note=w.fallback
     ? "Based on default 165 lb"
     : `Based on ${Number(w.weight).toFixed(1)} lb (${formatTargetWeightDate(w.date)})`;
-  return {calories, protein, proteinCeiling, fat, carbs, fiber, weight:w.weight, weightDate:w.date, fallback:!!w.fallback, note};
+  return {calories, protein, fat, carbs, fiber, weight:w.weight, weightDate:w.date, fallback:!!w.fallback, note};
 }
 function journalTargetDate(){
   const el=typeof document!=="undefined"?document.getElementById("nutDate"):null;
@@ -1807,7 +1806,7 @@ function updateJournalMacroTotals(items){
   const jCalSub=document.getElementById("jCalSub"); if(jCalSub) jCalSub.textContent = `/ ${tg.calories} (${tg.calories - tCal} left)`;
   
   const jPro=document.getElementById("jPro"); if(jPro) jPro.textContent = `${tPro}g`;
-  const jProSub=document.getElementById("jProSub"); if(jProSub) jProSub.textContent = `/ ${tg.protein}\u2013${tg.proteinCeiling}g (${tg.protein - tPro}g left)`;
+  const jProSub=document.getElementById("jProSub"); if(jProSub) jProSub.textContent = `/ ${tg.protein}g (${tg.protein - tPro}g left)`;
   
   const jCarb=document.getElementById("jCarb"); if(jCarb) jCarb.textContent = `${tCarb}g`;
   const jCarbSub=document.getElementById("jCarbSub"); if(jCarbSub) jCarbSub.textContent = `/ ${tg.carbs}g (${tg.carbs - tCarb}g left)`;
@@ -2294,7 +2293,7 @@ function renderDash(){
   const todayTg=targetsForDate(today(), d);
   const badgeBox=document.getElementById("dashMacroBadges");
   if(badgeBox){
-    badgeBox.innerHTML=`<span class="badge">Calories ${todayTg.calories}</span><span class="badge">Protein ${todayTg.protein}\u2013${todayTg.proteinCeiling}g</span><span class="badge">Fat ${todayTg.fat}g</span><span class="badge">Carbs ${todayTg.carbs}g</span><span class="badge">Fiber ${todayTg.fiber}g+</span>`;
+    badgeBox.innerHTML=`<span class="badge">Calories ${todayTg.calories}</span><span class="badge">Protein ${todayTg.protein}g</span><span class="badge">Fat ${todayTg.fat}g</span><span class="badge">Carbs ${todayTg.carbs}g</span><span class="badge">Fiber ${todayTg.fiber}g+</span>`;
   }
   const dashNote=document.getElementById("dashTargetNote");
   if(dashNote) dashNote.textContent=todayTg.note;
@@ -2318,7 +2317,7 @@ function makeRead(){
   const lastW=latestWithField(b,"weight"), lastWaist=latestWithField(b,"waist"),av=avg(seven(b,"weight")),cal=avg(seven(d.nutrition,"calories")),pro=avg(seven(d.nutrition,"protein"));
   
   return `Current phase: RECOMP / DEFICIT (MILESTONE 1 SPRINT)
-Daily targets: ${(()=>{const tg=targetsForDate(today(), d); return `${tg.calories} calories \u2022 ${tg.protein}\u2013${tg.proteinCeiling}g protein \u2022 ${tg.fat}g fat \u2022 ${tg.carbs}g carbs \u2022 ${tg.fiber}g+ fiber (${tg.note})`;})()}
+Daily targets: ${(()=>{const tg=targetsForDate(today(), d); return `${tg.calories} calories \u2022 ${tg.protein}g protein \u2022 ${tg.fat}g fat \u2022 ${tg.carbs}g carbs \u2022 ${tg.fiber}g+ fiber (${tg.note})`;})()}
 Target Milestone 1: 13.4% Body Fat (31.25" Waist) by November 6, 2026
 
 Latest weight: ${lastW.weight||"--"}
@@ -2562,7 +2561,7 @@ function renderHistory(){
    const b=d.body.filter(x=>x.date===date).at(-1)||{};
    const n=d.nutrition.filter(x=>x.date===date).at(-1)||{};
    const dayTg=targetsForDate(date, d);
-   const targetHint=`<span class="hint">Target: ${dayTg.protein}\u2013${dayTg.proteinCeiling} P / ${dayTg.carbs} C / ${dayTg.fat} F<br>${dayTg.note}</span>`;
+   const targetHint=`<span class="hint">Target: ${dayTg.protein} P / ${dayTg.carbs} C / ${dayTg.fat} F<br>${dayTg.note}</span>`;
    const macroText=(n.calories?`${n.calories} cal<br>P ${n.protein||""} / C ${n.carbs||""} / F ${n.fat||""}<br>`:"")+targetHint;
    const notes=[...workoutsForDate.map(x=>x.notes),n.notes].filter(Boolean).join(" | ");
    const bfBits=[]; if(b.humeBf) bfBits.push(`Hume ${b.humeBf}%`); if(b.visualBf) bfBits.push(`Vis ${b.visualBf}%`); if(b.humeCreatine) bfBits.push(`Cr ${b.humeCreatine}`); if(!bfBits.length&&b.bodyfat) bfBits.push(`Navy ${b.bodyfat}%`); const bfText=bfBits.join("<br>");
