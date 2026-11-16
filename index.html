@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <meta name="apple-mobile-web-app-title" content="Bob's Tracker"/>
 <meta name="theme-color" content="#070b12"/>
-<title>Bob's Corner v3.27</title>
+<title>Bob's Corner v3.28</title>
 <style>
 :root{
   --bg:#070b12;--panel:#111827;--panel2:#0b1220;--soft:#1f2937;--line:#2f3a4c;
@@ -172,7 +172,7 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
   <div class="header-top">
     <div>
       <h1>Bob's Corner &#x1F9EA;</h1>
-      <div class="phase">Goal: Fast Aesthetic Hypertrophy &bull; Milestone 1: Nov 6, 2026 &bull; v3.27</div>
+      <div class="phase">Goal: Fast Aesthetic Hypertrophy &bull; Milestone 1: Nov 6, 2026 &bull; v3.28</div>
     </div>
     <div style="display:flex;align-items:center;gap:8px">
       <span id="syncStatusBadge" class="sync-indicator synced">&#x2601;&#xFE0F; Synced</span>
@@ -316,7 +316,7 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
     <h2>Daily Body Check-In</h2>
     <div class="row">
       <div><label>Date</label><input id="bodyDate" type="date" onchange="loadBodyForDate()"></div>
-      <div><label>Weight (lb)</label><input id="weight" type="number" step="0.1" placeholder="163.4" onchange="autoSaveBodyOnChange()"><div class="hint" id="weight7">7-day avg: --</div></div>
+      <div><label>Weight (lb)</label><input id="weight" type="text" inputmode="decimal" enterkeyhint="done" autocomplete="off" placeholder="163.4" onchange="autoSaveBodyOnChange()"><div class="hint" id="weight7">7-day avg: --</div></div>
     </div>
     <div id="monthlyPrompt" class="notice goodnotice hidden" style="margin-top:10px"></div>
     <details id="waistBox" style="margin-top:8px"><summary class="tiny" style="cursor:pointer">Monthly Check-In (first Friday, optional) &mdash; Waist + full Hume scan</summary>
@@ -584,7 +584,7 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
   </div>
   <div class="card">
     <h2>Version 3.17 Changelog <span class="versionchip">Bob's Corner</span></h2>
-    <div class="tiny">&bull; <b>Nov 15, 2026 — Segmental May 27 baseline:</b> Hume Segmental card now includes an idempotent 2026-05-27 scan (earliest start). Start vs Current defaults to May 27 → latest (Nov 6). A small Start scan selector also offers Aug 1. Existing Aug 1 / Nov 6 seeds and imports are unchanged.<br>&bull; <b>Nov 13, 2026 — Macro targets:</b> Protein target is exactly that day's weigh-in in grams (no 180 g range). Fat target is 100 g on every day. Carbs = round((2650 − protein×4 − 100×9) ÷ 4). Calories stay 2,650. Example: 164 lb → 164 P / 100 F / 274 C; fallback 165 lb → 165 / 100 / 273.<br>&bull; <b>Nov 13, 2026 — Zero Sugar Creamer preset:</b> Added Zero Sugar Creamer after Creamer: 1 tablespoon (15 ml) = 10 kcal, 0P, 1F, 0C, 0 fiber. Scaling is off 15 ml (30 ml = 20 kcal / 2 g fat). If a saved pantry list is present, it is added only when missing; other entries and logged food are unchanged.<br>&bull; <b>Nov 13, 2026 — Dynamic nutrition targets:</b> Daily calories stay 2,650. Protein floor is that day's morning weigh-in in lb (nearest gram), shown as a range up to 180 g (e.g. 164–180 g). Fat stays 80 g; carbs = round((2650 − protein×4 − 80×9) ÷ 4). If no weigh-in that day, the most recent earlier weight is used; if none exist, 165 lb. History and past journal days use that date's weight, never today's. A note shows which weight and date were used.<br>&bull; <b>Nov 13, 2026 — Creamer 15 g:</b> Creamer serving corrected to 1 tbsp (15 g) = 30 kcal, 0P, 5C, 0 fiber, 1F. Gram scaling is off 15 g (30 g = 2 tbsp = 60 kcal). A saved v3.22 Creamer pantry entry is updated in place; logged food history is not changed.<br>&bull; <b>Nov 13, 2026 — Creamer pantry preset:</b> Added Creamer (1 tbsp / 30 g = 30 kcal, 0P, 5C, 0 fiber, 1F) alongside existing pantry staples, with the same gram scaling as Butter. If a saved pantry list is present, Creamer is added only when missing.<br>&bull; <b>Nov 9, 2026 — Bench positions (v3.21):</b> Robert's bench setups applied on Kickback (Pos 3, chest-supported face-down, both arms), Hip Thrust (flat, upper back), One-Arm DB Row (flat, hand+knee brace), Chest-Supported Row (Pos 3, face down), Wrist Curl (flat, forearm braced), Bulgarian Split Squat (flat, rear foot). Kickback stays <b>per arm</b> with per-arm progression (10→15, 52.5 cap); no weight conversion.<br>&bull; <b>Nov 9, 2026 — Bench &amp; Load labels:</b> Every Training card shows bench setup (position + usage) when a bench is used, and an explicit Load label (<b>per arm</b> or <b>total</b>) on the card, weight column, placeholder, and 1RM tab. Flip any lift via optional <code>loadLabel</code> on the exercise object.<br>&bull; <b>Nov 6, 2026 — Hume Segmental:</b> Segmental lean/fat + extra Hume metrics on Body check-in, dedicated Hume Segmental Breakdown card (Start→Current + Diff, arms/legs symmetry, 5-region total lean), idempotent seed for 2026-08-01 &amp; 2026-11-06, and one-paste JSON import for arrays / nested segmental / no-weight entries.<br>&bull; <b>Nov 6, 2026 — Body save safety:</b> Untouched blank inputs never wipe existing Hume/segmental fields; Dashboard/Progress ignore empty-weight body rows.<br>&bull; <b>Nov 6, 2026 — Progression:</b> Target now requires 2 consecutive clean full sessions (all prescribed sets at the same weight hitting the rep ceiling) before suggesting a weight increase; mid-session logging no longer counts as a prior session.<br>&bull; <b>Nov 6, 2026 — Est. 1RM:</b> Epley projected 1RM on every Training card plus a dedicated &#x1F3C6; 1RM tab (all-time PR + latest session, date stamped, per-arm vs total).<br>&bull; <b>Nov 6, 2026 — Body charts:</b> Every Body/Recovery chart shows Start, Current, and signed Diff (with dates). Hume Body Pod BF% and Trainer Visual Est. BF% each get their own chart (never mixed).<br>&bull; <b>Nov 6, 2026 — DB cap:</b> Progression never suggests past 52.5 lb per dumbbell / 105 lb total; at the cap after 2 clean sessions it says add reps or slower tempo.<br>&bull; Calf Raise set-count migration: stale 4-set override cleared so Standing DB Calf Raise defaults to the new 2&times;20 prescription.<br>&bull; Templates "+ Save Current Day" no longer depends on a fragile tab index.<br>&bull; Prior: Monday Pre-Workout Fresh Chin-Up Test; Light Cream 1 Tbsp; DB Chest Fly history aliases; Stable Waist Pacing.</div>
+    <div class="tiny">&bull; <b>Nov 16, 2026 — Weight decimal fix:</b> Protein is Math.round(that day's weigh-in). The weight field accepts a comma or a dot (166,2 or 166.2) and keeps the decimal. A stored body weight over 400 lb that becomes plausible when divided by 10 (100–400) is repaired on load and import (1662 → 166.2) and that corrected value is what syncs. Example: 166.2 lb → 166 P / 100 F / 272 C.<br>&bull; <b>Nov 15, 2026 — Segmental May 27 baseline:</b> Hume Segmental card now includes an idempotent 2026-05-27 scan (earliest start). Start vs Current defaults to May 27 → latest (Nov 6). A small Start scan selector also offers Aug 1. Existing Aug 1 / Nov 6 seeds and imports are unchanged.<br>&bull; <b>Nov 13, 2026 — Macro targets:</b> Protein target is exactly that day's weigh-in in grams (no 180 g range). Fat target is 100 g on every day. Carbs = round((2650 − protein×4 − 100×9) ÷ 4). Calories stay 2,650. Example: 164 lb → 164 P / 100 F / 274 C; fallback 165 lb → 165 / 100 / 273.<br>&bull; <b>Nov 13, 2026 — Zero Sugar Creamer preset:</b> Added Zero Sugar Creamer after Creamer: 1 tablespoon (15 ml) = 10 kcal, 0P, 1F, 0C, 0 fiber. Scaling is off 15 ml (30 ml = 20 kcal / 2 g fat). If a saved pantry list is present, it is added only when missing; other entries and logged food are unchanged.<br>&bull; <b>Nov 13, 2026 — Dynamic nutrition targets:</b> Daily calories stay 2,650. Protein floor is that day's morning weigh-in in lb (nearest gram), shown as a range up to 180 g (e.g. 164–180 g). Fat stays 80 g; carbs = round((2650 − protein×4 − 80×9) ÷ 4). If no weigh-in that day, the most recent earlier weight is used; if none exist, 165 lb. History and past journal days use that date's weight, never today's. A note shows which weight and date were used.<br>&bull; <b>Nov 13, 2026 — Creamer 15 g:</b> Creamer serving corrected to 1 tbsp (15 g) = 30 kcal, 0P, 5C, 0 fiber, 1F. Gram scaling is off 15 g (30 g = 2 tbsp = 60 kcal). A saved v3.22 Creamer pantry entry is updated in place; logged food history is not changed.<br>&bull; <b>Nov 13, 2026 — Creamer pantry preset:</b> Added Creamer (1 tbsp / 30 g = 30 kcal, 0P, 5C, 0 fiber, 1F) alongside existing pantry staples, with the same gram scaling as Butter. If a saved pantry list is present, Creamer is added only when missing.<br>&bull; <b>Nov 9, 2026 — Bench positions (v3.21):</b> Robert's bench setups applied on Kickback (Pos 3, chest-supported face-down, both arms), Hip Thrust (flat, upper back), One-Arm DB Row (flat, hand+knee brace), Chest-Supported Row (Pos 3, face down), Wrist Curl (flat, forearm braced), Bulgarian Split Squat (flat, rear foot). Kickback stays <b>per arm</b> with per-arm progression (10→15, 52.5 cap); no weight conversion.<br>&bull; <b>Nov 9, 2026 — Bench &amp; Load labels:</b> Every Training card shows bench setup (position + usage) when a bench is used, and an explicit Load label (<b>per arm</b> or <b>total</b>) on the card, weight column, placeholder, and 1RM tab. Flip any lift via optional <code>loadLabel</code> on the exercise object.<br>&bull; <b>Nov 6, 2026 — Hume Segmental:</b> Segmental lean/fat + extra Hume metrics on Body check-in, dedicated Hume Segmental Breakdown card (Start→Current + Diff, arms/legs symmetry, 5-region total lean), idempotent seed for 2026-08-01 &amp; 2026-11-06, and one-paste JSON import for arrays / nested segmental / no-weight entries.<br>&bull; <b>Nov 6, 2026 — Body save safety:</b> Untouched blank inputs never wipe existing Hume/segmental fields; Dashboard/Progress ignore empty-weight body rows.<br>&bull; <b>Nov 6, 2026 — Progression:</b> Target now requires 2 consecutive clean full sessions (all prescribed sets at the same weight hitting the rep ceiling) before suggesting a weight increase; mid-session logging no longer counts as a prior session.<br>&bull; <b>Nov 6, 2026 — Est. 1RM:</b> Epley projected 1RM on every Training card plus a dedicated &#x1F3C6; 1RM tab (all-time PR + latest session, date stamped, per-arm vs total).<br>&bull; <b>Nov 6, 2026 — Body charts:</b> Every Body/Recovery chart shows Start, Current, and signed Diff (with dates). Hume Body Pod BF% and Trainer Visual Est. BF% each get their own chart (never mixed).<br>&bull; <b>Nov 6, 2026 — DB cap:</b> Progression never suggests past 52.5 lb per dumbbell / 105 lb total; at the cap after 2 clean sessions it says add reps or slower tempo.<br>&bull; Calf Raise set-count migration: stale 4-set override cleared so Standing DB Calf Raise defaults to the new 2&times;20 prescription.<br>&bull; Templates "+ Save Current Day" no longer depends on a fragile tab index.<br>&bull; Prior: Monday Pre-Workout Fresh Chin-Up Test; Light Cream 1 Tbsp; DB Chest Fly history aliases; Stable Waist Pacing.</div>
   </div>
 </section>
 </main>
@@ -691,6 +691,7 @@ function restoreFromGoogleDrive() {
       localStorage.setItem(STORE_KEY, JSON.stringify(remoteData));
       seedCheckInBaselines();
       seedChinUpTestSession();
+      persistBodyWeightNormalization();
       loadBodyForDate();
       renderAll();
       loadJournalForDate();
@@ -728,7 +729,7 @@ function weightForDate(dateStr, d){
     .sort((a,b)=>a.date.localeCompare(b.date));
   if(!rows.length) return {weight:MACRO_DEFAULT_WEIGHT, date:null, fallback:true};
   const last=rows[rows.length-1];
-  return {weight:numeric(last.weight), date:last.date, fallback:false};
+  return {weight:numeric(normalizeBodyWeightValue(last.weight)), date:last.date, fallback:false};
 }
 function targetsForDate(dateStr, d){
   const w=weightForDate(dateStr, d);
@@ -1282,7 +1283,49 @@ function startRest(seconds){
 }
 function cancelTimer() {clearInterval(timerInt); document.getElementById("timer").classList.add("hidden")}
 
-function numeric(v){const n=parseFloat(v);return Number.isFinite(n)?n:null}
+function numeric(v){
+  if(v===undefined||v===null||v==="") return null;
+  if(typeof v==="number") return Number.isFinite(v)?v:null;
+  let s=String(v).trim().replace(/\s+/g,"");
+  if(!s) return null;
+  if(s.includes(",")&&!s.includes(".")) s=s.replace(",",".");
+  const n=parseFloat(s);
+  return Number.isFinite(n)?n:null;
+}
+function formatBodyWeight(n){
+  if(n===null||n===undefined||!Number.isFinite(n)) return "";
+  return String(Math.round(n*1000)/1000);
+}
+function normalizeBodyWeightValue(v){
+  if(v===undefined||v===null||v==="") return v;
+  let n=numeric(v);
+  if(n===null) return v;
+  if(n>400){
+    const tenth=n/10;
+    if(tenth>=100 && tenth<=400) n=tenth;
+  }
+  return formatBodyWeight(n);
+}
+function normalizeBodyWeights(d){
+  d=d||data();
+  d.body=d.body||[];
+  let changed=false;
+  d.body.forEach(b=>{
+    if(!b||b.weight===undefined||b.weight===null||b.weight==="") return;
+    const next=normalizeBodyWeightValue(b.weight);
+    if(String(next)!==String(b.weight)){ b.weight=next; changed=true; }
+  });
+  return changed;
+}
+function persistBodyWeightNormalization(d){
+  d=d||data();
+  if(normalizeBodyWeights(d)){
+    localStorage.setItem(STORE_KEY, JSON.stringify(d));
+    try{ triggerAutoSync(); }catch(e){}
+    return true;
+  }
+  return false;
+}
 function calcEpley1RM(weight, reps){
   const w=numeric(weight), r=numeric(reps);
   if(w===null || w<=0 || r===null || r<=0) return null;
@@ -1577,7 +1620,9 @@ function autoSaveBodyOnChange(){
   if(weightRaw===""){
     weightVal = (weightEl && weightEl.dataset.dirty==="1") ? "" : (prev.weight || "");
   } else {
-    weightVal = weightRaw;
+    const parsed=normalizeBodyWeightValue(weightRaw);
+    weightVal = (parsed!==undefined&&parsed!==null&&parsed!=="")?parsed:weightRaw;
+    if(weightEl && String(weightEl.value)!==String(weightVal)) weightEl.value=weightVal;
   }
   // New rows need a weight; existing rows (e.g. segmental-only) may update without one
   if(!weightVal && existingIdx===-1) return;
@@ -2198,7 +2243,7 @@ function addPantryItem(index){
 }
 
 function val(id){return document.getElementById(id).value}
-function avg(arr){let n=arr.map(Number).filter(x=>!isNaN(x)&&x>0);return n.length?n.reduce((a,b)=>a+b,0)/n.length:null}
+function avg(arr){let n=arr.map(v=>numeric(v)).filter(x=>x!==null&&x>0);return n.length?n.reduce((a,b)=>a+b,0)/n.length:null}
 function latestByDate(arr){return [...arr].sort((a,b)=>a.date.localeCompare(b.date)).at(-1)||{}}
 function latestWithField(arr,key){return [...arr].filter(x=>numeric(x[key])!==null).sort((a,b)=>a.date.localeCompare(b.date)).at(-1)||{}}
 function seven(arr,key){return [...arr].filter(x=>numeric(x[key])!==null).sort((a,b)=>a.date.localeCompare(b.date)).slice(-7).map(x=>x[key])}
@@ -2533,8 +2578,8 @@ function renderProgress(){
  const phaseStart = s.cutStartDate || "2026-08-13";
  const cut=[...d.body].filter(x=>x.date>=phaseStart).sort((a,b)=>a.date.localeCompare(b.date));
  const weights=cut.filter(x=>numeric(x.weight)!==null),waists=cut.filter(x=>numeric(x.waist)!==null),wt=splitWeekAverages(weights,"weight");
- const startWeight = cm.start ? Number(cm.start.weight) : (weights.length ? Number(weights[0].weight) : null);
- const currentWeight = weights.length ? Number(weights.at(-1).weight) : null;
+ const startWeight = cm.start ? numeric(cm.start.weight) : (weights.length ? numeric(weights[0].weight) : null);
+ const currentWeight = weights.length ? numeric(weights.at(-1).weight) : null;
  const current7DayAvg = cm.avgWeight !== null ? cm.avgWeight : null;
  const totalLostFromStart = (startWeight !== null && currentWeight !== null) ? (startWeight - currentWeight) : null;
  const lostLast7 = (wt.current !== null && wt.previous !== null) ? (wt.previous - wt.current) : null;
@@ -2706,6 +2751,7 @@ function importDataFromFile(){
       localStorage.setItem(STORE_KEY,JSON.stringify(parsed));
       seedCheckInBaselines();
       seedChinUpTestSession();
+      persistBodyWeightNormalization();
       loadBodyForDate();
       renderAll(); loadJournalForDate(); renderTemplateManager();
       alert("Backup loaded into the app.");
@@ -2716,7 +2762,7 @@ function importDataFromFile(){
 function quickDownloadBackup(){downloadBackup()}
 function clearAll(){if(confirm("Clear all saved data? Make sure you exported a backup first.")){localStorage.removeItem(STORE_KEY);renderAll()}}
 
-function renderAll(){try{setTimeout(updateWeight7,0);}catch(e){}
+function renderAll(){try{persistBodyWeightNormalization();}catch(e){} try{setTimeout(updateWeight7,0);}catch(e){}
   loadCutSettings();
   renderDash();
   try{
@@ -2828,6 +2874,7 @@ initTheme();
 lastKnownToday=today();
 seedChinUpTestSession();
 seedCheckInBaselines();
+persistBodyWeightNormalization();
 loadBodyForDate();
 setTimeout(()=>{pullZeppSteps(true);showZeppInfo();},800);
 renderWorkout();
@@ -2947,7 +2994,7 @@ function mergeBodyCheckIn(d, obj){
   let waistAvg=num(obj.waist);
   if(waistAvg===null && waist1!==null && waist2!==null && waist3!==null) waistAvg=avg([waist1,waist2,waist3]);
   const weightProvided = obj.weight!==undefined && obj.weight!==null && obj.weight!=="";
-  const weight = weightProvided ? String(num(obj.weight)??obj.weight) : (prev.weight||"");
+  const weight = weightProvided ? (normalizeBodyWeightValue(obj.weight) || String(num(obj.weight)??obj.weight)) : (normalizeBodyWeightValue(prev.weight||"")||prev.weight||"");
   const creatine=String(obj.humeCreatine||obj.creatine||"").toLowerCase();
   const seg=extractSegmental(obj);
   const patch={
@@ -3007,6 +3054,7 @@ function importBodyJson(){
     if(!date){ alert("Each check-in needs a date like 2026-11-06."); return; }
     imported.push(date);
   }
+  normalizeBodyWeights(d);
   save(d);
   const latest=imported.slice().sort().at(-1);
   document.getElementById("bodyDate").value=latest;
