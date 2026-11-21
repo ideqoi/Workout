@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <meta name="apple-mobile-web-app-title" content="Bob's Tracker"/>
 <meta name="theme-color" content="#070b12"/>
-<title>Bob's Corner v3.29</title>
+<title>Bob's Corner v3.31</title>
 <style>
 :root{
   --bg:#070b12;--panel:#111827;--panel2:#0b1220;--soft:#1f2937;--line:#2f3a4c;
@@ -35,7 +35,7 @@ h1{font-size:24px;margin:0;font-weight:900;letter-spacing:.2px}.phase{font-size:
 main{max-width:1050px;margin:0 auto;padding:14px 14px 70px}
 .card{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:18px;padding:15px;margin-bottom:14px;box-shadow:0 10px 30px rgba(0,0,0,0.15)}
 h2{font-size:18px;margin:0 0 12px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
-.stat{background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:12px}.stat .label{font-size:12px;color:var(--muted)}.stat .value{font-size:24px;font-weight:950;margin-top:4px}
+.stat{background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:12px}.stat .label{font-size:12px;color:var(--muted)}.stat .value{font-size:24px;font-weight:950;margin-top:4px}#dWeekAvg{font-size:22px;line-height:1.25;overflow-wrap:anywhere}#weekAvgCard .tiny{margin-top:3px}#dWeekAvgStep.met{color:var(--green)}
 .badge{display:inline-flex;align-items:center;gap:5px;border-radius:999px;padding:5px 9px;background:rgba(59,130,246,0.15);color:var(--blue);border:1px solid var(--line);font-size:12px;font-weight:800;margin:3px}
 .superset-badge{display:inline-flex;align-items:center;gap:4px;border-radius:999px;padding:3px 8px;background:rgba(168,85,247,0.2);color:var(--purple);border:1px solid rgba(168,85,247,0.4);font-size:11px;font-weight:900;margin-left:6px;vertical-align:middle}
 .green{color:var(--green)}.orange{color:var(--orange)}.red{color:var(--red)}.blue{color:var(--blue)}.purple{color:var(--purple)}.cyan{color:var(--cyan)}
@@ -172,7 +172,7 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
   <div class="header-top">
     <div>
       <h1>Bob's Corner &#x1F9EA;</h1>
-      <div class="phase">Goal: Fast Aesthetic Hypertrophy &bull; Milestone 1: Nov 6, 2026 &bull; v3.29</div>
+      <div class="phase">Goal: Fast Aesthetic Hypertrophy &bull; Milestone 1: Nov 6, 2026 &bull; v3.31</div>
     </div>
     <div style="display:flex;align-items:center;gap:8px">
       <span id="syncStatusBadge" class="sync-indicator synced">&#x2601;&#xFE0F; Synced</span>
@@ -209,6 +209,13 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
     <div class="grid" style="margin-top:10px">
       <div class="stat"><div class="label">Latest Weight</div><div class="value" id="dWeight">--</div></div>
       <div class="stat"><div class="label">7-Day Avg Weight</div><div class="value" id="dAvg">--</div><div class="tiny" id="dWeightTrend"></div></div>
+      <div class="stat" id="weekAvgCard">
+        <div class="label">This week (Sat–Fri) average</div>
+        <div class="value" id="dWeekAvg">–</div>
+        <div class="tiny" id="dWeekAvgMeta">0 weigh-ins</div>
+        <div class="tiny" id="dWeekAvgPrev"></div>
+        <div class="tiny" id="dWeekAvgStep"></div>
+      </div>
       <div class="stat"><div class="label">Average Belly-Button Waist</div><div class="value" id="dWaist">--</div><div class="tiny" id="dWaistTrend"></div></div>
       <div class="stat"><div class="label">Hume Body Pod BF%</div><div class="value" id="dBodyFat">--</div><div class="tiny" id="dBodyFatTrend">Visual est: --</div></div>
       <div class="stat"><div class="label">Workouts Logged</div><div class="value" id="dWorkouts">--</div><div class="tiny" id="dLastWorkout"></div></div>
@@ -239,6 +246,9 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
     <div class="row" style="margin-top:8px">
       <div><label>Height (Inches)</label><input id="userHeight" type="number" step="0.5" value="68"></div>
       <div><label>Target Weekly Loss/Gain</label><input id="plannedRate" type="number" step="0.1" value="0.3"></div>
+    </div>
+    <div class="row" style="margin-top:8px">
+      <div><label>Carb step if week avg &le; (lb)</label><input id="carbStepWeekAvgMax" type="number" step="0.1" value="164.7"></div>
     </div>
     <button class="secondary" style="margin-top:10px" onclick="saveCutSettings()">Save Phase & Target Settings</button>
     <p class="tiny" id="dashCalorieBlurb">Configured for a dated calorie target toward 13.4% body fat (31.25" waist) by Nov 6, 2026 (Milestone 1).</p>
@@ -584,7 +594,7 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
   </div>
   <div class="card">
     <h2>Version 3.17 Changelog <span class="versionchip">Bob's Corner</span></h2>
-    <div class="tiny">&bull; <b>Nov 20, 2026 — Reverse diet +75 kcal:</b> Daily calories come from a dated schedule (<code>CALORIE_STEPS</code> / <code>kcalForDate</code>). From Nov 20, 2026 the target is 2,725 kcal, with the added energy all in carbs. Protein is still that day's weigh-in; fat stays 100 g. Carbs = round((kcal − protein×4 − 100×9) ÷ 4). At 163 lb: 163 P / 100 F / 293 C. Days before Nov 20 keep the previous step. A future +50–75 kcal change is one added line in <code>CALORIE_STEPS</code>. Logged food is unchanged.<br>&bull; <b>Nov 16, 2026 — Weight decimal fix:</b> Protein is Math.round(that day's weigh-in). The weight field accepts a comma or a dot (166,2 or 166.2) and keeps the decimal. A stored body weight over 400 lb that becomes plausible when divided by 10 (100–400) is repaired on load and import (1662 → 166.2) and that corrected value is what syncs. Example: 166.2 lb → 166 P / 100 F / 272 C.<br>&bull; <b>Nov 15, 2026 — Segmental May 27 baseline:</b> Hume Segmental card now includes an idempotent 2026-05-27 scan (earliest start). Start vs Current defaults to May 27 → latest (Nov 6). A small Start scan selector also offers Aug 1. Existing Aug 1 / Nov 6 seeds and imports are unchanged.<br>&bull; <b>Nov 13, 2026 — Macro targets:</b> Protein target is exactly that day's weigh-in in grams (no 180 g range). Fat target is 100 g on every day. Carbs = round((daily kcal − protein×4 − 100×9) ÷ 4). Calories used the daily target in effect at that time. Example at that target: 164 lb → 164 P / 100 F / 274 C; fallback 165 lb → 165 / 100 / 273.<br>&bull; <b>Nov 13, 2026 — Zero Sugar Creamer preset:</b> Added Zero Sugar Creamer after Creamer: 1 tablespoon (15 ml) = 10 kcal, 0P, 1F, 0C, 0 fiber. Scaling is off 15 ml (30 ml = 20 kcal / 2 g fat). If a saved pantry list is present, it is added only when missing; other entries and logged food are unchanged.<br>&bull; <b>Nov 13, 2026 — Dynamic nutrition targets:</b> Daily calories used the target in effect at that time. Protein floor is that day's morning weigh-in in lb (nearest gram), shown as a range up to 180 g (e.g. 164–180 g). Fat stays 80 g; carbs = round((daily kcal − protein×4 − 80×9) ÷ 4). If no weigh-in that day, the most recent earlier weight is used; if none exist, 165 lb. History and past journal days use that date's weight, never today's. A note shows which weight and date were used.<br>&bull; <b>Nov 13, 2026 — Creamer 15 g:</b> Creamer serving corrected to 1 tbsp (15 g) = 30 kcal, 0P, 5C, 0 fiber, 1F. Gram scaling is off 15 g (30 g = 2 tbsp = 60 kcal). A saved v3.22 Creamer pantry entry is updated in place; logged food history is not changed.<br>&bull; <b>Nov 13, 2026 — Creamer pantry preset:</b> Added Creamer (1 tbsp / 30 g = 30 kcal, 0P, 5C, 0 fiber, 1F) alongside existing pantry staples, with the same gram scaling as Butter. If a saved pantry list is present, Creamer is added only when missing.<br>&bull; <b>Nov 9, 2026 — Bench positions (v3.21):</b> Robert's bench setups applied on Kickback (Pos 3, chest-supported face-down, both arms), Hip Thrust (flat, upper back), One-Arm DB Row (flat, hand+knee brace), Chest-Supported Row (Pos 3, face down), Wrist Curl (flat, forearm braced), Bulgarian Split Squat (flat, rear foot). Kickback stays <b>per arm</b> with per-arm progression (10→15, 52.5 cap); no weight conversion.<br>&bull; <b>Nov 9, 2026 — Bench &amp; Load labels:</b> Every Training card shows bench setup (position + usage) when a bench is used, and an explicit Load label (<b>per arm</b> or <b>total</b>) on the card, weight column, placeholder, and 1RM tab. Flip any lift via optional <code>loadLabel</code> on the exercise object.<br>&bull; <b>Nov 6, 2026 — Hume Segmental:</b> Segmental lean/fat + extra Hume metrics on Body check-in, dedicated Hume Segmental Breakdown card (Start→Current + Diff, arms/legs symmetry, 5-region total lean), idempotent seed for 2026-08-01 &amp; 2026-11-06, and one-paste JSON import for arrays / nested segmental / no-weight entries.<br>&bull; <b>Nov 6, 2026 — Body save safety:</b> Untouched blank inputs never wipe existing Hume/segmental fields; Dashboard/Progress ignore empty-weight body rows.<br>&bull; <b>Nov 6, 2026 — Progression:</b> Target now requires 2 consecutive clean full sessions (all prescribed sets at the same weight hitting the rep ceiling) before suggesting a weight increase; mid-session logging no longer counts as a prior session.<br>&bull; <b>Nov 6, 2026 — Est. 1RM:</b> Epley projected 1RM on every Training card plus a dedicated &#x1F3C6; 1RM tab (all-time PR + latest session, date stamped, per-arm vs total).<br>&bull; <b>Nov 6, 2026 — Body charts:</b> Every Body/Recovery chart shows Start, Current, and signed Diff (with dates). Hume Body Pod BF% and Trainer Visual Est. BF% each get their own chart (never mixed).<br>&bull; <b>Nov 6, 2026 — DB cap:</b> Progression never suggests past 52.5 lb per dumbbell / 105 lb total; at the cap after 2 clean sessions it says add reps or slower tempo.<br>&bull; Calf Raise set-count migration: stale 4-set override cleared so Standing DB Calf Raise defaults to the new 2&times;20 prescription.<br>&bull; Templates "+ Save Current Day" no longer depends on a fragile tab index.<br>&bull; Prior: Monday Pre-Workout Fresh Chin-Up Test; Light Cream 1 Tbsp; DB Chest Fly history aliases; Stable Waist Pacing.</div>
+    <div class="tiny">&bull; <b>Nov 21, 2026 — Carb step threshold 164.7:</b> <code>CARB_STEP_WEEK_AVG_MAX</code> and the Phase Setup default are 164.7, so the full Sat–Fri average (including trip days) can allow a 0.25 lb weekly gain. A stored v3.30 default of 164.0 is migrated once to 164.7; a later custom value is left alone.<br>&bull; <b>Nov 21, 2026 — Sat–Fri week average:</b> Dashboard adds a This week (Sat–Fri) average next to the rolling 7-day average. It averages only days with a weigh-in, shows the count, last week's average, and the change from last week. The week resets each Saturday. A "Carb step if ≤ …" line uses <code>CARB_STEP_WEEK_AVG_MAX</code> (default 164.0), also editable in Phase Setup. The rolling 7-day average and calorie targets are unchanged.<br>&bull; <b>Nov 20, 2026 — Reverse diet +75 kcal:</b> Daily calories come from a dated schedule (<code>CALORIE_STEPS</code> / <code>kcalForDate</code>). From Nov 20, 2026 the target is 2,725 kcal, with the added energy all in carbs. Protein is still that day's weigh-in; fat stays 100 g. Carbs = round((kcal − protein×4 − 100×9) ÷ 4). At 163 lb: 163 P / 100 F / 293 C. Days before Nov 20 keep the previous step. A future +50–75 kcal change is one added line in <code>CALORIE_STEPS</code>. Logged food is unchanged.<br>&bull; <b>Nov 16, 2026 — Weight decimal fix:</b> Protein is Math.round(that day's weigh-in). The weight field accepts a comma or a dot (166,2 or 166.2) and keeps the decimal. A stored body weight over 400 lb that becomes plausible when divided by 10 (100–400) is repaired on load and import (1662 → 166.2) and that corrected value is what syncs. Example: 166.2 lb → 166 P / 100 F / 272 C.<br>&bull; <b>Nov 15, 2026 — Segmental May 27 baseline:</b> Hume Segmental card now includes an idempotent 2026-05-27 scan (earliest start). Start vs Current defaults to May 27 → latest (Nov 6). A small Start scan selector also offers Aug 1. Existing Aug 1 / Nov 6 seeds and imports are unchanged.<br>&bull; <b>Nov 13, 2026 — Macro targets:</b> Protein target is exactly that day's weigh-in in grams (no 180 g range). Fat target is 100 g on every day. Carbs = round((daily kcal − protein×4 − 100×9) ÷ 4). Calories used the daily target in effect at that time. Example at that target: 164 lb → 164 P / 100 F / 274 C; fallback 165 lb → 165 / 100 / 273.<br>&bull; <b>Nov 13, 2026 — Zero Sugar Creamer preset:</b> Added Zero Sugar Creamer after Creamer: 1 tablespoon (15 ml) = 10 kcal, 0P, 1F, 0C, 0 fiber. Scaling is off 15 ml (30 ml = 20 kcal / 2 g fat). If a saved pantry list is present, it is added only when missing; other entries and logged food are unchanged.<br>&bull; <b>Nov 13, 2026 — Dynamic nutrition targets:</b> Daily calories used the target in effect at that time. Protein floor is that day's morning weigh-in in lb (nearest gram), shown as a range up to 180 g (e.g. 164–180 g). Fat stays 80 g; carbs = round((daily kcal − protein×4 − 80×9) ÷ 4). If no weigh-in that day, the most recent earlier weight is used; if none exist, 165 lb. History and past journal days use that date's weight, never today's. A note shows which weight and date were used.<br>&bull; <b>Nov 13, 2026 — Creamer 15 g:</b> Creamer serving corrected to 1 tbsp (15 g) = 30 kcal, 0P, 5C, 0 fiber, 1F. Gram scaling is off 15 g (30 g = 2 tbsp = 60 kcal). A saved v3.22 Creamer pantry entry is updated in place; logged food history is not changed.<br>&bull; <b>Nov 13, 2026 — Creamer pantry preset:</b> Added Creamer (1 tbsp / 30 g = 30 kcal, 0P, 5C, 0 fiber, 1F) alongside existing pantry staples, with the same gram scaling as Butter. If a saved pantry list is present, Creamer is added only when missing.<br>&bull; <b>Nov 9, 2026 — Bench positions (v3.21):</b> Robert's bench setups applied on Kickback (Pos 3, chest-supported face-down, both arms), Hip Thrust (flat, upper back), One-Arm DB Row (flat, hand+knee brace), Chest-Supported Row (Pos 3, face down), Wrist Curl (flat, forearm braced), Bulgarian Split Squat (flat, rear foot). Kickback stays <b>per arm</b> with per-arm progression (10→15, 52.5 cap); no weight conversion.<br>&bull; <b>Nov 9, 2026 — Bench &amp; Load labels:</b> Every Training card shows bench setup (position + usage) when a bench is used, and an explicit Load label (<b>per arm</b> or <b>total</b>) on the card, weight column, placeholder, and 1RM tab. Flip any lift via optional <code>loadLabel</code> on the exercise object.<br>&bull; <b>Nov 6, 2026 — Hume Segmental:</b> Segmental lean/fat + extra Hume metrics on Body check-in, dedicated Hume Segmental Breakdown card (Start→Current + Diff, arms/legs symmetry, 5-region total lean), idempotent seed for 2026-08-01 &amp; 2026-11-06, and one-paste JSON import for arrays / nested segmental / no-weight entries.<br>&bull; <b>Nov 6, 2026 — Body save safety:</b> Untouched blank inputs never wipe existing Hume/segmental fields; Dashboard/Progress ignore empty-weight body rows.<br>&bull; <b>Nov 6, 2026 — Progression:</b> Target now requires 2 consecutive clean full sessions (all prescribed sets at the same weight hitting the rep ceiling) before suggesting a weight increase; mid-session logging no longer counts as a prior session.<br>&bull; <b>Nov 6, 2026 — Est. 1RM:</b> Epley projected 1RM on every Training card plus a dedicated &#x1F3C6; 1RM tab (all-time PR + latest session, date stamped, per-arm vs total).<br>&bull; <b>Nov 6, 2026 — Body charts:</b> Every Body/Recovery chart shows Start, Current, and signed Diff (with dates). Hume Body Pod BF% and Trainer Visual Est. BF% each get their own chart (never mixed).<br>&bull; <b>Nov 6, 2026 — DB cap:</b> Progression never suggests past 52.5 lb per dumbbell / 105 lb total; at the cap after 2 clean sessions it says add reps or slower tempo.<br>&bull; Calf Raise set-count migration: stale 4-set override cleared so Standing DB Calf Raise defaults to the new 2&times;20 prescription.<br>&bull; Templates "+ Save Current Day" no longer depends on a fragile tab index.<br>&bull; Prior: Monday Pre-Workout Fresh Chin-Up Test; Light Cream 1 Tbsp; DB Chest Fly history aliases; Stable Waist Pacing.</div>
   </div>
 </section>
 </main>
@@ -692,6 +702,7 @@ function restoreFromGoogleDrive() {
       seedCheckInBaselines();
       seedChinUpTestSession();
       persistBodyWeightNormalization();
+      migrateCarbStepWeekAvgMax();
       loadBodyForDate();
       renderAll();
       loadJournalForDate();
@@ -718,6 +729,8 @@ function restoreFromGoogleDrive() {
 // Dated calorie schedule for the reverse diet. Each step applies from that date forward.
 // To add a future +50–75 kcal bump, append one line, e.g. {from:"2026-12-04", kcal:2800}.
 const CALORIE_STEPS=[{from:"0000-01-01", kcal:2650},{from:"2026-11-20", kcal:2725}];
+// Threshold shown under the Sat–Fri week average. Override in settings.carbStepWeekAvgMax if needed.
+const CARB_STEP_WEEK_AVG_MAX=164.7;
 function kcalForDate(dateStr){
   const date=dateStr||(typeof today==="function"?today():"");
   let kcal=CALORIE_STEPS[0]&&CALORIE_STEPS[0].kcal;
@@ -725,6 +738,105 @@ function kcalForDate(dateStr){
   return kcal;
 }
 const MACRO_FAT=100, MACRO_FIBER=35, MACRO_DEFAULT_WEIGHT=165;
+function isoDateKey(dt){
+  return dt.getFullYear()+"-"+String(dt.getMonth()+1).padStart(2,"0")+"-"+String(dt.getDate()).padStart(2,"0");
+}
+function addDaysKey(dateStr, n){
+  const [y,m,d]=String(dateStr||"").split("-").map(Number);
+  const dt=new Date(y,m-1,d);
+  dt.setDate(dt.getDate()+n);
+  return isoDateKey(dt);
+}
+function saturdayOnOrBefore(dateStr){
+  const date=dateStr||(typeof today==="function"?today():"");
+  const [y,m,d]=String(date).split("-").map(Number);
+  const dt=new Date(y,m-1,d);
+  dt.setDate(dt.getDate()-((dt.getDay()+1)%7));
+  return isoDateKey(dt);
+}
+function weekRangeSatFri(dateStr){
+  const start=saturdayOnOrBefore(dateStr);
+  return {start, end:addDaysKey(start,6)};
+}
+function dayWeightMap(d){
+  const map={};
+  [...((d&&d.body)||[])].filter(b=>b&&b.date).sort((a,b)=>String(a.date).localeCompare(String(b.date))).forEach(b=>{
+    const raw=(typeof normalizeBodyWeightValue==="function")?normalizeBodyWeightValue(b.weight):b.weight;
+    const w=numeric(raw);
+    if(w!==null) map[b.date]=w;
+  });
+  return map;
+}
+function satFriWeekStats(d, dateStr){
+  const {start,end}=weekRangeSatFri(dateStr||(typeof today==="function"?today():""));
+  const map=dayWeightMap(d||{body:[]});
+  const weights=[];
+  for(let cur=start; cur<=end; cur=addDaysKey(cur,1)){
+    if(map[cur]!=null) weights.push(map[cur]);
+  }
+  const count=weights.length;
+  const mean=count?weights.reduce((a,b)=>a+b,0)/count:null;
+  return {start,end,count,mean};
+}
+function formatWeighInCount(n){
+  const c=Number(n)||0;
+  return c+" weigh-in"+(c===1?"":"s");
+}
+function formatWeekAvgValue(stats){
+  if(!stats||stats.mean===null||!stats.count) return "\u2013";
+  return stats.mean.toFixed(1)+" \u00b7 "+formatWeighInCount(stats.count);
+}
+function formatWeekAvgChange(delta){
+  if(delta===null||delta===undefined||!Number.isFinite(delta)) return "\u2013";
+  const r=Number(delta.toFixed(1));
+  if(Math.abs(r)<1e-9) return "0.0 lb";
+  return (r>0?"+":"\u2212")+Math.abs(r).toFixed(1)+" lb";
+}
+function carbStepWeekAvgMax(d){
+  const n=numeric(d&&d.settings&&d.settings.carbStepWeekAvgMax);
+  return n!==null?n:CARB_STEP_WEEK_AVG_MAX;
+}
+/* One-time: a stored 164.0 from the v3.30 Phase Setup default should follow the new 164.7 threshold. */
+function migrateCarbStepWeekAvgMax(){
+  const d=data();
+  d.settings=d.settings||{};
+  if(d.settings.carbStepMaxMigratedTo1647) return false;
+  const n=numeric(d.settings.carbStepWeekAvgMax);
+  const stale=n!==null && Math.abs(n-164)<1e-9;
+  d.settings.carbStepMaxMigratedTo1647=true;
+  if(stale){
+    d.settings.carbStepWeekAvgMax=164.7;
+    localStorage.setItem(STORE_KEY, JSON.stringify(d));
+    try{ triggerAutoSync(); }catch(e){}
+    return true;
+  }
+  return false;
+}
+function renderWeekAverageCard(d, dateStr){
+  const day=dateStr||(typeof today==="function"?today():"");
+  const curr=satFriWeekStats(d, day);
+  const prev=satFriWeekStats(d, addDaysKey(curr.start,-1));
+  const valEl=document.getElementById("dWeekAvg");
+  const metaEl=document.getElementById("dWeekAvgMeta");
+  const prevEl=document.getElementById("dWeekAvgPrev");
+  const stepEl=document.getElementById("dWeekAvgStep");
+  if(valEl) valEl.textContent=formatWeekAvgValue(curr);
+  if(metaEl){
+    if(curr.count) metaEl.textContent=curr.start+" \u2013 "+curr.end;
+    else metaEl.textContent=formatWeighInCount(0);
+  }
+  if(prevEl){
+    const delta=(curr.mean!==null&&prev.mean!==null)?(curr.mean-prev.mean):null;
+    if(prev.count) prevEl.textContent="Last week: "+formatWeekAvgValue(prev)+" \u00b7 "+formatWeekAvgChange(delta);
+    else prevEl.textContent="Last week: \u2013";
+  }
+  if(stepEl){
+    const thresh=carbStepWeekAvgMax(d);
+    const met=curr.mean!==null && curr.mean<=thresh;
+    stepEl.textContent="Carb step if \u2264 "+Number(thresh).toFixed(1)+(met?" \u2713":"");
+    stepEl.className="tiny"+(met?" met":"");
+  }
+}
 function formatTargetWeightDate(dateStr){
   if(!dateStr) return "";
   const dt=new Date(String(dateStr)+"T12:00:00");
@@ -2270,7 +2382,8 @@ function saveCutSettings(){
     goalWaist: numeric(val("goalWaist")) || 31.25,
     goalWeight: numeric(val("goalWeight")) || 160.5,
     plannedRate: numeric(val("plannedRate")) || 0.3,
-    height: numeric(val("userHeight")) || 68
+    height: numeric(val("userHeight")) || 68,
+    carbStepWeekAvgMax: (numeric(val("carbStepWeekAvgMax"))!==null?numeric(val("carbStepWeekAvgMax")):CARB_STEP_WEEK_AVG_MAX)
   };
   save(d);
   alert("Milestone 1 settings and target dates saved & synced!");
@@ -2284,6 +2397,8 @@ function loadCutSettings(){
   document.getElementById("goalWeight").value = s.goalWeight || 160.5;
   document.getElementById("plannedRate").value = (s.plannedRate !== undefined) ? s.plannedRate : 0.3;
   document.getElementById("userHeight").value = s.height || 68;
+  const stepEl=document.getElementById("carbStepWeekAvgMax");
+  if(stepEl) stepEl.value = (numeric(s.carbStepWeekAvgMax)!==null?s.carbStepWeekAvgMax:CARB_STEP_WEEK_AVG_MAX);
 }
 
 function dateDiffDays(a,b){return Math.floor((new Date(a+"T12:00:00")-new Date(b+"T12:00:00"))/86400000)}
@@ -2364,6 +2479,7 @@ function renderDash(){
   const visLatest = visualEntries.length ? numeric(visualEntries.at(-1).visualBf).toFixed(1) + "%" : "--";
   document.getElementById("dBodyFatTrend").textContent = "Visual est: " + visLatest;
   document.getElementById("dAvg").textContent=av?av.toFixed(1)+" lb":"--";
+  try{ renderWeekAverageCard(d); }catch(e){}
   document.getElementById("dWorkouts").textContent=d.workouts.length;
   document.getElementById("dWeightTrend").textContent=trendText(wt.current,wt.previous," lb");
   document.getElementById("dWaistTrend").textContent=trendText(wa.current,wa.previous,'"');
@@ -2763,6 +2879,7 @@ function importDataFromFile(){
       seedCheckInBaselines();
       seedChinUpTestSession();
       persistBodyWeightNormalization();
+      migrateCarbStepWeekAvgMax();
       loadBodyForDate();
       renderAll(); loadJournalForDate(); renderTemplateManager();
       alert("Backup loaded into the app.");
@@ -2886,6 +3003,7 @@ lastKnownToday=today();
 seedChinUpTestSession();
 seedCheckInBaselines();
 persistBodyWeightNormalization();
+migrateCarbStepWeekAvgMax();
 loadBodyForDate();
 setTimeout(()=>{pullZeppSteps(true);showZeppInfo();},800);
 renderWorkout();
