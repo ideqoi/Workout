@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <meta name="apple-mobile-web-app-title" content="Bob's Tracker"/>
 <meta name="theme-color" content="#070b12"/>
-<title>Bob's Corner v3.33</title>
+<title>Bob's Corner v3.34</title>
 <style>
 :root{
   --bg:#070b12;--panel:#111827;--panel2:#0b1220;--soft:#1f2937;--line:#2f3a4c;
@@ -172,7 +172,7 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
   <div class="header-top">
     <div>
       <h1>Bob's Corner &#x1F9EA;</h1>
-      <div class="phase">Goal: Fast Aesthetic Hypertrophy &bull; Milestone 1: Nov 6, 2026 &bull; v3.33</div>
+      <div class="phase">Goal: Fast Aesthetic Hypertrophy &bull; Milestone 1: Nov 6, 2026 &bull; v3.34</div>
     </div>
     <div style="display:flex;align-items:center;gap:8px">
       <span id="syncStatusBadge" class="sync-indicator synced">&#x2601;&#xFE0F; Synced</span>
@@ -594,7 +594,7 @@ canvas{width:100%;height:210px;background:var(--chart-bg);border:1px solid var(-
   </div>
   <div class="card">
     <h2>Version 3.17 Changelog <span class="versionchip">Bob's Corner</span></h2>
-    <div class="tiny">&bull; <b>Nov 23, 2026 — Push and Upper template update:</b> Monday Push no longer includes DB Overhead Triceps Extension (Two-Hand) in the default list; the lift stays in the swap list. Push is now Flat DB Bench Press, Incline DB Bench Press • Bench Position 3, DB Lateral Raise, and DB Kickback. Thursday Upper replaces Incline with Neutral-Grip Close DB Press (3 sets, 10–12 reps, load labeled total) right after Seated DB Shoulder Press. Upper is now Seated DB Shoulder Press • Bench Position 5, Neutral-Grip Close DB Press, One-Arm DB Row (Neutral), DB Chest Fly • Bench Position 2, and Slow DB Wrist Curl. Incline stays in Upper’s swap list; Close Press is in the swap list for both Push and Upper. DB Lateral Raise is 12–20 reps (an exception to the 10-rep cap). Kickback is unchanged (per arm, 10→15). A stored Push or Upper template that still matches the old default is migrated to the new one; a custom stored template is left alone. Logged sessions and the backup format are unchanged.<br>&bull; <b>Nov 21, 2026 — Granola bar and Psyllium husk presets:</b> Added a Granola bar button (1 bar = 100 kcal, 1 P, 3 F, 18 C, 1 g fiber; 4 bars scale to 400 / 4 / 12 / 72 / 4). Added Psyllium husk (Nutricost, unflavored) after it: 7 g = 0 kcal, 0 P, 0 F, 7 C (all fiber), 7 g fiber, scaling by gram (14 g = 0 kcal / 14 C / 14 fiber). Calories use the label 0, so logging it does not change the daily kcal total. If a saved pantry list is present, each is added only when missing; logged food is unchanged.<br>&bull; <b>Nov 21, 2026 — Carb step threshold 164.7:</b> <code>CARB_STEP_WEEK_AVG_MAX</code> and the Phase Setup default are 164.7, so the full Sat–Fri average (including trip days) can allow a 0.25 lb weekly gain. A stored v3.30 default of 164.0 is migrated once to 164.7; a later custom value is left alone.<br>&bull; <b>Nov 21, 2026 — Sat–Fri week average:</b> Dashboard adds a This week (Sat–Fri) average next to the rolling 7-day average. It averages only days with a weigh-in, shows the count, last week's average, and the change from last week. The week resets each Saturday. A "Carb step if ≤ …" line uses <code>CARB_STEP_WEEK_AVG_MAX</code> (default 164.0), also editable in Phase Setup. The rolling 7-day average and calorie targets are unchanged.<br>&bull; <b>Nov 20, 2026 — Reverse diet +75 kcal:</b> Daily calories come from a dated schedule (<code>CALORIE_STEPS</code> / <code>kcalForDate</code>). From Nov 20, 2026 the target is 2,725 kcal, with the added energy all in carbs. Protein is still that day's weigh-in; fat stays 100 g. Carbs = round((kcal − protein×4 − 100×9) ÷ 4). At 163 lb: 163 P / 100 F / 293 C. Days before Nov 20 keep the previous step. A future +50–75 kcal change is one added line in <code>CALORIE_STEPS</code>. Logged food is unchanged.<br>&bull; <b>Nov 16, 2026 — Weight decimal fix:</b> Protein is Math.round(that day's weigh-in). The weight field accepts a comma or a dot (166,2 or 166.2) and keeps the decimal. A stored body weight over 400 lb that becomes plausible when divided by 10 (100–400) is repaired on load and import (1662 → 166.2) and that corrected value is what syncs. Example: 166.2 lb → 166 P / 100 F / 272 C.<br>&bull; <b>Nov 15, 2026 — Segmental May 27 baseline:</b> Hume Segmental card now includes an idempotent 2026-05-27 scan (earliest start). Start vs Current defaults to May 27 → latest (Nov 6). A small Start scan selector also offers Aug 1. Existing Aug 1 / Nov 6 seeds and imports are unchanged.<br>&bull; <b>Nov 13, 2026 — Macro targets:</b> Protein target is exactly that day's weigh-in in grams (no 180 g range). Fat target is 100 g on every day. Carbs = round((daily kcal − protein×4 − 100×9) ÷ 4). Calories used the daily target in effect at that time. Example at that target: 164 lb → 164 P / 100 F / 274 C; fallback 165 lb → 165 / 100 / 273.<br>&bull; <b>Nov 13, 2026 — Zero Sugar Creamer preset:</b> Added Zero Sugar Creamer after Creamer: 1 tablespoon (15 ml) = 10 kcal, 0P, 1F, 0C, 0 fiber. Scaling is off 15 ml (30 ml = 20 kcal / 2 g fat). If a saved pantry list is present, it is added only when missing; other entries and logged food are unchanged.<br>&bull; <b>Nov 13, 2026 — Dynamic nutrition targets:</b> Daily calories used the target in effect at that time. Protein floor is that day's morning weigh-in in lb (nearest gram), shown as a range up to 180 g (e.g. 164–180 g). Fat stays 80 g; carbs = round((daily kcal − protein×4 − 80×9) ÷ 4). If no weigh-in that day, the most recent earlier weight is used; if none exist, 165 lb. History and past journal days use that date's weight, never today's. A note shows which weight and date were used.<br>&bull; <b>Nov 13, 2026 — Creamer 15 g:</b> Creamer serving corrected to 1 tbsp (15 g) = 30 kcal, 0P, 5C, 0 fiber, 1F. Gram scaling is off 15 g (30 g = 2 tbsp = 60 kcal). A saved v3.22 Creamer pantry entry is updated in place; logged food history is not changed.<br>&bull; <b>Nov 13, 2026 — Creamer pantry preset:</b> Added Creamer (1 tbsp / 30 g = 30 kcal, 0P, 5C, 0 fiber, 1F) alongside existing pantry staples, with the same gram scaling as Butter. If a saved pantry list is present, Creamer is added only when missing.<br>&bull; <b>Nov 9, 2026 — Bench positions (v3.21):</b> Robert's bench setups applied on Kickback (Pos 3, chest-supported face-down, both arms), Hip Thrust (flat, upper back), One-Arm DB Row (flat, hand+knee brace), Chest-Supported Row (Pos 3, face down), Wrist Curl (flat, forearm braced), Bulgarian Split Squat (flat, rear foot). Kickback stays <b>per arm</b> with per-arm progression (10→15, 52.5 cap); no weight conversion.<br>&bull; <b>Nov 9, 2026 — Bench &amp; Load labels:</b> Every Training card shows bench setup (position + usage) when a bench is used, and an explicit Load label (<b>per arm</b> or <b>total</b>) on the card, weight column, placeholder, and 1RM tab. Flip any lift via optional <code>loadLabel</code> on the exercise object.<br>&bull; <b>Nov 6, 2026 — Hume Segmental:</b> Segmental lean/fat + extra Hume metrics on Body check-in, dedicated Hume Segmental Breakdown card (Start→Current + Diff, arms/legs symmetry, 5-region total lean), idempotent seed for 2026-08-01 &amp; 2026-11-06, and one-paste JSON import for arrays / nested segmental / no-weight entries.<br>&bull; <b>Nov 6, 2026 — Body save safety:</b> Untouched blank inputs never wipe existing Hume/segmental fields; Dashboard/Progress ignore empty-weight body rows.<br>&bull; <b>Nov 6, 2026 — Progression:</b> Target now requires 2 consecutive clean full sessions (all prescribed sets at the same weight hitting the rep ceiling) before suggesting a weight increase; mid-session logging no longer counts as a prior session.<br>&bull; <b>Nov 6, 2026 — Est. 1RM:</b> Epley projected 1RM on every Training card plus a dedicated &#x1F3C6; 1RM tab (all-time PR + latest session, date stamped, per-arm vs total).<br>&bull; <b>Nov 6, 2026 — Body charts:</b> Every Body/Recovery chart shows Start, Current, and signed Diff (with dates). Hume Body Pod BF% and Trainer Visual Est. BF% each get their own chart (never mixed).<br>&bull; <b>Nov 6, 2026 — DB cap:</b> Progression never suggests past 52.5 lb per dumbbell / 105 lb total; at the cap after 2 clean sessions it says add reps or slower tempo.<br>&bull; Calf Raise set-count migration: stale 4-set override cleared so Standing DB Calf Raise defaults to the new 2&times;20 prescription.<br>&bull; Templates "+ Save Current Day" no longer depends on a fragile tab index.<br>&bull; Prior: Monday Pre-Workout Fresh Chin-Up Test; Light Cream 1 Tbsp; DB Chest Fly history aliases; Stable Waist Pacing.</div>
+    <div class="tiny">&bull; <b>Nov 24, 2026 — Program load and template update:</b> All five training days get new default loads (totals unless marked per arm), rep ranges, and cues. The auto-injected Monday Chin-Up Test is off until further notice (one flag, <code>SHOW_MONDAY_CHINUP_TEST</code>); the lift, its code path, and past history stay in the app. Tuesday Pull slot 1 is One-Arm DB Row (Neutral) at 40 per arm; the V-handle pulldown stays in the swap list. Thursday Upper replaces DB Chest Fly with DB Lateral Raise (35, 12–20); the fly stays in the swap list. Tuesday and Thursday both use One-Arm DB Row (Neutral) under the same name, with per-day notes and loads (lats vs upper back); history is not renamed. Kickback is 17.5 per arm with a 10–15 rep range (cap 15). Hip thrust is 3 sets (a stored 4-set override is cleared once). New prescribed loads show as the starting target until the first log on or after Nov 24, 2026; older history is left as-is. A stored day template that still matches a previous official default is migrated; a custom list is left alone.<br>&bull; <b>Nov 23, 2026 — Push and Upper template update:</b> Monday Push no longer includes DB Overhead Triceps Extension (Two-Hand) in the default list; the lift stays in the swap list. Push is now Flat DB Bench Press, Incline DB Bench Press • Bench Position 3, DB Lateral Raise, and DB Kickback. Thursday Upper replaces Incline with Neutral-Grip Close DB Press (3 sets, 10–12 reps, load labeled total) right after Seated DB Shoulder Press. Upper is now Seated DB Shoulder Press • Bench Position 5, Neutral-Grip Close DB Press, One-Arm DB Row (Neutral), DB Chest Fly • Bench Position 2, and Slow DB Wrist Curl. Incline stays in Upper’s swap list; Close Press is in the swap list for both Push and Upper. DB Lateral Raise is 12–20 reps (an exception to the 10-rep cap). Kickback is unchanged (per arm, 10→15). A stored Push or Upper template that still matches the old default is migrated to the new one; a custom stored template is left alone. Logged sessions and the backup format are unchanged.<br>&bull; <b>Nov 21, 2026 — Granola bar and Psyllium husk presets:</b> Added a Granola bar button (1 bar = 100 kcal, 1 P, 3 F, 18 C, 1 g fiber; 4 bars scale to 400 / 4 / 12 / 72 / 4). Added Psyllium husk (Nutricost, unflavored) after it: 7 g = 0 kcal, 0 P, 0 F, 7 C (all fiber), 7 g fiber, scaling by gram (14 g = 0 kcal / 14 C / 14 fiber). Calories use the label 0, so logging it does not change the daily kcal total. If a saved pantry list is present, each is added only when missing; logged food is unchanged.<br>&bull; <b>Nov 21, 2026 — Carb step threshold 164.7:</b> <code>CARB_STEP_WEEK_AVG_MAX</code> and the Phase Setup default are 164.7, so the full Sat–Fri average (including trip days) can allow a 0.25 lb weekly gain. A stored v3.30 default of 164.0 is migrated once to 164.7; a later custom value is left alone.<br>&bull; <b>Nov 21, 2026 — Sat–Fri week average:</b> Dashboard adds a This week (Sat–Fri) average next to the rolling 7-day average. It averages only days with a weigh-in, shows the count, last week's average, and the change from last week. The week resets each Saturday. A "Carb step if ≤ …" line uses <code>CARB_STEP_WEEK_AVG_MAX</code> (default 164.0), also editable in Phase Setup. The rolling 7-day average and calorie targets are unchanged.<br>&bull; <b>Nov 20, 2026 — Reverse diet +75 kcal:</b> Daily calories come from a dated schedule (<code>CALORIE_STEPS</code> / <code>kcalForDate</code>). From Nov 20, 2026 the target is 2,725 kcal, with the added energy all in carbs. Protein is still that day's weigh-in; fat stays 100 g. Carbs = round((kcal − protein×4 − 100×9) ÷ 4). At 163 lb: 163 P / 100 F / 293 C. Days before Nov 20 keep the previous step. A future +50–75 kcal change is one added line in <code>CALORIE_STEPS</code>. Logged food is unchanged.<br>&bull; <b>Nov 16, 2026 — Weight decimal fix:</b> Protein is Math.round(that day's weigh-in). The weight field accepts a comma or a dot (166,2 or 166.2) and keeps the decimal. A stored body weight over 400 lb that becomes plausible when divided by 10 (100–400) is repaired on load and import (1662 → 166.2) and that corrected value is what syncs. Example: 166.2 lb → 166 P / 100 F / 272 C.<br>&bull; <b>Nov 15, 2026 — Segmental May 27 baseline:</b> Hume Segmental card now includes an idempotent 2026-05-27 scan (earliest start). Start vs Current defaults to May 27 → latest (Nov 6). A small Start scan selector also offers Aug 1. Existing Aug 1 / Nov 6 seeds and imports are unchanged.<br>&bull; <b>Nov 13, 2026 — Macro targets:</b> Protein target is exactly that day's weigh-in in grams (no 180 g range). Fat target is 100 g on every day. Carbs = round((daily kcal − protein×4 − 100×9) ÷ 4). Calories used the daily target in effect at that time. Example at that target: 164 lb → 164 P / 100 F / 274 C; fallback 165 lb → 165 / 100 / 273.<br>&bull; <b>Nov 13, 2026 — Zero Sugar Creamer preset:</b> Added Zero Sugar Creamer after Creamer: 1 tablespoon (15 ml) = 10 kcal, 0P, 1F, 0C, 0 fiber. Scaling is off 15 ml (30 ml = 20 kcal / 2 g fat). If a saved pantry list is present, it is added only when missing; other entries and logged food are unchanged.<br>&bull; <b>Nov 13, 2026 — Dynamic nutrition targets:</b> Daily calories used the target in effect at that time. Protein floor is that day's morning weigh-in in lb (nearest gram), shown as a range up to 180 g (e.g. 164–180 g). Fat stays 80 g; carbs = round((daily kcal − protein×4 − 80×9) ÷ 4). If no weigh-in that day, the most recent earlier weight is used; if none exist, 165 lb. History and past journal days use that date's weight, never today's. A note shows which weight and date were used.<br>&bull; <b>Nov 13, 2026 — Creamer 15 g:</b> Creamer serving corrected to 1 tbsp (15 g) = 30 kcal, 0P, 5C, 0 fiber, 1F. Gram scaling is off 15 g (30 g = 2 tbsp = 60 kcal). A saved v3.22 Creamer pantry entry is updated in place; logged food history is not changed.<br>&bull; <b>Nov 13, 2026 — Creamer pantry preset:</b> Added Creamer (1 tbsp / 30 g = 30 kcal, 0P, 5C, 0 fiber, 1F) alongside existing pantry staples, with the same gram scaling as Butter. If a saved pantry list is present, Creamer is added only when missing.<br>&bull; <b>Nov 9, 2026 — Bench positions (v3.21):</b> Robert's bench setups applied on Kickback (Pos 3, chest-supported face-down, both arms), Hip Thrust (flat, upper back), One-Arm DB Row (flat, hand+knee brace), Chest-Supported Row (Pos 3, face down), Wrist Curl (flat, forearm braced), Bulgarian Split Squat (flat, rear foot). Kickback stays <b>per arm</b> with per-arm progression (10→15, 52.5 cap); no weight conversion.<br>&bull; <b>Nov 9, 2026 — Bench &amp; Load labels:</b> Every Training card shows bench setup (position + usage) when a bench is used, and an explicit Load label (<b>per arm</b> or <b>total</b>) on the card, weight column, placeholder, and 1RM tab. Flip any lift via optional <code>loadLabel</code> on the exercise object.<br>&bull; <b>Nov 6, 2026 — Hume Segmental:</b> Segmental lean/fat + extra Hume metrics on Body check-in, dedicated Hume Segmental Breakdown card (Start→Current + Diff, arms/legs symmetry, 5-region total lean), idempotent seed for 2026-08-01 &amp; 2026-11-06, and one-paste JSON import for arrays / nested segmental / no-weight entries.<br>&bull; <b>Nov 6, 2026 — Body save safety:</b> Untouched blank inputs never wipe existing Hume/segmental fields; Dashboard/Progress ignore empty-weight body rows.<br>&bull; <b>Nov 6, 2026 — Progression:</b> Target now requires 2 consecutive clean full sessions (all prescribed sets at the same weight hitting the rep ceiling) before suggesting a weight increase; mid-session logging no longer counts as a prior session.<br>&bull; <b>Nov 6, 2026 — Est. 1RM:</b> Epley projected 1RM on every Training card plus a dedicated &#x1F3C6; 1RM tab (all-time PR + latest session, date stamped, per-arm vs total).<br>&bull; <b>Nov 6, 2026 — Body charts:</b> Every Body/Recovery chart shows Start, Current, and signed Diff (with dates). Hume Body Pod BF% and Trainer Visual Est. BF% each get their own chart (never mixed).<br>&bull; <b>Nov 6, 2026 — DB cap:</b> Progression never suggests past 52.5 lb per dumbbell / 105 lb total; at the cap after 2 clean sessions it says add reps or slower tempo.<br>&bull; Calf Raise set-count migration: stale 4-set override cleared so Standing DB Calf Raise defaults to the new 2&times;20 prescription.<br>&bull; Templates "+ Save Current Day" no longer depends on a fragile tab index.<br>&bull; Prior: Monday Pre-Workout Fresh Chin-Up Test; Light Cream 1 Tbsp; DB Chest Fly history aliases; Stable Waist Pacing.</div>
   </div>
 </section>
 </main>
@@ -702,7 +702,7 @@ function restoreFromGoogleDrive() {
       seedCheckInBaselines();
       seedChinUpTestSession();
       persistBodyWeightNormalization();
-      migrateCarbStepWeekAvgMax(); migrateProgramTemplates();
+      migrateCarbStepWeekAvgMax(); migrateProgramTemplates(); migrateHipThrustSetCount();
       loadBodyForDate();
       renderAll();
       loadJournalForDate();
@@ -894,42 +894,44 @@ const pantryItems = [
 // WORKOUTS: ALL-DUMBBELL 4-WEEK TRIAL (Oct 22, 2026). Removed machine/cable moves keep their history in the backup.
 // WORKOUTS: WEEKLY SPLIT (Oct 27, 2026). Removed exercises keep their history in the backup.
 const EXTRA_EXERCISES=[
- {name:"One-Arm DB Row (Neutral)",target:"3 sets \u2022 10 reps each arm \u2022 1s up / 3s down \u2022 stand-in until V-handle arrives",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3,defaultWeight:"35",perArm:true,loadLabel:"per arm"},
+ {name:"Neutral-Grip V-Handle Pulldown",target:"3 sets \u2022 10 reps \u2022 1s up / 3s down \u2022 straps, V-handle, 3s lowering",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3,defaultWeight:"100"},
+ {name:"DB Chest Fly \u2022 Bench Position 2",target:"3 sets \u2022 10 reps \u2022 1s up / 3s down \u2022 soft elbows, deep stretch, bench position 2",rest:60,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3,defaultWeight:"50"},
  {name:"DB Overhead Triceps Extension (Two-Hand)",target:"3 sets \u2022 10 reps \u2022 1s up / 3s down \u2022 one DB held in both hands, deep long-head stretch",rest:60,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3,defaultWeight:"30",loadLabel:"total"}
 ];
 const workouts={
 "Push":[
- {name:"Flat DB Bench Press",target:"3 sets \u2022 10 reps \u2022 1s up / 3s down \u2022 dense mid/lower chest",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3,defaultWeight:"100"},
+ {name:"Flat DB Bench Press",target:"3 sets \u2022 10 reps \u2022 1s up / 3s down \u2022 dense mid/lower chest",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3,defaultWeight:"90"},
  {name:"Incline DB Bench Press \u2022 Bench Position 3",target:"3 sets \u2022 10 reps \u2022 1s up / 3s down \u2022 upper chest, deep stretch",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3,defaultWeight:"100"},
- {name:"DB Lateral Raise",target:"3 sets \u2022 12-20 reps \u2022 1s up / 3s down \u2022 lead with elbows",rest:60,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3,defaultWeight:"45"},
- {name:"DB Kickback",target:"3 sets \u2022 10 reps \u2022 1s up / 3s down \u2022 upper arm pinned, squeeze at lockout",rest:60,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3,defaultWeight:"10",perArm:true,loadLabel:"per arm"}
+ {name:"DB Lateral Raise",target:"3 sets \u2022 12-20 reps \u2022 1s up / 3s down \u2022 lead with elbows",rest:60,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3,defaultWeight:"35"},
+ {name:"DB Kickback",target:"3 sets \u2022 10-15 reps \u2022 1s up / 3s down \u2022 upper arm pinned, squeeze at lockout",rest:60,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3,defaultWeight:"17.5",perArm:true,loadLabel:"per arm"}
 ],
 "Pull":[
- {name:"Neutral-Grip V-Handle Pulldown",target:"3 sets \u2022 10 reps \u2022 1s up / 3s down \u2022 straps, V-handle, 3s lowering",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3,defaultWeight:"100"},
- {name:"Chest-Supported DB Row",target:"3 sets \u2022 10 reps \u2022 1s up / 3s down \u2022 chest on incline bench, drive elbows back",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3,defaultWeight:"70",loadLabel:"total"},
- {name:"DB Rear Delt Fly",target:"3 sets \u2022 10 reps \u2022 1s up / 3s down \u2022 light, lead with elbows",rest:60,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3,defaultWeight:"20"},
- {name:"DB Hammer Curl",target:"3 sets \u2022 10 reps \u2022 1s up / 3s down \u2022 neutral grip",rest:60,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3,defaultWeight:"60"},
+ {name:"One-Arm DB Row (Neutral)",target:"3 sets \u2022 10 reps each arm \u2022 1s up / 3s down \u2022 straps OK, elbow to hip, lats",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3,defaultWeight:"40",perArm:true,loadLabel:"per arm"},
+ {name:"Chest-Supported DB Row",target:"3 sets \u2022 10 reps \u2022 1s up / 3s down \u2022 chest on incline bench, drive elbows back",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3,defaultWeight:"90",loadLabel:"total"},
+ {name:"DB Rear Delt Fly",target:"3 sets \u2022 12-20 reps \u2022 1s up / 3s down \u2022 chest-supported 30-45\u00B0, 1-2s pause, 3s down",rest:60,defaultTempo:3,defaultUp:1,defaultHold:2,sets:3,defaultWeight:"25"},
+ {name:"DB Hammer Curl",target:"3 sets \u2022 10 reps \u2022 1s up / 3s down \u2022 neutral grip",rest:60,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3,defaultWeight:"70"},
  {name:"Slow DB Wrist Curl",target:"2 sets \u2022 15 reps each arm \u2022 1s up / 4s down \u2022 forearm on bench, elbow-friendly, weight per arm",rest:45,defaultTempo:4,defaultUp:1,defaultHold:1,sets:2,defaultWeight:"10",perArm:true,loadLabel:"per arm"}
 ],
 "Legs":[
- {name:"Goblet Squat",target:"4 sets \u2022 10 reps \u2022 1s up / 3s down \u2022 upright torso",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1,sets:4,defaultWeight:"50",loadLabel:"total"},
- {name:"DB Bulgarian Split Squat",target:"3 sets \u2022 10 reps \u2022 1s up / 3s down \u2022 per leg, rear foot on bench, DB in each hand (log total)",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3,defaultWeight:"30",loadLabel:"total"},
- {name:"Standing DB Calf Raise",target:"2 sets \u2022 20 reps \u2022 up 1 / hold 2 / down 2 / hold 2 \u2022 single 30 lb DB, set 1 left hand, set 2 right hand",rest:60,defaultTempo:2,defaultUp:1,defaultHold:2,sets:2,defaultWeight:"30",loadLabel:"per arm"},
- {name:"DB-on-Chest Floor Crunch",target:"3 sets \u2022 10-15 reps \u2022 1s up / 3s down \u2022 DB held on chest",rest:75,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3,defaultWeight:"",loadLabel:"total"}
+ {name:"Goblet Squat",target:"4 sets \u2022 10-15 reps \u2022 1s up / 3s down \u2022 1s pause at the bottom; heels on a plate OK",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1,sets:4,defaultWeight:"52.5",loadLabel:"total"},
+ {name:"DB Bulgarian Split Squat",target:"3 sets \u2022 10 reps \u2022 1s up / 3s down \u2022 per leg, rear foot on bench, DB in each hand (log total)",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3,defaultWeight:"35",loadLabel:"total"},
+ {name:"Standing DB Calf Raise",target:"2 sets \u2022 20 reps \u2022 up 1 / hold 2 / down 2 / hold 2 \u2022 single 40 lb DB, set 1 left hand, set 2 right hand",rest:60,defaultTempo:2,defaultUp:1,defaultHold:2,sets:2,defaultWeight:"40",loadLabel:"per arm"},
+ {name:"DB-on-Chest Floor Crunch",target:"3 sets \u2022 10-15 reps \u2022 1s up / 3s down \u2022 DB held on chest",rest:75,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3,defaultWeight:"25",loadLabel:"total"}
 ],
 "Upper":[
  {name:"Seated DB Shoulder Press \u2022 Bench Position 5",target:"3 sets \u2022 10 reps \u2022 1s up / 3s down \u2022 75-80\u00B0 scapular plane",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3,defaultWeight:"90"},
- {name:"Neutral-Grip Close DB Press",target:"3 sets \u2022 10-12 reps \u2022 1s up / 3s down \u2022 neutral close grip, log the total of both DBs",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3,defaultWeight:"100",loadLabel:"total"},
- {name:"One-Arm DB Row (Neutral)",target:"3 sets \u2022 10 reps each arm \u2022 1s up / 3s down \u2022 stand-in until V-handle arrives",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3,defaultWeight:"35",perArm:true,loadLabel:"per arm"},
- {name:"DB Chest Fly \u2022 Bench Position 2",target:"3 sets \u2022 10 reps \u2022 1s up / 3s down \u2022 soft elbows, deep stretch, bench position 2",rest:60,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3,defaultWeight:"50"},
+ {name:"Neutral-Grip Close DB Press",target:"3 sets \u2022 10-12 reps \u2022 1s up / 3s down \u2022 neutral close grip, log the total of both DBs",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3,defaultWeight:"50",loadLabel:"total"},
+ {name:"One-Arm DB Row (Neutral)",target:"3 sets \u2022 12 reps each arm \u2022 1s up / 3s down \u2022 elbow flared, pull to upper back, 1s squeeze",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3,defaultWeight:"35",perArm:true,loadLabel:"per arm"},
+ {name:"DB Lateral Raise",target:"3 sets \u2022 12-20 reps \u2022 1s up / 3s down \u2022 lead with elbows",rest:60,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3,defaultWeight:"35"},
  {name:"Slow DB Wrist Curl",target:"2 sets \u2022 15 reps each arm \u2022 1s up / 4s down \u2022 forearm on bench, elbow-friendly, weight per arm",rest:45,defaultTempo:4,defaultUp:1,defaultHold:1,sets:2,defaultWeight:"10",perArm:true,loadLabel:"per arm"}
 ],
 "Lower":[
- {name:"Romanian Deadlift",target:"4 sets \u2022 10 reps \u2022 1s up / 4s down \u2022 hamstring stretch, 4s lowering",rest:90,defaultTempo:4,defaultUp:1,defaultHold:1,sets:4,defaultWeight:"105"},
- {name:"DB Hip Thrust",target:"3 sets \u2022 10 reps \u2022 1s up / 3s down \u2022 one dumbbell, hard glute lockout pause",rest:90,defaultTempo:3,defaultUp:1,defaultHold:2,sets:3,defaultWeight:"52.5",loadLabel:"total"},
- {name:"DB Reverse Lunge",target:"3 sets \u2022 10 reps \u2022 1s up / 3s down \u2022 per leg, DB in each hand (log total)",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3,defaultWeight:"30"},
- {name:"Standing DB Calf Raise",target:"2 sets \u2022 20 reps \u2022 up 1 / hold 2 / down 2 / hold 2 \u2022 single 30 lb DB, set 1 left hand, set 2 right hand",rest:60,defaultTempo:2,defaultUp:1,defaultHold:2,sets:2,defaultWeight:"30",loadLabel:"per arm"}
+ {name:"Romanian Deadlift",target:"4 sets \u2022 10-12 reps \u2022 1s up / 4s down \u2022 hamstring stretch, 4s lowering",rest:90,defaultTempo:4,defaultUp:1,defaultHold:1,sets:4,defaultWeight:"105"},
+ {name:"DB Hip Thrust",target:"3 sets \u2022 10-15 reps \u2022 1s up / 3s down \u2022 2s squeeze at the top",rest:90,defaultTempo:3,defaultUp:1,defaultHold:2,sets:3,defaultWeight:"52.5",loadLabel:"total"},
+ {name:"DB Reverse Lunge",target:"3 sets \u2022 10 reps \u2022 1s up / 3s down \u2022 per leg, DB in each hand (log total)",rest:90,defaultTempo:3,defaultUp:1,defaultHold:1,sets:3,defaultWeight:"40"},
+ {name:"Standing DB Calf Raise",target:"2 sets \u2022 20 reps \u2022 up 1 / hold 2 / down 2 / hold 2 \u2022 single 40 lb DB, set 1 left hand, set 2 right hand",rest:60,defaultTempo:2,defaultUp:1,defaultHold:2,sets:2,defaultWeight:"40",loadLabel:"per arm"}
 ]
+
 };
 
 function today(){
@@ -1003,11 +1005,31 @@ function showTab(id,btn){
   if(id==="train") renderWorkout();
 }
 const CHINUP_TEST={name:"Pre-Workout Fresh Chin-Up Test",target:"Monday test \u2022 1 set \u2022 fresh \u2022 max reps",rest:120,defaultTempo:3,defaultUp:1,defaultHold:1,sets:1,defaultWeight:"BW",loadLabel:"total"};
+/* Flip to true to put the Monday pre-workout chin-up test back on the Push card. History stays either way. */
+const SHOW_MONDAY_CHINUP_TEST=false;
 function isMonday(dateStr){return new Date(dateStr+"T12:00:00").getDay()===1}
+function mondayChinUpInjected(dateStr){return SHOW_MONDAY_CHINUP_TEST && isMonday(dateStr||today())}
 /* Built-in defaults live in `workouts`. A copy may also be saved under
    settings.programWorkouts, settings.workouts, or programWorkouts. */
-const OLD_PUSH_TEMPLATE_NAMES=["Flat DB Bench Press","Incline DB Bench Press","DB Lateral Raise","DB Overhead Triceps Extension (Two-Hand)","DB Kickback"];
-const OLD_UPPER_TEMPLATE_NAMES=["Seated DB Shoulder Press","Neutral-Grip V-Handle Pulldown","Incline DB Bench Press","DB Chest Fly","Slow DB Wrist Curl"];
+const PREVIOUS_TEMPLATE_NAMES={
+  Push:[
+    ["Flat DB Bench Press","Incline DB Bench Press","DB Lateral Raise","DB Overhead Triceps Extension (Two-Hand)","DB Kickback"],
+    ["Flat DB Bench Press","Incline DB Bench Press","DB Lateral Raise","DB Kickback"]
+  ],
+  Pull:[
+    ["Neutral-Grip V-Handle Pulldown","Chest-Supported DB Row","DB Rear Delt Fly","DB Hammer Curl","Slow DB Wrist Curl"]
+  ],
+  Legs:[
+    ["Goblet Squat","DB Bulgarian Split Squat","Standing DB Calf Raise","DB-on-Chest Floor Crunch"]
+  ],
+  Upper:[
+    ["Seated DB Shoulder Press","Neutral-Grip V-Handle Pulldown","Incline DB Bench Press","DB Chest Fly","Slow DB Wrist Curl"],
+    ["Seated DB Shoulder Press","Neutral-Grip Close DB Press","One-Arm DB Row (Neutral)","DB Chest Fly","Slow DB Wrist Curl"]
+  ],
+  Lower:[
+    ["Romanian Deadlift","DB Hip Thrust","DB Reverse Lunge","Standing DB Calf Raise"]
+  ]
+};
 function isProgramMap(obj){
   return obj && typeof obj==="object" && !Array.isArray(obj) && (Array.isArray(obj.Push) || Array.isArray(obj.Upper));
 }
@@ -1025,28 +1047,46 @@ function templateDayNames(list){
 function templateNamesMatch(a,b){
   return Array.isArray(a) && a.length===b.length && a.every((n,i)=>n===b[i]);
 }
-/* One-time: if a stored Push/Upper template still matches the pre-v3.33 default, replace
+/* One-time: if a stored day template still matches a previous official default, replace
    that day with the new default. A custom stored list is left alone. Never touches logged sessions. */
 function migrateProgramTemplates(){
   const d=data();
   d.settings=d.settings||{};
-  if(d.settings.programMigratedV333) return false;
+  if(d.settings.programMigratedV334) return false;
   const maps=storedProgramMaps(d);
   if(!maps.length) return false;
   let changed=false;
   maps.forEach(map=>{
-    if(templateNamesMatch(templateDayNames(map.Push), OLD_PUSH_TEMPLATE_NAMES)){
-      map.Push=workouts.Push.map(e=>Object.assign({},e));
-      changed=true;
-    }
-    if(templateNamesMatch(templateDayNames(map.Upper), OLD_UPPER_TEMPLATE_NAMES)){
-      map.Upper=workouts.Upper.map(e=>Object.assign({},e));
-      changed=true;
-    }
+    Object.keys(PREVIOUS_TEMPLATE_NAMES).forEach(day=>{
+      if(!Array.isArray(map[day])) return;
+      const names=templateDayNames(map[day]);
+      if(PREVIOUS_TEMPLATE_NAMES[day].some(prev=>templateNamesMatch(names, prev))){
+        map[day]=workouts[day].map(e=>Object.assign({},e));
+        changed=true;
+      }
+    });
   });
-  d.settings.programMigratedV333=true;
+  d.settings.programMigratedV334=true;
   localStorage.setItem(STORE_KEY, JSON.stringify(d));
   try{ triggerAutoSync(); }catch(e){}
+  return changed;
+}
+/* One-time: clear a stored 4-set override so DB Hip Thrust uses the 3-set prescription. */
+function migrateHipThrustSetCount(){
+  const d=data();
+  d.settings=d.settings||{};
+  if(d.settings.hipThrust3setMigrated) return false;
+  d.settings.exerciseSets=d.settings.exerciseSets||{};
+  let changed=false;
+  if(d.settings.exerciseSets["DB Hip Thrust"]===4){
+    delete d.settings.exerciseSets["DB Hip Thrust"];
+    changed=true;
+  }
+  if(changed){
+    d.settings.hipThrust3setMigrated=true;
+    localStorage.setItem(STORE_KEY, JSON.stringify(d));
+    try{ triggerAutoSync(); }catch(e){}
+  }
   return changed;
 }
 function hydrateProgramDay(list){
@@ -1083,16 +1123,16 @@ function exercisesFor(type,dateStr){
   const days=programWorkouts();
   const list=(days[type]||[]).map((e,k)=>{
     if(!sw[k]) return e;
-    const alt=findExerciseDef(sw[k]) || EXTRA_EXERCISES.find(x=>x.name===sw[k]) || {};
+    const alt=findExerciseDef(sw[k], type) || EXTRA_EXERCISES.find(x=>x.name===sw[k]) || {};
     const tgt=(alt.target||e.target)+" \u2022 swapped in for "+e.name;
     return Object.assign({},e,alt,{name:sw[k],target:tgt,swappedFrom:e.name});
   });
-  return isMonday(dateStr||today())?[CHINUP_TEST,...list]:list;
+  return mondayChinUpInjected(ds)?[CHINUP_TEST,...list]:list;
 }
 /* Editable progression rules (stored in settings, synced with backup) */
 function progressionRules(){
   const d=data();
-  const def={repCeiling:10,holds:{"Cable Triceps Pushdown":"Hold weight (elbows). Slower lowering only.","Overhead Cable Triceps Extension":"Hold at 44, 4s lowering. Next step is a 4th set, not more weight."},dbSteps:"5,10,15,20,22.5,25,30,35,40,45,50,52.5",cableSteps:"8,20,32,44,56,68,80,85,90,95,100,105,110,115,120,125,130,135,140"};
+  const def={repCeiling:10,holds:{"Cable Triceps Pushdown":"Hold weight (elbows). Slower lowering only.","Overhead Cable Triceps Extension":"Hold at 44, 4s lowering. Next step is a 4th set, not more weight."},dbSteps:"5,10,15,17.5,20,22.5,25,30,35,40,45,50,52.5",cableSteps:"8,20,32,44,56,68,80,85,90,95,100,105,110,115,120,125,130,135,140"};
   return Object.assign(def,d.settings.progression||{});
 }
 function nextStep(cur,steps){const arr=String(steps).split(",").map(Number).filter(Number.isFinite).sort((a,b)=>a-b);return arr.find(x=>x>cur)??null}
@@ -1119,6 +1159,7 @@ const BENCH_SETUP = {
   "DB Hip Thrust": {position:"flat", usage:"upper back on bench, one DB", evidence:"Robert Nov 9, 2026"},
   "One-Arm DB Row (Neutral)": {position:"flat", usage:"braced with one hand and one knee", evidence:"Robert Nov 9, 2026"},
   "Chest-Supported DB Row": {position:"Bench Position 3", usage:"chest-supported (face down), both arms", evidence:"Robert Nov 9, 2026"},
+  "DB Rear Delt Fly": {position:"30-45\u00B0", usage:"chest-supported, 1-2s pause", evidence:"trainer cue Nov 24, 2026"},
   "Slow DB Wrist Curl": {position:"flat", usage:"forearm braced, one arm at a time", evidence:"Robert Nov 9, 2026"},
   "DB Bulgarian Split Squat": {position:"flat", usage:"rear foot on bench, DB in each hand", evidence:"Robert Nov 9, 2026"}
 };
@@ -1148,11 +1189,15 @@ function isPerArmExercise(exDef, base){
   const b = base || (exDef ? baseExerciseName(exDef.name||"") : "");
   return Boolean((exDef && exDef.perArm) || /One-Arm|Single-Arm|Wrist Curl/i.test(b));
 }
-function findExerciseDef(exName){
+function findExerciseDef(exName, type){
   const base=baseExerciseName(exName);
+  if(type && workouts[type]){
+    const hit=workouts[type].find(e=>baseExerciseName(e.name)===base);
+    if(hit) return hit;
+  }
   return builtinExerciseCatalog().find(e=>baseExerciseName(e.name)===base) || null;
 }
-function priorExerciseSessions(exName, beforeDate){
+function priorExerciseSessions(exName, beforeDate, type){
   const d=data(), base=baseExerciseName(exName);
   const sessions=[];
   const sorted=[...d.workouts].sort((a,b)=>b.date.localeCompare(a.date));
@@ -1167,6 +1212,10 @@ function priorExerciseSessions(exName, beforeDate){
     });
     if(!validSets.length) continue;
     sessions.push({date:w.date, type:w.type, sets:validSets});
+  }
+  if(type){
+    const same=sessions.filter(s=>s.type===type);
+    if(same.length) return same;
   }
   return sessions;
 }
@@ -1222,15 +1271,32 @@ function exerciseRepCeiling(exDef, base){
   const m = exDef && String(exDef.target||"").match(/(\d+)(?:-(\d+))?\s*reps/i);
   if(m) return Number(m[2]||m[1]);
   const b = base || (exDef ? baseExerciseName(exDef.name||"") : "");
-  if(/Lateral Raise/i.test(b)) return 20;
-  if(/Close DB Press/i.test(b)) return 12;
+  if(/Lateral Raise|Rear Delt/i.test(b)) return 20;
+  if(/Kickback/i.test(b)) return 15;
+  if(/Goblet Squat|Floor Crunch|Hip Thrust/i.test(b)) return 15;
+  if(/Close DB Press|Romanian Deadlift/i.test(b)) return 12;
   return r.repCeiling;
 }
-function targetText(exName,prevSets,curDate,exDef){
+/* New program loads apply to sessions on or after this date until the first log under the prescription. */
+const PRESCRIPTION_EFFECTIVE_DATE="2026-11-24";
+function prescribedWeight(ex){
+  if(!ex) return null;
+  const w=ex.defaultWeight;
+  if(w===undefined||w===null||w==="") return null;
+  return String(w);
+}
+function shouldUsePrescribedLoad(ex, type, curDate){
+  if(!ex || prescribedWeight(ex)===null) return false;
+  const day=curDate || (typeof val==="function" ? (val("workDate")||today()) : today());
+  if(!day || day<PRESCRIPTION_EFFECTIVE_DATE) return false;
+  const sessions=priorExerciseSessions(ex.name, day, type);
+  return !sessions.some(s=>s.date>=PRESCRIPTION_EFFECTIVE_DATE);
+}
+function targetText(exName,prevSets,curDate,exDef,type){
   const r=progressionRules(), base=baseExerciseName(exName);
-  exDef = exDef || findExerciseDef(exName);
+  exDef = exDef || findExerciseDef(exName, type);
   const before = curDate || (typeof val==="function" ? (val("workDate")||today()) : today());
-  const sessions = priorExerciseSessions(exName, before);
+  const sessions = priorExerciseSessions(exName, before, type);
   const rawPrev = prevSets && prevSets.length ? prevSets : (sessions[0] ? sessions[0].sets : []);
 
   // Chin-up / BW max-effort
@@ -1240,6 +1306,19 @@ function targetText(exName,prevSets,curDate,exDef){
     return `\uD83C\uDFAF Target: beat ${reps.join("/")} reps (max effort)`;
   }
   if(r.holds[base]) return "\uD83D\uDD12 "+r.holds[base];
+  if(shouldUsePrescribedLoad(exDef||{name:exName}, type, before)){
+    const dw=prescribedWeight(exDef);
+    const unit=exerciseLoadLabel(exDef, base)==="per arm"?" per arm":"";
+    const effectiveSets = exDef ? getExerciseSetCount(exDef) : 3;
+    const ceil = exerciseRepCeiling(exDef, base);
+    const goalStr = Array(effectiveSets).fill(ceil).join("/");
+    if(sessions.length){
+      const last=sessions[0];
+      const lastW=last.sets.map(x=>numeric(x.weight??x.w)).filter(x=>x!==null)[0];
+      return "\uD83C\uDFAF Target: "+dw+unit+" (program load); last was "+(lastW??"--")+" on "+last.date+" (goal "+goalStr+")";
+    }
+    return "\uD83C\uDFAF Target: "+dw+unit+" (program load) (goal "+goalStr+")";
+  }
   if(!sessions.length && !(prevSets&&prevSets.length)) return "Target: log a baseline";
 
   const effectiveSets = exDef ? getExerciseSetCount(exDef) : 3;
@@ -1284,7 +1363,7 @@ function targetText(exName,prevSets,curDate,exDef){
 }
 function previousExerciseSets(type, exerciseName, index, excludeDate){
   const before = excludeDate || (typeof val==="function" ? (val("workDate")||today()) : today());
-  const sessions = priorExerciseSessions(exerciseName, before);
+  const sessions = priorExerciseSessions(exerciseName, before, type);
   if(!sessions.length) return { sets: [], date: null, type: null };
   const s = sessions[0];
   return { sets: s.sets, date: s.date, type: s.type };
@@ -1392,7 +1471,7 @@ function renderWorkout(){
       <div class="exname">${ex.name} ${supersetTag} <span id="pr_badge_${i}"></span></div>
       <div class="hint">${ex.target}</div>
       <div class="ex-meta"><span class="ex-meta-pill"><b>Load</b> ${loadLbl}</span>${benchLine?`<span class="ex-meta-pill bench"><b>Bench</b> ${benchLine.replace(/^Bench:\s*/,'')}</span>`:''}</div>
-      <div class="exstats" style="color:var(--green);font-weight:800">${targetText(ex.name,prevSets,curDate,ex)}</div>
+      <div class="exstats" style="color:var(--green);font-weight:800">${targetText(ex.name,prevSets,curDate,ex,type)}</div>
       <div class="rm-line" id="rm_line_${i}">${formatOneRMLine(ex)}</div>
       <div class="exstats">${lastSetText?`${sourceLabel}: ${lastSetText}`:"No previous sets for this exercise"}${h.best?` \u2022 Best set: ${h.best.weight} \u00D7${h.best.reps}`:""}</div>
     </div>
@@ -1409,8 +1488,9 @@ function renderWorkout(){
     const n=idx+1;
     const p=prevSets[idx]||{};
     const activeSet = currentExEntry?.sets?.[idx];
-    const pw=activeSet ? (activeSet.weight ?? activeSet.w ?? "") : (p.weight??p.w??(ex.defaultWeight||""));
-    const pr=activeSet ? (activeSet.reps ?? activeSet.r ?? "") : (p.reps ?? p.r ?? "");
+    const usePrescribed=!activeSet && shouldUsePrescribedLoad(ex, type, curDate);
+    const pw=activeSet ? (activeSet.weight ?? activeSet.w ?? "") : (usePrescribed ? (ex.defaultWeight||"") : (p.weight??p.w??(ex.defaultWeight||"")));
+    const pr=activeSet ? (activeSet.reps ?? activeSet.r ?? "") : (usePrescribed ? "" : (p.reps ?? p.r ?? ""));
     const preR=(!activeSet && pr!=="")?"1":"";
     const prPh=(p.reps??p.r??"")!==""?`last ${p.reps??p.r}`:"reps";
     const pt=activeSet ? activeSet.tempo : (p.tempo!==undefined&&p.tempo!==""?p.tempo:(ex.defaultTempo!==undefined?ex.defaultTempo:3));
@@ -2976,7 +3056,7 @@ function importDataFromFile(){
       seedCheckInBaselines();
       seedChinUpTestSession();
       persistBodyWeightNormalization();
-      migrateCarbStepWeekAvgMax(); migrateProgramTemplates();
+      migrateCarbStepWeekAvgMax(); migrateProgramTemplates(); migrateHipThrustSetCount();
       loadBodyForDate();
       renderAll(); loadJournalForDate(); renderTemplateManager();
       alert("Backup loaded into the app.");
@@ -3100,7 +3180,7 @@ lastKnownToday=today();
 seedChinUpTestSession();
 seedCheckInBaselines();
 persistBodyWeightNormalization();
-migrateCarbStepWeekAvgMax(); migrateProgramTemplates();
+migrateCarbStepWeekAvgMax(); migrateProgramTemplates(); migrateHipThrustSetCount();
 loadBodyForDate();
 setTimeout(()=>{pullZeppSteps(true);showZeppInfo();},800);
 renderWorkout();
@@ -3134,7 +3214,7 @@ document.addEventListener("DOMContentLoaded",()=>{
 function swapExercise(i){
   const type=workType.value, ds=val("workDate")||today();
   const list=exercisesFor(type,ds); const ex=list[i]; if(!ex) return;
-  const off=isMonday(ds)?1:0, k=i-off; if(k<0){alert("The chin-up test can't be swapped.");return;}
+  const off=mondayChinUpInjected(ds)?1:0, k=i-off; if(k<0){alert("The chin-up test can't be swapped.");return;}
   const orig=(programWorkouts()[type]||workouts[type]||[])[k];
   const names=swapCandidateNames(ex.name);
   const pick=prompt("Swap \""+ex.name+"\" for which exercise?\nEnter a number, or type any exercise name.\nType 0 to go back to "+orig.name+".\n\n"+names.map((n,j)=>(j+1)+". "+n).join("\n"));
